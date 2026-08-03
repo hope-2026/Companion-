@@ -1,6 +1,8 @@
 // netlify/functions/openai-proxy.js
 // This file handles secure API calls to OpenAI.
 
+const crypto = require('crypto');
+
 const MEMORY_TRIGGERS = [
   /erinnerst du dich/i,
   /wei[sß]t du noch/i,
@@ -23,6 +25,23 @@ const MEMORY_TRIGGERS = [
 
 const MAIN_MODEL = process.env.OPENAI_MAIN_MODEL || 'gpt-4o';
 const UTILITY_MODEL = process.env.OPENAI_UTILITY_MODEL || 'gpt-4o-mini';
+
+function getPortalPassword() {
+  return (process.env.PORTAL_PASSWORD || '').trim();
+}
+
+function createPortalToken() {
+  const password = getPortalPassword();
+  if (!password) return '';
+  const secret = process.env.OPENAI_API_KEY || 'tatjana-portal';
+  return crypto.createHmac('sha256', secret).update(password).digest('hex');
+}
+
+function isAuthorized(event) {
+  if (!getPortalPassword()) return true;
+  const token = event.headers['x-portal-auth'] || event.headers['X-Portal-Auth'];
+  return Boolean(token) && token === createPortalToken();
+}
 
 function selectModel(requestedModel, task) {
   if (task === 'utility') return UTILITY_MODEL;
@@ -111,11 +130,20 @@ function withMemoryContext(messages, memoryContext) {
 }
 
 exports.handler = async (event, context) => {
-  // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
       body: JSON.stringify({ error: 'Method not allowed' })
+    };
+  }
+
+  if (!isAuthorized(event)) {
+    return {
+      statusCode: 401,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ error: 'Portal password required', type: 'portal_auth_required' })
     };
   }
 
@@ -128,7 +156,6 @@ exports.handler = async (event, context) => {
       apiMessages = withMemoryContext(messages, memoryContext);
     }
 
-    // Call OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
