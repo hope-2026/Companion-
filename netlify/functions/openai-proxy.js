@@ -15,6 +15,10 @@ const MEMORY_TRIGGERS = [
   /was hab ich/i,
   /was wei[sß]t du/i,
   /erz[äa]hl mir von/i,
+  /\bsabine\b/i,
+  /\bfreundin(?:nen)?\b/i,
+  /kennengelernt/i,
+  /intensive zeit/i,
   /do you remember/i,
   /tell me about/i,
   /what did we/i,
@@ -83,10 +87,34 @@ function formatMemoryResults(results) {
     .join('\n\n---\n\n');
 }
 
+function summarizeMemoryResults(results) {
+  return results.map((result) => {
+    const attrs = result.attributes || {};
+    const content = extractMemoryText(result).trim();
+    return {
+      title: attrs.title || 'Unbenannter Chat',
+      date: attrs.date || 'unbekanntes Datum',
+      score: typeof result.score === 'number' ? result.score : null,
+      preview: content.slice(0, 220)
+    };
+  });
+}
+
 async function searchMemory(query) {
   const vectorStoreId = process.env.MEMORY_VECTOR_STORE_ID;
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!vectorStoreId || !apiKey) return '';
+  if (!vectorStoreId || !apiKey) {
+    return {
+      context: '',
+      log: {
+        searched: false,
+        query,
+        resultCount: 0,
+        results: [],
+        error: 'Vector Store ID oder OpenAI API Key fehlt.'
+      }
+    };
+  }
 
   const response = await fetch(`https://api.openai.com/v1/vector_stores/${vectorStoreId}/search`, {
     method: 'POST',
@@ -107,11 +135,30 @@ async function searchMemory(query) {
   if (!response.ok) {
     const detail = await response.text();
     console.error('Memory search failed:', response.status, detail);
-    return '';
+    return {
+      context: '',
+      log: {
+        searched: true,
+        query,
+        resultCount: 0,
+        results: [],
+        error: `Memory search failed: ${response.status}`
+      }
+    };
   }
 
   const data = await response.json();
-  return formatMemoryResults(data.data || []);
+  const results = data.data || [];
+  return {
+    context: formatMemoryResults(results),
+    log: {
+      searched: true,
+      query,
+      resultCount: results.length,
+      results: summarizeMemoryResults(results),
+      error: ''
+    }
+  };
 }
 
 function withMemoryContext(messages, memoryContext) {
@@ -150,10 +197,18 @@ exports.handler = async (event, context) => {
   try {
     const { messages, model, task } = JSON.parse(event.body);
     let apiMessages = messages;
+    let memoryLog = {
+      searched: false,
+      query: getLastUserMessage(Array.isArray(messages) ? messages : []),
+      resultCount: 0,
+      results: [],
+      error: ''
+    };
 
     if (Array.isArray(messages) && shouldSearchMemory(messages)) {
-      const memoryContext = await searchMemory(getLastUserMessage(messages));
-      apiMessages = withMemoryContext(messages, memoryContext);
+      const memorySearch = await searchMemory(getLastUserMessage(messages));
+      memoryLog = memorySearch.log;
+      apiMessages = withMemoryContext(messages, memorySearch.context);
     }
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -206,7 +261,7 @@ exports.handler = async (event, context) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify({ ...data, memoryLog })
     };
 
   } catch (error) {
