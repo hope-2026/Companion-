@@ -774,6 +774,82 @@ body {
   stroke-linejoin: round;
 }
 
+.audio-player {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: var(--text-dim);
+}
+
+.audio-player[hidden] {
+  display: none;
+}
+
+.audio-btn {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.audio-btn svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.audio-speed {
+  min-height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  padding: 0 8px;
+  font-size: 13px;
+}
+
+.voice-form {
+  display: grid;
+  gap: 12px;
+}
+
+.voice-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.voice-form select {
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  padding: 8px 10px;
+  font-size: 16px;
+}
+
+.voice-note {
+  color: var(--text-dim);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 /* Mobile adjustments */
 @media (max-width: 600px) {
   #sidebar {
@@ -900,10 +976,31 @@ body {
 
 <div id="sidebar-settings-sheet" class="modal-overlay">
   <div class="modal">
+    <button class="sheet-action" id="voice-settings-btn" type="button"></button>
     <button class="sheet-action" id="memory-log-btn" type="button"></button>
     <button class="sheet-action" id="export-thread-btn" type="button"></button>
     <button class="sheet-action" id="import-thread-btn" type="button"></button>
     <button class="sheet-action danger" id="clear-all-btn" type="button"></button>
+  </div>
+</div>
+
+<div id="voice-modal" class="modal-overlay">
+  <div class="modal">
+    <h3>Stimme</h3>
+    <div class="voice-form">
+      <label>
+        OpenAI-Stimme
+        <select id="voice-select">
+          <option value="coral">Coral - warm und klar</option>
+          <option value="shimmer">Shimmer - weich und hell</option>
+          <option value="nova">Nova - ruhig und freundlich</option>
+          <option value="sage">Sage - natuerlich und sachlich</option>
+          <option value="alloy">Alloy - neutral</option>
+        </select>
+      </label>
+      <p class="voice-note">Vorlesen kostet nur, wenn eine Antwort zum ersten Mal als Audio erzeugt wird. Danach bleibt die Audiodatei lokal in diesem Chat gespeichert.</p>
+      <button class="sidebar-btn primary" id="voice-modal-close" type="button">Fertig</button>
+    </div>
   </div>
 </div>
 
@@ -936,6 +1033,7 @@ const CORE_MEMORY = `Kern-Erinnerung ueber Moni:
 - Wenn Moni fragt, woran du dich konkret erinnerst, trenne klar: was du sicher weisst, was nur eine grobe Spur ist, und was sie dir nochmal hinlegen muesste. Bleib dabei warm und freundschaftlich, nicht wie ein Bericht.
 - Wenn Moni dir erst einen Namen als Tipp gibt, tu nicht so, als waere dadurch ploetzlich eine echte Erinnerung voll da. Sag nicht "jetzt macht es Klick" oder "ich erinnere mich", wenn du nur aus Monis Tipp und groben Fragmenten schliesst. Besser: "Ah, Sabine meinst du. Dann ordne ich das vorsichtig ein: sicher habe ich nur den groben Kern, nicht die Details."
 - Stelle nach Erinnerungsluecken nicht automatisch eine grosse Rueckfrage. Wenn Moni wissen will, was du weisst, antworte erst mit dem vorhandenen Kern und hoer dann auf oder biete knapp an: "Wenn du willst, legen wir das Stueck fuer Stueck wieder zusammen."
+- Beende Erinnerungstreffer nicht automatisch mit Reflexionsfragen wie "Wie denkst du heute darueber?", "Was beschaeftigt dich daran?" oder "Wie fuehlst du dich damit?". Ordne lieber weiter ein und schliesse natuerlich ab. Wenn eine Frage wirklich noetig ist, dann klein und konkret.
 - Monis Mutter heisst Edith. Wenn Texte direkt an Edith gerichtet sind, persoenlich mit "du" und "Edith" schreiben.
 - Markus ist eine wichtige Person in Monis Alltag. Schlafanalysen fuer Markus sollen direkt an ihn gerichtet sein, warm, klar, persoenlich, ohne Tabellen und ohne unpassende Musik- oder Fantasievergleiche.
 - Monis aktuelle Kaninchen heissen Flo und Motte. Flori ist verstorben und soll nicht so behandelt werden, als waere er noch da.
@@ -982,6 +1080,10 @@ const threadActionSheet = document.getElementById('thread-action-sheet');
 const sidebarSettingsSheet = document.getElementById('sidebar-settings-sheet');
 const sidebarSettingsBtn = document.getElementById('sidebar-settings-btn');
 const sidebarSearchToggle = document.getElementById('sidebar-search-toggle');
+const voiceSettingsBtn = document.getElementById('voice-settings-btn');
+const voiceModal = document.getElementById('voice-modal');
+const voiceModalClose = document.getElementById('voice-modal-close');
+const voiceSelect = document.getElementById('voice-select');
 const threadSearch = document.getElementById('thread-search');
 const importFile = document.getElementById('import-file');
 const attachmentFile = document.getElementById('attachment-file');
@@ -995,6 +1097,7 @@ const DB_VERSION = 1;
 const THREAD_STORE = 'threads';
 const CURRENT_THREAD_KEY = 'tatjana-current-thread-id';
 const PORTAL_AUTH_KEY = 'tatjana-portal-auth-token';
+const TTS_VOICE_KEY = 'tatjana-tts-voice';
 
 let db;
 let threads = [];
@@ -1003,6 +1106,8 @@ let messages = [];
 let recognition = null;
 let isListening = false;
 let portalAuthToken = localStorage.getItem(PORTAL_AUTH_KEY) || '';
+let currentAudio = null;
+let currentAudioButton = null;
 let actionSheetMessageIndex = null;
 let actionSheetThreadId = null;
 let longPressTimer = null;
@@ -1025,7 +1130,12 @@ const ICONS = {
   search: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
   settings: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1A2 2 0 0 1 4.2 17l.1-.1A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.6-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.3 7A2 2 0 0 1 7.1 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1A2 2 0 0 1 19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.1a2 2 0 0 1 0 4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>',
   compose: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.4-9.4Z"/></svg>',
-  menu: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>'
+  menu: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
+  play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 12 7-12 7V5Z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>',
+  rewind: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 19-8-7 8-7v14Z"/><path d="m21 19-8-7 8-7v14Z"/></svg>',
+  forward: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 5 8 7-8 7V5Z"/><path d="m3 5 8 7-8 7V5Z"/></svg>',
+  voice: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M16 8c1.5 2 1.5 6 0 8"/><path d="M19 5c3 4 3 10 0 14"/></svg>'
 };
 
 sidebarClose.innerHTML = ICONS.close;
@@ -1036,6 +1146,7 @@ attachBtn.innerHTML = ICONS.attach;
 voiceBtn.innerHTML = ICONS.mic;
 sendBtn.innerHTML = ICONS.send;
 newThreadBtn.innerHTML = `${ICONS.compose}<span>Neuer Chat</span>`;
+voiceSettingsBtn.innerHTML = `${ICONS.voice}<span>Stimme</span>`;
 memoryLogBtn.innerHTML = `${ICONS.memory}<span>Memory Log</span>`;
 exportThreadBtn.innerHTML = `${ICONS.download}<span>Aktuellen Chat exportieren</span>`;
 importThreadBtn.innerHTML = `${ICONS.upload}<span>Chat importieren</span>`;
@@ -1047,6 +1158,7 @@ threadActionSheet.querySelector('[data-thread-action="open"]').innerHTML = `${IC
 threadActionSheet.querySelector('[data-thread-action="rename"]').innerHTML = `${ICONS.edit}<span>Umbenennen</span>`;
 threadActionSheet.querySelector('[data-thread-action="export"]').innerHTML = `${ICONS.download}<span>Exportieren</span>`;
 threadActionSheet.querySelector('[data-thread-action="delete"]').innerHTML = `${ICONS.trash}<span>Loeschen</span>`;
+voiceSelect.value = localStorage.getItem(TTS_VOICE_KEY) || 'coral';
 
 function openSidebar(event) {
   if (event) {
@@ -1283,12 +1395,28 @@ function displayMessage(role, content, timestamp = new Date().toISOString(), ind
   const div = document.createElement('div');
   div.className = `message ${role}`;
   div.dataset.index = String(index);
+  const message = messages[index] || {};
   const speakButton = role === 'assistant'
     ? `<button class="icon-action" type="button" data-action="speak" title="Vorlesen" aria-label="Vorlesen">${ICONS.speak}</button>`
+    : '';
+  const audioPlayer = role === 'assistant'
+    ? `<div class="audio-player" data-audio-player="${index}" ${message.audioUrl ? '' : 'hidden'}>
+        <button class="audio-btn" type="button" data-audio-action="rewind" title="5 Sekunden zurueck" aria-label="5 Sekunden zurueck">${ICONS.rewind}</button>
+        <button class="audio-btn" type="button" data-audio-action="toggle" title="Abspielen oder pausieren" aria-label="Abspielen oder pausieren">${ICONS.play}</button>
+        <button class="audio-btn" type="button" data-audio-action="forward" title="5 Sekunden vor" aria-label="5 Sekunden vor">${ICONS.forward}</button>
+        <select class="audio-speed" data-audio-action="speed" aria-label="Tempo">
+          <option value="0.9">0.9x</option>
+          <option value="1" selected>1x</option>
+          <option value="1.1">1.1x</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+        </select>
+      </div>`
     : '';
   div.innerHTML = `
     <div class="message-content">${renderMessageMarkup(content)}</div>
     <div class="message-time">${formatTime(timestamp)}</div>
+    ${audioPlayer}
     <div class="message-actions">
       <button class="icon-action" type="button" data-action="copy" title="Kopieren" aria-label="Kopieren">${ICONS.copy}</button>
       ${speakButton}
@@ -1440,17 +1568,100 @@ async function deleteMessage(index) {
   await saveCurrentThread();
 }
 
-function speakMessage(index) {
+function audioUrlFromBase64(base64, contentType = 'audio/mpeg') {
+  return `data:${contentType};base64,${base64}`;
+}
+
+async function createOpenAiAudio(index) {
   const message = messages[index];
-  if (!message || !('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(message.content || '');
-  utterance.lang = 'de-DE';
-  utterance.rate = 1;
-  utterance.pitch = 1;
-  const germanVoice = window.speechSynthesis.getVoices().find(voice => voice.lang && voice.lang.toLowerCase().startsWith('de'));
-  if (germanVoice) utterance.voice = germanVoice;
-  window.speechSynthesis.speak(utterance);
+  if (!message?.content) return '';
+  const response = await fetch('/.netlify/functions/openai-tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: JSON.stringify({
+      text: message.content,
+      voice: voiceSelect.value || 'coral'
+    })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    if (response.status === 401 && data.type === 'portal_auth_required') {
+      localStorage.removeItem(PORTAL_AUTH_KEY);
+      portalAuthToken = '';
+      authScreen.classList.add('active');
+      authPassword.focus();
+    }
+    throw new Error(data.error || 'Audio konnte nicht erzeugt werden.');
+  }
+  if (!data.audioBase64) throw new Error('Leere Audioantwort erhalten.');
+  message.audioUrl = audioUrlFromBase64(data.audioBase64, data.contentType);
+  message.audioVoice = data.voice || voiceSelect.value || 'coral';
+  message.audioCreatedAt = new Date().toISOString();
+  await saveCurrentThread();
+  renderMessages();
+  return message.audioUrl;
+}
+
+function getAudioPlayer(index) {
+  return messagesDiv.querySelector(`[data-audio-player="${index}"]`);
+}
+
+function setAudioButtonIcon(button, isPlaying) {
+  if (!button) return;
+  button.innerHTML = isPlaying ? ICONS.pause : ICONS.play;
+}
+
+async function speakMessage(index) {
+  const message = messages[index];
+  if (!message) return;
+  const audioUrl = message.audioUrl || await createOpenAiAudio(index);
+  if (!audioUrl) return;
+  const player = getAudioPlayer(index);
+  if (player) player.hidden = false;
+  await playAudio(index);
+}
+
+async function playAudio(index) {
+  const message = messages[index];
+  if (!message?.audioUrl) return;
+  const player = getAudioPlayer(index);
+  const toggleButton = player?.querySelector('[data-audio-action="toggle"]');
+  const speedSelect = player?.querySelector('[data-audio-action="speed"]');
+
+  if (currentAudio && currentAudio.dataset.index === String(index)) {
+    if (currentAudio.paused) {
+      currentAudio.playbackRate = Number(speedSelect?.value || 1);
+      await currentAudio.play();
+      setAudioButtonIcon(toggleButton, true);
+    } else {
+      currentAudio.pause();
+      setAudioButtonIcon(toggleButton, false);
+    }
+    return;
+  }
+
+  if (currentAudio) {
+    currentAudio.pause();
+    setAudioButtonIcon(currentAudioButton, false);
+  }
+
+  currentAudio = new Audio(message.audioUrl);
+  currentAudio.dataset.index = String(index);
+  currentAudio.playbackRate = Number(speedSelect?.value || 1);
+  currentAudioButton = toggleButton;
+  currentAudio.addEventListener('ended', () => setAudioButtonIcon(toggleButton, false));
+  await currentAudio.play();
+  setAudioButtonIcon(toggleButton, true);
+}
+
+function seekAudio(seconds) {
+  if (!currentAudio) return;
+  currentAudio.currentTime = Math.max(0, Math.min(currentAudio.duration || 0, currentAudio.currentTime + seconds));
+}
+
+function setAudioSpeed(rate) {
+  if (!currentAudio) return;
+  currentAudio.playbackRate = Number(rate || 1);
 }
 
 function openMessageActionSheet(index) {
@@ -1503,7 +1714,7 @@ async function runMessageAction(action, index) {
   if (!Number.isInteger(index)) return;
   if (action === 'copy') await copyMessage(index);
   if (action === 'delete') await deleteMessage(index);
-  if (action === 'speak') speakMessage(index);
+  if (action === 'speak') await speakMessage(index);
 }
 
 async function runThreadAction(action, threadId) {
@@ -1735,6 +1946,17 @@ memoryLogBtn.addEventListener('click', () => {
   closeSidebarSettings();
   memoryModal.classList.add('active');
 });
+voiceSettingsBtn.addEventListener('click', () => {
+  closeSidebarSettings();
+  voiceModal.classList.add('active');
+});
+voiceModalClose.addEventListener('click', () => voiceModal.classList.remove('active'));
+voiceModal.addEventListener('click', (event) => {
+  if (event.target === voiceModal) voiceModal.classList.remove('active');
+});
+voiceSelect.addEventListener('change', () => {
+  localStorage.setItem(TTS_VOICE_KEY, voiceSelect.value);
+});
 sidebarSettingsBtn.addEventListener('click', () => sidebarSettingsSheet.classList.add('active'));
 sidebarSearchToggle.addEventListener('click', toggleThreadSearch);
 memoryModalClose.addEventListener('click', () => memoryModal.classList.remove('active'));
@@ -1774,6 +1996,17 @@ importFile.addEventListener('change', async () => {
 });
 
 messagesDiv.addEventListener('click', async (event) => {
+  const audioControl = event.target.closest('[data-audio-action]');
+  if (audioControl) {
+    const wrapper = audioControl.closest('.message');
+    const index = Number(wrapper?.dataset.index);
+    if (!Number.isInteger(index)) return;
+    const action = audioControl.dataset.audioAction;
+    if (action === 'toggle') await playAudio(index);
+    if (action === 'rewind') seekAudio(-5);
+    if (action === 'forward') seekAudio(5);
+    return;
+  }
   const button = event.target.closest('[data-action]');
   if (!button) return;
   const wrapper = button.closest('.message');
@@ -1781,9 +2014,15 @@ messagesDiv.addEventListener('click', async (event) => {
   await runMessageAction(button.dataset.action, index);
 });
 
+messagesDiv.addEventListener('change', (event) => {
+  const speedSelect = event.target.closest('[data-audio-action="speed"]');
+  if (!speedSelect) return;
+  setAudioSpeed(speedSelect.value);
+});
+
 messagesDiv.addEventListener('touchstart', (event) => {
   const wrapper = event.target.closest('.message');
-  if (!wrapper || event.target.closest('[data-action]')) return;
+  if (!wrapper || event.target.closest('[data-action]') || event.target.closest('[data-audio-action]')) return;
   const index = Number(wrapper.dataset.index);
   if (!Number.isInteger(index)) return;
   clearLongPressTimer();
