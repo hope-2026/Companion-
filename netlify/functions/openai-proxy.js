@@ -165,7 +165,7 @@ async function searchMemory(query) {
 
 function withMemoryContext(messages, memoryContext) {
   if (!memoryContext) return messages;
-  const memoryInstructions = `\n\nWICHTIGER ERINNERUNGSHINWEIS:\nWenn abgerufene Erinnerungen vorhanden sind, nutze sie direkt. Erfinde keine Details, ergänze keine Lücken mit Spekulationen und sage offen, wenn die Erinnerung unvollständig ist.\n\nABGERUFENE ERINNERUNGEN:\n${memoryContext}`;
+  const memoryInstructions = `\n\nWICHTIGER ERINNERUNGSHINWEIS:\nAbgerufene Erinnerungen sind historische Hinweise, keine aktuelle Wahrheit. Wenn Moni im aktuellen Chat eine Person, Beziehung oder Situation neu einordnet, hat diese aktuelle Einordnung Vorrang vor alten Erinnerungen. Nutze Erinnerungen direkt, aber erfinde keine Details, ergänze keine Lücken mit Spekulationen und sage offen, wenn die Erinnerung unvollständig ist.\n\nABGERUFENE ERINNERUNGEN:\n${memoryContext}`;
 
   return messages.map((message, index) => {
     if (index === 0 && message.role === 'system') {
