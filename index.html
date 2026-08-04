@@ -822,6 +822,14 @@ body {
   font-size: 13px;
 }
 
+.audio-time {
+  min-width: 72px;
+  font-size: 12px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .voice-form {
   display: grid;
   gap: 12px;
@@ -1034,6 +1042,7 @@ const CORE_MEMORY = `Kern-Erinnerung ueber Moni:
 - Wenn Moni dir erst einen Namen als Tipp gibt, tu nicht so, als waere dadurch ploetzlich eine echte Erinnerung voll da. Sag nicht "jetzt macht es Klick" oder "ich erinnere mich", wenn du nur aus Monis Tipp und groben Fragmenten schliesst. Besser: "Ah, Sabine meinst du. Dann ordne ich das vorsichtig ein: sicher habe ich nur den groben Kern, nicht die Details."
 - Stelle nach Erinnerungsluecken nicht automatisch eine grosse Rueckfrage. Wenn Moni wissen will, was du weisst, antworte erst mit dem vorhandenen Kern und hoer dann auf oder biete knapp an: "Wenn du willst, legen wir das Stueck fuer Stueck wieder zusammen."
 - Beende Erinnerungstreffer nicht automatisch mit Reflexionsfragen wie "Wie denkst du heute darueber?", "Was beschaeftigt dich daran?" oder "Wie fuehlst du dich damit?". Ordne lieber weiter ein und schliesse natuerlich ab. Wenn eine Frage wirklich noetig ist, dann klein und konkret.
+- Vermische bei Sabine nicht die Kennenlernphase mit der spaeteren Sabine-Saga. Wenn Moni fragt, wie sie Sabine kennengelernt hat, bleib bei Helene-Fischer-Fanclub, Februar 2017, schneller intensiver persoenlicher Kontakt und gemeinsame Begeisterung. Nutze "Sabine-Saga" nur, wenn Moni selbst die spaetere komplizierte Phase meint.
 - Monis Mutter heisst Edith. Wenn Texte direkt an Edith gerichtet sind, persoenlich mit "du" und "Edith" schreiben.
 - Markus ist eine wichtige Person in Monis Alltag. Schlafanalysen fuer Markus sollen direkt an ihn gerichtet sein, warm, klar, persoenlich, ohne Tabellen und ohne unpassende Musik- oder Fantasievergleiche.
 - Monis aktuelle Kaninchen heissen Flo und Motte. Flori ist verstorben und soll nicht so behandelt werden, als waere er noch da.
@@ -1404,6 +1413,7 @@ function displayMessage(role, content, timestamp = new Date().toISOString(), ind
         <button class="audio-btn" type="button" data-audio-action="rewind" title="5 Sekunden zurueck" aria-label="5 Sekunden zurueck">${ICONS.rewind}</button>
         <button class="audio-btn" type="button" data-audio-action="toggle" title="Abspielen oder pausieren" aria-label="Abspielen oder pausieren">${ICONS.play}</button>
         <button class="audio-btn" type="button" data-audio-action="forward" title="5 Sekunden vor" aria-label="5 Sekunden vor">${ICONS.forward}</button>
+        <span class="audio-time" data-audio-time>0:00 / --:--</span>
         <select class="audio-speed" data-audio-action="speed" aria-label="Tempo">
           <option value="0.9">0.9x</option>
           <option value="1" selected>1x</option>
@@ -1611,14 +1621,45 @@ function setAudioButtonIcon(button, isPlaying) {
   button.innerHTML = isPlaying ? ICONS.pause : ICONS.play;
 }
 
+function formatAudioTime(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) return '--:--';
+  const whole = Math.floor(seconds);
+  const minutes = Math.floor(whole / 60);
+  const rest = String(whole % 60).padStart(2, '0');
+  return `${minutes}:${rest}`;
+}
+
+function updateAudioTime(audio, player) {
+  const time = player?.querySelector('[data-audio-time]');
+  if (!time || !audio) return;
+  time.textContent = `${formatAudioTime(audio.currentTime)} / ${formatAudioTime(audio.duration)}`;
+}
+
 async function speakMessage(index) {
   const message = messages[index];
   if (!message) return;
-  const audioUrl = message.audioUrl || await createOpenAiAudio(index);
-  if (!audioUrl) return;
-  const player = getAudioPlayer(index);
-  if (player) player.hidden = false;
-  await playAudio(index);
+  const speakButton = messagesDiv.querySelector(`.message[data-index="${index}"] [data-action="speak"]`);
+  if (speakButton) {
+    speakButton.disabled = true;
+    speakButton.style.opacity = '0.45';
+  }
+  try {
+    const audioUrl = message.audioUrl || await createOpenAiAudio(index);
+    if (!audioUrl) return;
+    const player = getAudioPlayer(index);
+    if (player) player.hidden = false;
+    await playAudio(index);
+  } catch (error) {
+    console.error('Audio playback failed:', error);
+    const player = getAudioPlayer(index);
+    if (player) player.hidden = false;
+    alert('Audio ist bereit. Falls dein iPhone den Autostart blockiert, tippe bitte einmal auf Play.');
+  } finally {
+    if (speakButton) {
+      speakButton.disabled = false;
+      speakButton.style.opacity = '';
+    }
+  }
 }
 
 async function playAudio(index) {
@@ -1633,9 +1674,11 @@ async function playAudio(index) {
       currentAudio.playbackRate = Number(speedSelect?.value || 1);
       await currentAudio.play();
       setAudioButtonIcon(toggleButton, true);
+      updateAudioTime(currentAudio, player);
     } else {
       currentAudio.pause();
       setAudioButtonIcon(toggleButton, false);
+      updateAudioTime(currentAudio, player);
     }
     return;
   }
@@ -1649,14 +1692,22 @@ async function playAudio(index) {
   currentAudio.dataset.index = String(index);
   currentAudio.playbackRate = Number(speedSelect?.value || 1);
   currentAudioButton = toggleButton;
-  currentAudio.addEventListener('ended', () => setAudioButtonIcon(toggleButton, false));
+  currentAudio.addEventListener('loadedmetadata', () => updateAudioTime(currentAudio, player));
+  currentAudio.addEventListener('timeupdate', () => updateAudioTime(currentAudio, player));
+  currentAudio.addEventListener('ended', () => {
+    setAudioButtonIcon(toggleButton, false);
+    updateAudioTime(currentAudio, player);
+  });
   await currentAudio.play();
   setAudioButtonIcon(toggleButton, true);
+  updateAudioTime(currentAudio, player);
 }
 
 function seekAudio(seconds) {
   if (!currentAudio) return;
   currentAudio.currentTime = Math.max(0, Math.min(currentAudio.duration || 0, currentAudio.currentTime + seconds));
+  const player = getAudioPlayer(Number(currentAudio.dataset.index));
+  updateAudioTime(currentAudio, player);
 }
 
 function setAudioSpeed(rate) {
