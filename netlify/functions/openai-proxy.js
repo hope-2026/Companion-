@@ -29,6 +29,11 @@ const MEMORY_TRIGGERS = [
   /did we talk about/i
 ];
 
+const FAMILY_MEMORY_TRIGGERS = [
+  /(?:wer ist|kennst du|weisst du.*wer|weißt du.*wer|wie heisst|wie heißt|erzaehl.*(?:ueber|über)|erzähl.*(?:ueber|über)).*(?:mutter|bruder|thomas|vater|hans|hannelore|tante|familie)/i,
+  /(?:mama|mutter|edith|bruder|thomas|vater|hans|hannelore|tante|familie).*(?:erinner|weisst|weißt|kennst|name|heisst|heißt|erzaehl|erzähl|details|frueher|früher|damals)/i
+];
+
 const MAIN_MODEL = process.env.OPENAI_MAIN_MODEL || 'gpt-4o';
 const UTILITY_MODEL = process.env.OPENAI_UTILITY_MODEL || 'gpt-4o-mini';
 
@@ -57,7 +62,7 @@ function selectModel(requestedModel, task) {
 function shouldSearchMemory(messages) {
   const lastUserMessage = [...messages].reverse().find((message) => message.role === 'user');
   if (!lastUserMessage?.content) return false;
-  return MEMORY_TRIGGERS.some((pattern) => pattern.test(lastUserMessage.content));
+  return [...MEMORY_TRIGGERS, ...FAMILY_MEMORY_TRIGGERS].some((pattern) => pattern.test(lastUserMessage.content));
 }
 
 function getLastUserMessage(messages) {
@@ -179,6 +184,7 @@ function withMemoryContext(messages, memoryContext) {
 }
 
 exports.handler = async (event, context) => {
+  // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
@@ -213,6 +219,7 @@ exports.handler = async (event, context) => {
       apiMessages = withMemoryContext(messages, memorySearch.context);
     }
 
+    // Call OpenAI API
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
