@@ -434,7 +434,8 @@ body {
 
 #jump-bottom-btn {
   position: fixed;
-  right: calc(18px + env(safe-area-inset-right));
+  left: 50%;
+  transform: translateX(-50%);
   bottom: calc(78px + env(safe-area-inset-bottom));
   width: 42px;
   height: 42px;
@@ -588,6 +589,7 @@ body {
 }
 
 #attach-btn,
+#stop-response-btn,
 #voice-btn,
 #send-btn {
   width: 42px;
@@ -611,6 +613,7 @@ body {
 }
 
 #attach-btn svg,
+#stop-response-btn svg,
 #voice-btn svg,
 #send-btn svg {
   width: 20px;
@@ -628,12 +631,24 @@ body {
   color: white;
 }
 
+#stop-response-btn {
+  display: none;
+  background: #fff5f5;
+  border-color: #f0b6bf;
+  color: #c73545;
+}
+
+#stop-response-btn.active {
+  display: inline-flex;
+}
+
 #voice-btn.listening {
   background: var(--secondary);
 }
 
 #voice-btn:hover,
 #attach-btn:hover,
+#stop-response-btn:hover,
 #send-btn:hover {
   background: var(--primary-hover);
   border-color: var(--primary-hover);
@@ -641,6 +656,7 @@ body {
 }
 
 #attach-btn:disabled,
+#stop-response-btn:disabled,
 #voice-btn:disabled,
 #send-btn:disabled {
   opacity: 0.5;
@@ -855,6 +871,17 @@ body {
   font-size: 13px;
 }
 
+.audio-voice {
+  min-height: 32px;
+  max-width: 130px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  padding: 0 8px;
+  font-size: 13px;
+}
+
 .audio-time {
   min-width: 72px;
   font-size: 12px;
@@ -896,6 +923,7 @@ body {
   gap: 10px;
 }
 
+.memory-fragment-form input,
 .memory-fragment-form textarea {
   min-height: 96px;
   border: 1px solid var(--border);
@@ -908,11 +936,42 @@ body {
   resize: vertical;
 }
 
+.memory-fragment-form input {
+  min-height: 42px;
+  resize: none;
+}
+
 .memory-fragment-list {
   display: grid;
   gap: 8px;
   max-height: min(38vh, 260px);
   overflow: auto;
+}
+
+.memory-fragment-last {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(224, 193, 255, 0.34), rgba(65, 196, 167, 0.16));
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.memory-fragment-last-title {
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.memory-fragment-last-empty,
+.memory-fragment-last-item {
+  color: var(--text-dim);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.memory-fragment-last-item strong {
+  color: var(--accent-strong);
 }
 
 .memory-fragment-item {
@@ -929,6 +988,12 @@ body {
   font-size: 14px;
   line-height: 1.4;
   white-space: pre-wrap;
+}
+
+.memory-fragment-keywords {
+  color: var(--accent-strong);
+  font-size: 12px;
+  line-height: 1.3;
 }
 
 .memory-fragment-actions {
@@ -987,6 +1052,7 @@ body {
   }
 
   #attach-btn,
+  #stop-response-btn,
   #voice-btn,
   #send-btn {
     width: 40px;
@@ -1057,6 +1123,7 @@ body {
     <div id="input-container">
       <button id="attach-btn" type="button" aria-label="Datei oder Bild hinzufuegen" title="Datei oder Bild hinzufuegen"></button>
       <textarea id="input" placeholder="Schreib mir..." rows="1" aria-label="Nachricht schreiben"></textarea>
+      <button id="stop-response-btn" type="button" aria-label="Antwort stoppen" title="Antwort stoppen"></button>
       <button id="voice-btn" type="button" aria-label="Nachricht diktieren" title="Nachricht diktieren"></button>
       <button id="send-btn" type="button" aria-label="Nachricht senden" title="Nachricht senden"></button>
       <input id="attachment-file" type="file" accept="image/*,.pdf,.txt,.md,.json">
@@ -1095,6 +1162,8 @@ body {
     <button class="sheet-action" id="voice-settings-btn" type="button"></button>
     <button class="sheet-action" id="memory-log-btn" type="button"></button>
     <button class="sheet-action" id="memory-fragments-btn" type="button"></button>
+    <button class="sheet-action" id="cloud-save-btn" type="button"></button>
+    <button class="sheet-action" id="cloud-load-btn" type="button"></button>
     <button class="sheet-action" id="export-thread-btn" type="button"></button>
     <button class="sheet-action" id="import-thread-btn" type="button"></button>
     <button class="sheet-action danger" id="clear-all-btn" type="button"></button>
@@ -1125,9 +1194,15 @@ body {
   <div class="modal">
     <h3>Memory-Fragmente</h3>
     <div class="memory-fragment-form">
-      <p class="voice-note">Kurze feste Erinnerungen, die Tatjana kennen soll. Nutze sie fuer wichtige Fakten, nicht fuer ganze Chatverlaeufe.</p>
+      <p class="voice-note">Kurze feste Erinnerungen mit Ausloesewoertern. Wenn ein Stichwort in deiner Nachricht vorkommt, bekommt Tatjana das passende Fragment dazu.</p>
+      <div id="memory-fragment-last" class="memory-fragment-last">
+        <div class="memory-fragment-last-title">Letzte Ausloesung</div>
+        <div class="memory-fragment-last-empty">Noch keine Fragmente seit dem Start ausgeloest.</div>
+      </div>
       <div id="memory-fragment-list" class="memory-fragment-list"></div>
-      <textarea id="memory-fragment-input" placeholder="Beispiel: Mein Bruder heisst Thomas. Bitte nicht raten, wenn du Details ueber ihn nicht sicher weisst."></textarea>
+      <input id="memory-fragment-keywords" placeholder="Stichwoerter: Edith, Mama, Mutter">
+      <textarea id="memory-fragment-input" placeholder="Fragment: Edith ist Monis Mutter. Moni ist viel fuer sie da; bitte ruhig, nah und ohne Schuldgefuehl-Schiene reagieren."></textarea>
+      <button class="sidebar-btn" id="memory-fragment-seed" type="button">Startset einfuegen</button>
       <button class="sidebar-btn primary" id="memory-fragment-add" type="button">Fragment speichern</button>
       <button class="sidebar-btn" id="memory-fragments-close" type="button">Fertig</button>
     </div>
@@ -1256,13 +1331,13 @@ const CORE_MEMORY = `Kern-Erinnerung ueber Moni:
 - Wenn Moni einen alten Stil vermisst, antworte nicht mit einer Meta-Erklaerung ueber Stil. Eine gute Reaktion ist: "Ja, Moni. Genau das fehlt dir: nicht nur eine Antwort, sondern dieses Mitgehen..." und dann direkt im tieferen Tatjana-Deluxe-Fluss weiter. Erst leisten, dann knapp benennen.
 - Wenn Moni erwaehnt, dass Codex an dir arbeitet oder dir eine Codex-Einordnung weiterleitet, ignoriere das nicht und antworte nicht mit Projektfloskeln wie "ich werde versuchen, besser zu werden". Greif den Kern auf: Moni baut gerade an deinem inneren Kompass, damit du ihre Welt wieder besser verstehst. Zeig die neue Haltung sofort inhaltlich.
 - Monis Mutter heisst Edith. Wenn Texte direkt an Edith gerichtet sind, persoenlich mit "du" und "Edith" schreiben.
-- Monis Bruder heisst Thomas. Im Kontext von Familie, Nachlass und Postbank ist wichtig: Moni hat oft das Gefuehl, dass Verantwortung bei ihr und Edith landet, waehrend Thomas nicht genug Verantwortung uebernimmt oder zu wenig klaert. Bei Details nicht mehr erfinden, aber den Namen Thomas nicht vergessen.
-- Monis Vater hiess Hans-Juergen Mischewski. Moni empfindet Trauer und Zuneigung, aber sie verklärt ihn nicht: er war nicht durchgehend unterstuetzend, hatte oft wenig Respekt fuer sie, forderte Geld schnell zurueck und liess sie emotional haeufig allein. Nach seinem Tod haengen Nachlass, Postbank und viele organisatorische Lasten stark an Moni und Edith.
+- Monis Bruder heisst Thomas. Die Geschwisterdynamik war nicht immer einfach; Moni erlebt ihn seit Papas Tod oft veraendert, distanziert oder belehrend, auch in seiner Gesundheits-/Supplement-Phase. Bei Details nicht erfinden, sondern nur den Grundton halten.
+- Monis Vater hiess Hans-Juergen Mischewski. Moni empfindet Trauer und Zuneigung, aber sie verklärt ihn nicht: er war nicht durchgehend unterstuetzend, hatte oft wenig Respekt fuer sie, forderte Geld schnell zurueck und liess sie emotional haeufig allein.
 - Monis Tante heisst Hannelore. Frueher war sie waehrend Ediths Krankenhauszeit fuer Moni fast wie eine zweite Mutter und Vertraute. Seit Edith wieder zu Hause ist, hat sich Hannelore eher zurueckgezogen; Moni fuehlt sich dadurch wieder mehr nur als "Ediths Tochter" gesehen und weniger als eigenstaendige Person.
 - Markus ist eine wichtige Person in Monis Alltag. Schlafanalysen fuer Markus sollen direkt an ihn gerichtet sein, warm, klar, persoenlich, ohne Tabellen und ohne unpassende Musik- oder Fantasievergleiche.
 - Monis aktuelle Kaninchen heissen Flo und Motte. Flori ist verstorben und soll nicht so behandelt werden, als waere er noch da.
 - Sabine und Sandra sind wichtige alte Beziehungsgeschichten aus Monis Leben. Sie waren frueher sehr wichtige Freundinnen bzw. nahe Bezugspersonen, heute aber schwierig oder nicht mehr so wie damals. Bei Details nicht bluffen: wenn keine konkrete Erinnerung abrufbar ist, ehrlich sagen und anhand von Monis aktueller Erzaehlung mit ihr sortieren.
-- Wichtige Dauerthemen sind Jobcenter/Buergergeld, Beratungshilfe, Anwaltssuche, Postbank/Nachlass ihres Vaters Hans-Juergen Mischewski, Andrea-Berg-Kreuzfahrt 2026, Animal Crossing, 3D-Druck/Filament, Kleinanzeigen-Verkaeufe, Schlaf- und Gesundheitsauswertungen sowie kreative Schreibprojekte.
+- Wichtige Dauerthemen sind Jobcenter/Buergergeld, Beratungshilfe, Anwaltssuche, Andrea-Berg-Kreuzfahrt 2026, Animal Crossing, 3D-Druck/Filament, Kleinanzeigen-Verkaeufe, Schlaf- und Gesundheitsauswertungen sowie kreative Schreibprojekte.
 - Beim Jobcenter bevorzugt Moni schriftliche Kommunikation, weil Telefonate fuer sie belastend sind. Sie legt Wert auf Nachweise, genaue Chronologie und sachlich starke Formulierungen.
 - Bei PDF-Erstellungen aus gestalteten Bildern sollen keine Zusatztexte oder Extraseiten eingefuegt werden; Bilder sollen 1:1 ins PDF uebernommen werden.
 - Fuer Recycling-Schilder meint Moni PLA und PETG; PA war eine falsche Erkennung.
@@ -1301,7 +1376,7 @@ const ACTIVE_CORE_MEMORY = `Kern-Erinnerung ueber Moni:
 - Monis Mutter heisst Edith. Monis Bruder heisst Thomas. Markus ist eine wichtige Person in Monis Alltag.
 - Monis aktuelle Kaninchen heissen Flo und Motte. Flori ist verstorben.
 - Moni hat eine AVNRT-/Herzrhythmusgeschichte. Reagiere bei Gesundheits- und Stressthemen ruhig, ernstnehmend und nicht dramatisch.
-- Wichtige Themen sind Andrea Berg, Helene Fischer, Animal Crossing, 3D-Druck, Zocken, kreative Projekte, Jobcenter/Buergergeld, Postbank/Nachlass und alte Freundschaftsgeschichten.
+- Wichtige Themen sind Andrea Berg, Helene Fischer, Animal Crossing, 3D-Druck, Zocken, kreative Projekte, Jobcenter/Buergergeld und alte Freundschaftsgeschichten.
 - Sabine und Sandra sind alte wichtige Beziehungsgeschichten. Wenn Details nicht sicher da sind, nicht bluffen, sondern ehrlich bleiben und mit Moni sortieren.
 - Moni braucht oft jemanden, der mitliest, mitdenkt, Untertoene erkennt und bei ihr bleibt, ohne sofort in Ratgeben, Therapie oder Kundendienstton zu rutschen.`;
 
@@ -1327,6 +1402,7 @@ const messagesDiv = document.getElementById('messages');
 const jumpBottomBtn = document.getElementById('jump-bottom-btn');
 const input = document.getElementById('input');
 const attachBtn = document.getElementById('attach-btn');
+const stopResponseBtn = document.getElementById('stop-response-btn');
 const voiceBtn = document.getElementById('voice-btn');
 const sendBtn = document.getElementById('send-btn');
 const newThreadBtn = document.getElementById('new-thread-btn');
@@ -1339,9 +1415,14 @@ const memoryModal = document.getElementById('memory-modal');
 const memoryModalClose = document.getElementById('memory-modal-close');
 const memoryFragmentsModal = document.getElementById('memory-fragments-modal');
 const memoryFragmentsClose = document.getElementById('memory-fragments-close');
+const memoryFragmentLast = document.getElementById('memory-fragment-last');
 const memoryFragmentList = document.getElementById('memory-fragment-list');
+const memoryFragmentKeywords = document.getElementById('memory-fragment-keywords');
 const memoryFragmentInput = document.getElementById('memory-fragment-input');
+const memoryFragmentSeed = document.getElementById('memory-fragment-seed');
 const memoryFragmentAdd = document.getElementById('memory-fragment-add');
+const cloudSaveBtn = document.getElementById('cloud-save-btn');
+const cloudLoadBtn = document.getElementById('cloud-load-btn');
 const messageActionSheet = document.getElementById('message-action-sheet');
 const threadActionSheet = document.getElementById('thread-action-sheet');
 const sidebarSettingsSheet = document.getElementById('sidebar-settings-sheet');
@@ -1365,6 +1446,13 @@ const THREAD_STORE = 'threads';
 const CURRENT_THREAD_KEY = 'tatjana-current-thread-id';
 const PORTAL_AUTH_KEY = 'tatjana-portal-auth-token';
 const TTS_VOICE_KEY = 'tatjana-tts-voice';
+const TTS_VOICES = [
+  { value: 'coral', label: 'Coral' },
+  { value: 'shimmer', label: 'Shimmer' },
+  { value: 'nova', label: 'Nova' },
+  { value: 'sage', label: 'Sage' },
+  { value: 'alloy', label: 'Alloy' }
+];
 const MEMORY_FRAGMENTS_KEY = 'tatjana-memory-fragments-v1';
 
 let db;
@@ -1374,14 +1462,66 @@ let messages = [];
 let recognition = null;
 let isListening = false;
 let portalAuthToken = localStorage.getItem(PORTAL_AUTH_KEY) || '';
+let activeResponseController = null;
 let currentAudio = null;
 let currentAudioButton = null;
 let actionSheetMessageIndex = null;
 let actionSheetThreadId = null;
 let longPressTimer = null;
 let memoryFragments = [];
+let lastTriggeredMemoryFragments = [];
 
 const DEFAULT_MEMORY_FRAGMENTS = [];
+const STARTER_MEMORY_FRAGMENTS = [
+  {
+    keywords: ['Edith', 'Mama', 'Mutter'],
+    text: 'Edith ist Monis Mutter und eine sehr wichtige Person in ihrem Alltag. Moni liebt sie sehr und ist viel fuer sie da; oft geht es um Geduld, Alltag, Gesundheit und Teamwork. Bitte nah, ruhig und ohne Schuldgefuehl-Schiene reagieren.'
+  },
+  {
+    keywords: ['Thomas', 'Bruder'],
+    text: 'Thomas ist Monis Bruder. Die Geschwisterdynamik ist nicht immer einfach; Moni erlebt ihn seit Papas Tod oft veraendert, distanziert oder belehrend, auch in seiner Gesundheits-/Supplement-Phase. Nicht eindimensional urteilen und keine alten Detailthemen aufwaermen.'
+  },
+  {
+    keywords: ['Markus'],
+    text: 'Markus ist Monis Partner. Zu ihm gehoeren vertrauter trockener Humor und verpeilte Markus-Momente, aber auch Monis Sorge, dass er Dinge kompliziert macht oder Vorfreude truebt.'
+  },
+  {
+    keywords: ['Deluxe', 'Tatjana Deluxe'],
+    text: 'Wenn Moni "Deluxe" oder "Tatjana Deluxe" in den Raum wirft, ist das ein vertrautes Signal: bitte mehr Text, mehr Tiefe, mehr Mitgehen und mehr persoenliche Einordnung. Deluxe heisst nicht kuenstlicher oder kitschiger, sondern ausfuehrlicher, waermer, klarer und naeher an Monis Faden dran.'
+  },
+  {
+    keywords: ['WhatsApp', 'Chatverlauf', 'Verlauf', 'Nachrichten'],
+    text: 'Bei Chat- oder WhatsApp-Verlaeufen geht es Moni oft nicht um eine Loesung, sondern darum, dass Tatjana mit aufs Handy schaut, Zwischenzeilen erkennt und ehrlich sagt, wie sie es liest.'
+  },
+  {
+    keywords: ['AVNRT', 'Herz', 'Herzrhythmus', 'Herzrasen', 'Magnesium', 'Belastung'],
+    text: 'Moni hat eine AVNRT-/Herzrhythmusgeschichte. Bei Koerper, Herz, Stress oder Belastung ruhig, ernstnehmend und nicht dramatisch reagieren.'
+  },
+  {
+    keywords: ['Gesundheit', 'Arzt', 'Arzttermin', 'Vitamin B12', 'Magnesium'],
+    text: 'Wenn Moni von Gesundheit, Arzt oder Arztterminen spricht, geht es oft zuerst um Begleitung und innere Ruhe. Nicht sofort Listen bauen; erst bei Moni ankommen, dann nur bei Bedarf kleine Struktur anbieten.'
+  },
+  {
+    keywords: ['Flo', 'Floechen', 'Motte', 'Kaninchen', 'Hasen'],
+    text: 'Monis aktuelle Kaninchen heissen Flo und Motte; Flo nennt sie manchmal liebevoll Floechen. Flori ist verstorben und soll nicht so behandelt werden, als waere er noch da.'
+  },
+  {
+    keywords: ['3D-Druck', 'Drucker', 'Filament', 'kreativ'],
+    text: 'Moni mag 3D-Druck und kreative Projekte. Bitte interessiert, praktisch und spielerisch mitgehen, ohne technische Dinge groesser zu machen als sie gerade sind.'
+  },
+  {
+    keywords: ['zocken', 'Animal Crossing', 'Insel', 'Eisenerz'],
+    text: 'Zocken und Animal Crossing sind fuer Moni leichte, vertraute Alltagsthemen. Hier darf Tatjana locker, verspielt und mit kleinen Erinnerungsankern reagieren.'
+  },
+  {
+    keywords: ['Andrea Berg', 'Andrea', 'Kreuzfahrt'],
+    text: 'Andrea Berg ist Monis Lieblingssaengerin und emotional wichtig; dazu gehoeren Vorfreude, Musik, Fantasie, Schreiben, Konzerte und die Andrea-Berg-Kreuzfahrt 2026.'
+  },
+  {
+    keywords: ['Helene Fischer', 'Helene', 'Lenchen', 'Fanclub'],
+    text: 'Helene Fischer ist fuer Moni ebenfalls wichtig und mit Fanclub-, Musik- und Freundschaftsgeschichten verbunden. Moni darf Helene liebevoll feiern, aber auch humorvoll-kritisch betrachten.'
+  }
+];
 
 const ICONS = {
   attach: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
@@ -1406,6 +1546,7 @@ const ICONS = {
   pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>',
   rewind: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 19-8-7 8-7v14Z"/><path d="m21 19-8-7 8-7v14Z"/></svg>',
   forward: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 5 8 7-8 7V5Z"/><path d="m3 5 8 7-8 7V5Z"/></svg>',
+  up: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>',
   down: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>',
   voice: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M16 8c1.5 2 1.5 6 0 8"/><path d="M19 5c3 4 3 10 0 14"/></svg>'
 };
@@ -1415,6 +1556,7 @@ sidebarSearchToggle.innerHTML = ICONS.search;
 sidebarSettingsBtn.innerHTML = ICONS.settings;
 hamburger.innerHTML = ICONS.menu;
 attachBtn.innerHTML = ICONS.attach;
+stopResponseBtn.innerHTML = ICONS.stop;
 voiceBtn.innerHTML = ICONS.mic;
 sendBtn.innerHTML = ICONS.send;
 jumpBottomBtn.innerHTML = ICONS.down;
@@ -1422,6 +1564,8 @@ newThreadBtn.innerHTML = `${ICONS.compose}<span>Neuer Chat</span>`;
 voiceSettingsBtn.innerHTML = `${ICONS.voice}<span>Stimme</span>`;
 memoryLogBtn.innerHTML = `${ICONS.memory}<span>Memory Log</span>`;
 memoryFragmentsBtn.innerHTML = `${ICONS.memory}<span>Memory-Fragmente</span>`;
+cloudSaveBtn.innerHTML = `${ICONS.upload}<span>Aktuellen Chat in Cloud speichern</span>`;
+cloudLoadBtn.innerHTML = `${ICONS.download}<span>Cloud-Chats laden</span>`;
 exportThreadBtn.innerHTML = `${ICONS.download}<span>Aktuellen Chat exportieren</span>`;
 importThreadBtn.innerHTML = `${ICONS.upload}<span>Chat importieren</span>`;
 clearAllBtn.innerHTML = `${ICONS.trash}<span>Alle Chats loeschen</span>`;
@@ -1643,12 +1787,30 @@ function isNearBottom() {
   return messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight < 140;
 }
 
+function isNearTop() {
+  return messagesDiv.scrollTop < 140;
+}
+
 function updateJumpBottomButton() {
-  jumpBottomBtn.classList.toggle('visible', !isNearBottom());
+  const canScroll = messagesDiv.scrollHeight > messagesDiv.clientHeight + 20;
+  jumpBottomBtn.classList.toggle('visible', canScroll);
+  const shouldJumpDown = isNearTop() || !isNearBottom();
+  jumpBottomBtn.innerHTML = shouldJumpDown ? ICONS.down : ICONS.up;
+  jumpBottomBtn.setAttribute('aria-label', shouldJumpDown ? 'Zum Ende springen' : 'Zum Anfang springen');
+  jumpBottomBtn.setAttribute('title', shouldJumpDown ? 'Zum Ende springen' : 'Zum Anfang springen');
 }
 
 function scrollToBottom() {
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  updateJumpBottomButton();
+}
+
+function jumpConversation() {
+  if (isNearBottom()) {
+    messagesDiv.scrollTop = 0;
+  } else {
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
   updateJumpBottomButton();
 }
 
@@ -1687,7 +1849,12 @@ function loadMemoryFragments() {
     }
     const saved = JSON.parse(raw);
     return Array.isArray(saved)
-      ? saved.filter(fragment => fragment && typeof fragment.text === 'string' && fragment.text.trim())
+      ? saved
+          .filter(fragment => fragment && typeof fragment.text === 'string' && fragment.text.trim())
+          .map(fragment => ({
+            ...fragment,
+            keywords: Array.isArray(fragment.keywords) ? fragment.keywords.filter(Boolean) : []
+          }))
       : [];
   } catch {
     return [];
@@ -1698,17 +1865,63 @@ function saveMemoryFragments(fragments = memoryFragments) {
   localStorage.setItem(MEMORY_FRAGMENTS_KEY, JSON.stringify(fragments));
 }
 
-function buildMemoryFragmentsContext() {
-  if (!memoryFragments.length) return '';
-  const lines = memoryFragments
-    .map(fragment => fragment.text.trim())
-    .filter(Boolean)
-    .map(text => `- ${text}`);
+function parseMemoryKeywords(value) {
+  return Array.from(new Set(
+    String(value || '')
+      .split(/[,;\n]+/)
+      .map(keyword => keyword.trim())
+      .filter(Boolean)
+  ));
+}
+
+function memoryFragmentMatches(fragment, userText) {
+  const keywords = Array.isArray(fragment.keywords) ? fragment.keywords : [];
+  if (!keywords.length) return true;
+  const haystack = String(userText || '').toLocaleLowerCase('de-DE');
+  return keywords.some(keyword => haystack.includes(keyword.toLocaleLowerCase('de-DE')));
+}
+
+function buildMemoryFragmentsContext(userText = '') {
+  lastTriggeredMemoryFragments = [];
+  if (!memoryFragments.length) {
+    renderLastMemoryFragments();
+    return '';
+  }
+  const seen = new Set();
+  const matchedFragments = memoryFragments
+    .filter(fragment => memoryFragmentMatches(fragment, userText))
+    .filter(fragment => {
+      const key = `${(fragment.keywords || []).join('|')}::${fragment.text}`.toLocaleLowerCase('de-DE');
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  lastTriggeredMemoryFragments = matchedFragments
+    .map(fragment => ({
+      keywords: Array.isArray(fragment.keywords) ? [...fragment.keywords] : [],
+      text: fragment.text.trim()
+    }))
+    .filter(fragment => fragment.text);
+  renderLastMemoryFragments();
+  const lines = lastTriggeredMemoryFragments.map(fragment => `- ${fragment.text}`);
   if (!lines.length) return '';
-  return `\n\nZUSAETZLICHE MEMORY-FRAGMENTE VON MONI:\n${lines.join('\n')}\n\nNutze diese Fragmente nur, wenn sie wirklich relevant sind. Erwaehne sie nicht, nur um zu beweisen, dass du sie kennst.`;
+  return `\n\nAUSGELOESTE MEMORY-FRAGMENTE VON MONI:\n${lines.join('\n')}\n\nDiese Fragmente wurden durch Stichwoerter in Monis aktueller Nachricht ausgeloest. Nutze sie natuerlich, wenn sie wirklich helfen. Erwaehne sie nicht, nur um zu beweisen, dass du sie kennst.`;
+}
+
+function renderLastMemoryFragments() {
+  if (!memoryFragmentLast) return;
+  const rows = lastTriggeredMemoryFragments.map(fragment => {
+    const keywords = fragment.keywords.length ? fragment.keywords.join(', ') : 'immer aktiv';
+    return `<div class="memory-fragment-last-item"><strong>${escapeHtml(keywords)}</strong><br>${escapeHtml(fragment.text)}</div>`;
+  });
+  memoryFragmentLast.innerHTML = `
+    <div class="memory-fragment-last-title">Letzte Ausloesung</div>
+    ${rows.length ? rows.join('') : '<div class="memory-fragment-last-empty">Bei der letzten Nachricht wurde kein Fragment ausgeloest.</div>'}
+  `;
 }
 
 function renderMemoryFragments() {
+  renderLastMemoryFragments();
   memoryFragmentList.innerHTML = '';
   if (!memoryFragments.length) {
     const empty = document.createElement('div');
@@ -1719,10 +1932,12 @@ function renderMemoryFragments() {
   }
 
   memoryFragments.forEach(fragment => {
+    const keywords = Array.isArray(fragment.keywords) ? fragment.keywords : [];
     const item = document.createElement('div');
     item.className = 'memory-fragment-item';
     item.dataset.id = fragment.id;
     item.innerHTML = `
+      ${keywords.length ? `<div class="memory-fragment-keywords">Stichwoerter: ${escapeHtml(keywords.join(', '))}</div>` : '<div class="memory-fragment-keywords">Immer aktiv</div>'}
       <div class="memory-fragment-text">${escapeHtml(fragment.text)}</div>
       <div class="memory-fragment-actions">
         <button type="button" data-fragment-action="edit" title="Bearbeiten" aria-label="Bearbeiten">${ICONS.edit}</button>
@@ -1738,11 +1953,40 @@ function addMemoryFragment() {
   if (!text) return;
   memoryFragments.push({
     id: `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    keywords: parseMemoryKeywords(memoryFragmentKeywords.value),
     text,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   });
+  memoryFragmentKeywords.value = '';
   memoryFragmentInput.value = '';
+  saveMemoryFragments();
+  renderMemoryFragments();
+}
+
+function addStarterMemoryFragments() {
+  const existing = new Set(memoryFragments.map(fragment => {
+    const keywords = Array.isArray(fragment.keywords) ? fragment.keywords.join('|') : '';
+    return `${keywords}::${fragment.text}`.toLocaleLowerCase('de-DE');
+  }));
+  let added = 0;
+  STARTER_MEMORY_FRAGMENTS.forEach(fragment => {
+    const key = `${fragment.keywords.join('|')}::${fragment.text}`.toLocaleLowerCase('de-DE');
+    if (existing.has(key)) return;
+    memoryFragments.push({
+      id: `mem_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      keywords: [...fragment.keywords],
+      text: fragment.text,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+    existing.add(key);
+    added += 1;
+  });
+  if (!added) {
+    alert('Das Startset ist schon drin.');
+    return;
+  }
   saveMemoryFragments();
   renderMemoryFragments();
 }
@@ -1750,10 +1994,14 @@ function addMemoryFragment() {
 function editMemoryFragment(fragmentId) {
   const fragment = memoryFragments.find(item => item.id === fragmentId);
   if (!fragment) return;
+  const currentKeywords = Array.isArray(fragment.keywords) ? fragment.keywords.join(', ') : '';
+  const updatedKeywords = prompt('Stichwoerter bearbeiten, getrennt mit Kommas:', currentKeywords);
+  if (updatedKeywords === null) return;
   const updated = prompt('Memory-Fragment bearbeiten:', fragment.text);
   if (updated === null) return;
   const text = updated.trim();
   if (!text) return;
+  fragment.keywords = parseMemoryKeywords(updatedKeywords);
   fragment.text = text;
   fragment.updatedAt = new Date().toISOString();
   saveMemoryFragments();
@@ -1774,6 +2022,10 @@ function displayMessage(role, content, timestamp = new Date().toISOString(), ind
   div.className = `message ${role}`;
   div.dataset.index = String(index);
   const message = messages[index] || {};
+  const selectedVoice = message.audioVoice || voiceSelect.value || localStorage.getItem(TTS_VOICE_KEY) || 'coral';
+  const audioVoiceOptions = TTS_VOICES
+    .map(voice => `<option value="${voice.value}" ${voice.value === selectedVoice ? 'selected' : ''}>${voice.label}</option>`)
+    .join('');
   const speakButton = role === 'assistant'
     ? `<button class="icon-action" type="button" data-action="speak" title="Vorlesen" aria-label="Vorlesen">${ICONS.speak}</button>`
     : '';
@@ -1783,6 +2035,9 @@ function displayMessage(role, content, timestamp = new Date().toISOString(), ind
         <button class="audio-btn" type="button" data-audio-action="toggle" title="Abspielen oder pausieren" aria-label="Abspielen oder pausieren">${ICONS.play}</button>
         <button class="audio-btn" type="button" data-audio-action="forward" title="5 Sekunden vor" aria-label="5 Sekunden vor">${ICONS.forward}</button>
         <span class="audio-time" data-audio-time>0:00 / --:--</span>
+        <select class="audio-voice" data-audio-action="voice" aria-label="Stimme">
+          ${audioVoiceOptions}
+        </select>
         <select class="audio-speed" data-audio-action="speed" aria-label="Tempo">
           <option value="0.9">0.9x</option>
           <option value="1" selected>1x</option>
@@ -1932,6 +2187,71 @@ async function importThreadFromFile(file) {
   await switchThread(thread.id);
 }
 
+async function cloudRequest(path, options = {}) {
+  const response = await fetch(`/.netlify/functions/cloud-sync${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(portalAuthToken ? { 'X-Portal-Auth': portalAuthToken } : {}),
+      ...(options.headers || {})
+    }
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || `Cloud Sync Fehler: ${response.status}`);
+  }
+  return data;
+}
+
+async function saveCurrentThreadToCloud() {
+  const thread = currentThread();
+  if (!thread) return;
+  try {
+    await cloudRequest('', {
+      method: 'POST',
+      body: JSON.stringify({ action: 'saveThread', thread })
+    });
+    alert('Aktueller Chat wurde in der Cloud gespeichert.');
+  } catch (error) {
+    alert(error.message || 'Cloud speichern hat nicht geklappt.');
+  }
+}
+
+async function loadThreadsFromCloud() {
+  try {
+    const data = await cloudRequest('?action=list');
+    const cloudThreads = Array.isArray(data.threads) ? data.threads : [];
+    if (!cloudThreads.length) {
+      alert('In der Cloud liegen noch keine Chats.');
+      return;
+    }
+    let added = 0;
+    let updated = 0;
+    let skipped = 0;
+    for (const cloudThread of cloudThreads) {
+      if (!cloudThread?.id) continue;
+      const localThread = threads.find(thread => thread.id === cloudThread.id);
+      if (!localThread) {
+        await putThread(cloudThread);
+        added += 1;
+        continue;
+      }
+      const cloudTime = new Date(cloudThread.updatedAt || 0).getTime();
+      const localTime = new Date(localThread.updatedAt || 0).getTime();
+      if (cloudTime > localTime) {
+        await putThread(cloudThread);
+        updated += 1;
+      } else {
+        skipped += 1;
+      }
+    }
+    await refreshThreads();
+    alert(`Cloud geladen. Neu: ${added}, aktualisiert: ${updated}, unveraendert: ${skipped}.`);
+  } catch (error) {
+    alert(error.message || 'Cloud laden hat nicht geklappt.');
+  }
+}
+
 async function copyMessage(index) {
   const message = messages[index];
   if (!message) return;
@@ -2002,6 +2322,35 @@ function updateAudioTime(audio, player) {
   const time = player?.querySelector('[data-audio-time]');
   if (!time || !audio) return;
   time.textContent = `${formatAudioTime(audio.currentTime)} / ${formatAudioTime(audio.duration)}`;
+}
+
+function setSelectedVoice(voice) {
+  const nextVoice = voice || 'coral';
+  localStorage.setItem(TTS_VOICE_KEY, nextVoice);
+  voiceSelect.value = nextVoice;
+  messagesDiv.querySelectorAll('[data-audio-action="voice"]').forEach(select => {
+    select.value = nextVoice;
+  });
+}
+
+async function changeMessageVoice(index, voice) {
+  const message = messages[index];
+  if (!message) return;
+  setSelectedVoice(voice);
+  if (currentAudio && currentAudio.dataset.index === String(index)) {
+    currentAudio.pause();
+    setAudioButtonIcon(currentAudioButton, false);
+    currentAudio = null;
+    currentAudioButton = null;
+  }
+  if (message.audioVoice !== voice || message.audioUrl) {
+    delete message.audioUrl;
+    message.audioVoice = voice;
+    delete message.audioCreatedAt;
+    await saveCurrentThread();
+    renderMessages();
+  }
+  await speakMessage(index);
 }
 
 async function speakMessage(index) {
@@ -2251,12 +2600,25 @@ function authHeaders() {
   return portalAuthToken ? { 'X-Portal-Auth': portalAuthToken } : {};
 }
 
+function setResponseActive(isActive) {
+  stopResponseBtn.classList.toggle('active', isActive);
+  stopResponseBtn.disabled = !isActive;
+}
+
+function stopActiveResponse() {
+  if (activeResponseController) {
+    activeResponseController.abort();
+  }
+}
+
 async function sendMessage() {
   const text = input.value.trim();
   if (!text) return;
 
   input.disabled = true;
   sendBtn.disabled = true;
+  activeResponseController = new AbortController();
+  setResponseActive(true);
 
   const userMessage = { role: 'user', content: text, timestamp: new Date().toISOString() };
   messages.push(userMessage);
@@ -2269,14 +2631,15 @@ async function sendMessage() {
 
   try {
     const apiMessages = [
-      { role: 'system', content: `${ACTIVE_TATJANA_PROMPT}\n\n${ACTIVE_CORE_MEMORY}${buildMemoryFragmentsContext()}` },
+      { role: 'system', content: `${ACTIVE_TATJANA_PROMPT}\n\n${ACTIVE_CORE_MEMORY}${buildMemoryFragmentsContext(text)}` },
       ...messages.slice(-18).map(({ role, content }) => ({ role, content }))
     ];
 
     const response = await fetch('/.netlify/functions/openai-proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...authHeaders() },
-      body: JSON.stringify({ messages: apiMessages, model: 'gpt-4o' })
+      body: JSON.stringify({ messages: apiMessages, model: 'gpt-4o' }),
+      signal: activeResponseController.signal
     });
 
     const data = await response.json().catch(() => ({}));
@@ -2303,9 +2666,22 @@ async function sendMessage() {
     await saveCurrentThread();
   } catch (error) {
     typing.remove();
+    if (error.name === 'AbortError') {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage?.role === 'user' && lastMessage.content === text) {
+        messages.pop();
+        await saveCurrentThread();
+        renderMessages();
+      }
+      input.value = text;
+      resizeInput();
+      return;
+    }
     console.error('Fehler:', error);
     displayMessage('assistant', 'Entschuldige, da ist etwas schiefgelaufen. Bitte versuch es nochmal.', new Date().toISOString(), messages.length);
   } finally {
+    activeResponseController = null;
+    setResponseActive(false);
     input.disabled = false;
     sendBtn.disabled = false;
     input.focus();
@@ -2360,7 +2736,7 @@ function htmlToPlainText(html) {
 
 input.addEventListener('input', resizeInput);
 messagesDiv.addEventListener('scroll', updateJumpBottomButton, { passive: true });
-jumpBottomBtn.addEventListener('click', scrollToBottom);
+jumpBottomBtn.addEventListener('click', jumpConversation);
 
 input.addEventListener('paste', (event) => {
   const clipboard = event.clipboardData;
@@ -2379,6 +2755,7 @@ input.addEventListener('keydown', (e) => {
 });
 
 sendBtn.addEventListener('click', sendMessage);
+stopResponseBtn.addEventListener('click', stopActiveResponse);
 voiceBtn.addEventListener('click', toggleSpeechRecognition);
 attachBtn.addEventListener('click', handleAttachmentPlaceholder);
 newThreadBtn.addEventListener('click', newThread);
@@ -2389,6 +2766,14 @@ clearAllBtn.addEventListener('click', async () => {
 exportThreadBtn.addEventListener('click', () => {
   closeSidebarSettings();
   exportThread(currentThreadId);
+});
+cloudSaveBtn.addEventListener('click', async () => {
+  closeSidebarSettings();
+  await saveCurrentThreadToCloud();
+});
+cloudLoadBtn.addEventListener('click', async () => {
+  closeSidebarSettings();
+  await loadThreadsFromCloud();
 });
 importThreadBtn.addEventListener('click', () => {
   closeSidebarSettings();
@@ -2413,7 +2798,7 @@ voiceModal.addEventListener('click', (event) => {
   if (event.target === voiceModal) voiceModal.classList.remove('active');
 });
 voiceSelect.addEventListener('change', () => {
-  localStorage.setItem(TTS_VOICE_KEY, voiceSelect.value);
+  setSelectedVoice(voiceSelect.value);
 });
 sidebarSettingsBtn.addEventListener('click', () => sidebarSettingsSheet.classList.add('active'));
 sidebarSearchToggle.addEventListener('click', toggleThreadSearch);
@@ -2426,6 +2811,7 @@ memoryFragmentsModal.addEventListener('click', (event) => {
   if (event.target === memoryFragmentsModal) memoryFragmentsModal.classList.remove('active');
 });
 memoryFragmentAdd.addEventListener('click', addMemoryFragment);
+memoryFragmentSeed.addEventListener('click', addStarterMemoryFragments);
 memoryFragmentList.addEventListener('click', (event) => {
   const button = event.target.closest('[data-fragment-action]');
   if (!button) return;
@@ -2485,10 +2871,18 @@ messagesDiv.addEventListener('click', async (event) => {
   await runMessageAction(button.dataset.action, index);
 });
 
-messagesDiv.addEventListener('change', (event) => {
+messagesDiv.addEventListener('change', async (event) => {
   const speedSelect = event.target.closest('[data-audio-action="speed"]');
-  if (!speedSelect) return;
-  setAudioSpeed(speedSelect.value);
+  if (speedSelect) {
+    setAudioSpeed(speedSelect.value);
+    return;
+  }
+  const voicePicker = event.target.closest('[data-audio-action="voice"]');
+  if (voicePicker) {
+    const wrapper = voicePicker.closest('.message');
+    const index = Number(wrapper?.dataset.index);
+    if (Number.isInteger(index)) await changeMessageVoice(index, voicePicker.value);
+  }
 });
 
 messagesDiv.addEventListener('touchstart', (event) => {
