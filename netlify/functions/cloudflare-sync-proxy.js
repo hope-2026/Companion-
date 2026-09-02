@@ -1,7 +1,3 @@
-﻿// netlify/functions/openai-proxy.js
-// This file handles secure API calls to OpenAI
-// Place this file in: netlify/functions/openai-proxy.js
-
 const crypto = require('crypto');
 
 function verifySessionToken(token, secret) {
@@ -41,15 +37,26 @@ function isLocalDevRequest(event, token) {
 }
 
 exports.handler = async (event) => {
-  // Only allow POST requests
-  if (event.httpMethod !== 'POST') {
+  const workerBaseUrl = (process.env.CLOUDFLARE_SYNC_WORKER_URL || '').replace(/\/+$/, '');
+  const syncToken = process.env.CLOUDFLARE_SYNC_TOKEN;
+  const sessionSecret = process.env.AUTH_SESSION_SECRET || process.env.AUTH_PASSWORD_HASH;
+
+  if (!workerBaseUrl) {
     return {
-      statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' })
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'CLOUDFLARE_SYNC_WORKER_URL is not configured' })
     };
   }
 
-  const sessionSecret = process.env.AUTH_SESSION_SECRET || process.env.AUTH_PASSWORD_HASH;
+  if (!syncToken) {
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'CLOUDFLARE_SYNC_TOKEN is not configured' })
+    };
+  }
+
   if (!sessionSecret) {
     return {
       statusCode: 500,
@@ -72,41 +79,36 @@ exports.handler = async (event) => {
     };
   }
 
-  try {
-    const { messages, model, temperature, max_tokens } = JSON.parse(event.body);
+  const proxyPrefix = '/.netlify/functions/cloudflare-sync-proxy';
+  const requestedPath = event.path.startsWith(proxyPrefix)
+    ? event.path.slice(proxyPrefix.length) || '/'
+    : '/';
+  const queryString = event.rawQuery ? `?${event.rawQuery}` : '';
+  const targetUrl = `${workerBaseUrl}${requestedPath}${queryString}`;
 
-    // Call OpenAI API
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+  try {
+    const response = await fetch(targetUrl, {
+      method: event.httpMethod,
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
+        'Content-Type': event.headers['content-type'] || event.headers['Content-Type'] || 'application/json',
+        'Authorization': `Bearer ${syncToken}`
       },
-      body: JSON.stringify({
-        model: model || 'gpt-4o-2024-11-20',
-        messages: messages,
-        temperature: Number.isFinite(Number(temperature)) ? Math.min(1.5, Math.max(0, Number(temperature))) : 1.1,
-        top_p: 0.95,
-        max_tokens: Number.isFinite(Number(max_tokens)) ? Math.min(8000, Math.max(500, Math.round(Number(max_tokens)))) : 3500
-      })
+      body: ['GET', 'HEAD'].includes(event.httpMethod) ? undefined : event.body
     });
 
-    const data = await response.json();
-
     return {
-      statusCode: 200,
+      statusCode: response.status,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': response.headers.get('content-type') || 'application/json',
+        'Cache-Control': 'no-store'
       },
-      body: JSON.stringify(data)
+      body: await response.text()
     };
-
   } catch (error) {
-    console.error('Error:', error);
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Internal server error', details: error.message })
+      statusCode: 502,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Cloudflare sync proxy failed', message: error.message })
     };
   }
 };
-

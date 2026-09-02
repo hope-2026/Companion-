@@ -8,6 +8,19 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#10b981">
 <title>Tatjana Portal</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./pwa-icon.png">
+<link rel="icon" href="./pwa-icon.png">
+
+
+<!--
+╔═══════════════════════════════════════════════════════════════════╗
+║                    ELLIVIEN COMPANION PORTAL                      ║
+║                  Custom AI Companion Interface                    ║
+║                      https://ellivien.blogspot.com                ║
+╚═══════════════════════════════════════════════════════════════════╝
+-->
+
 <style>
 :root {
   --app-vh: 1vh;
@@ -607,34 +620,6 @@ body {
   font-size: 18px;
 }
 
-#storage-security-info-modal {
-  align-items: flex-start;
-  overflow-y: auto;
-  padding: max(16px, env(safe-area-inset-top)) 12px max(16px, env(safe-area-inset-bottom));
-}
-
-#storage-security-info-modal .modal {
-  box-sizing: border-box;
-  width: min(100%, 520px);
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-#storage-security-info-modal .modal h3 {
-  margin: 0 0 10px;
-}
-
-#storage-security-info-modal .modal p {
-  margin: 0 0 10px;
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-#storage-security-info-modal #security-sync-checklist {
-  margin: 12px 0 !important;
-}
-
 .theme-option {
   padding: 12px;
   margin: 8px 0;
@@ -699,319 +684,6 @@ body {
     padding-left: calc(16px + env(safe-area-inset-left));
     padding-right: calc(16px + env(safe-area-inset-right));
   }
-}
-
-
-/* Tatjana clean UI repair */
-#header {
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-main);
-}
-
-#header-left,
-#header-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.icon-svg {
-  width: 20px;
-  height: 20px;
-  display: block;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-#hamburger,
-#settings-btn,
-.composer-icon-btn,
-.message-tool-btn,
-#scroll-bottom-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#settings-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: #fff;
-  color: var(--text-main);
-}
-
-.tatjana-settings-modal .modal {
-  max-width: 520px;
-  width: min(92vw, 520px);
-}
-
-.settings-section {
-  display: grid;
-  gap: 12px;
-  padding: 14px 0;
-  border-top: 1px solid var(--border);
-}
-
-.settings-section:first-of-type {
-  border-top: 0;
-}
-
-.settings-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.settings-row input[type="range"] {
-  flex: 1;
-}
-
-.settings-help {
-  margin: 0;
-  color: var(--text-dim);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.danger-zone {
-  margin-top: 14px;
-  padding: 14px;
-  border: 1px solid rgba(185, 28, 28, .35);
-  border-radius: 12px;
-  background: rgba(185, 28, 28, .08);
-}
-
-.danger-zone h4 {
-  margin: 0 0 6px;
-  color: #991b1b;
-}
-
-.danger-zone button {
-  width: 100%;
-  min-height: 42px;
-  border: 0;
-  border-radius: 10px;
-  color: #fff;
-  background: #b91c1c;
-  font-weight: 700;
-}
-
-.message-tools {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.message-tool-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, .72);
-  color: var(--text-dim);
-}
-
-.message-tool-btn.danger {
-  color: var(--danger);
-}
-
-.message-voice-select {
-  min-height: 32px;
-  max-width: 132px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, .76);
-  padding: 0 8px;
-  font-size: 13px;
-}
-
-#scroll-bottom-btn {
-  position: fixed;
-  right: calc(18px + env(safe-area-inset-right));
-  bottom: calc(86px + env(safe-area-inset-bottom));
-  z-index: 30;
-  width: 48px;
-  height: 48px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--text-main);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, .18);
-}
-
-#scroll-bottom-btn[hidden] {
-  display: none;
-}
-
-@media (max-width: 700px) {
-  .message-voice-select {
-    max-width: 110px;
-  }
-
-  #scroll-bottom-btn {
-    right: calc(76px + env(safe-area-inset-right));
-    bottom: calc(92px + env(safe-area-inset-bottom));
-  }
-}
-
-/* Tatjana final UI cleanup */
-#header {
-  border-bottom: 1px solid var(--border);
-  gap: 12px;
-}
-#header h1 {
-  margin: 0;
-}
-#header-controls {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-#settings-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal-overlay.active.tatjana-settings-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
-  background: rgba(15, 23, 42, 0.48);
-}
-.tatjana-settings-modal .modal {
-  width: min(94vw, 520px);
-  max-height: min(88vh, 760px);
-  overflow: auto;
-  padding: 22px;
-  border-radius: 14px;
-  background: var(--bg-main);
-  color: var(--text-main);
-  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.28);
-}
-.tatjana-settings-modal .modal-close {
-  float: right;
-  width: 36px;
-  height: 36px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--bg-chat);
-  color: var(--text-main);
-  font-size: 22px;
-}
-.tatjana-settings-modal h3 {
-  margin: 0 44px 18px 0;
-}
-.settings-section {
-  padding: 14px 0;
-  border-top: 1px solid var(--border);
-}
-.settings-row {
-  display: grid;
-  grid-template-columns: 1fr 48px;
-  gap: 12px;
-  align-items: center;
-  margin-top: 10px;
-}
-.settings-help {
-  margin: 8px 0 0;
-  color: var(--text-dim);
-  font-size: 14px;
-}
-.danger-zone {
-  margin-top: 16px;
-  padding: 14px;
-  border: 1px solid rgba(185, 28, 28, 0.35);
-  border-radius: 12px;
-  background: rgba(185, 28, 28, 0.08);
-}
-.danger-zone h4 {
-  margin: 0 0 6px;
-  color: var(--danger);
-}
-.danger-zone button {
-  width: 100%;
-  margin-top: 12px;
-  border: 0;
-  border-radius: 10px;
-  padding: 12px;
-  color: white;
-  background: var(--danger);
-  font-weight: 700;
-}
-.message-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  margin-top: 10px;
-}
-.message-tool-btn {
-  width: 34px;
-  height: 34px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.55);
-  color: var(--text-dim);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.message-tool-btn.danger {
-  color: var(--danger);
-}
-.message-voice-select {
-  height: 34px;
-  max-width: 150px;
-  border: 0;
-  border-radius: 999px;
-  padding: 0 28px 0 12px;
-  background: rgba(255,255,255,0.68);
-  color: var(--text-main);
-}
-#scroll-bottom-btn,
-#send-btn {
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px !important;
-  min-height: 44px !important;
-  max-width: 44px !important;
-  max-height: 44px !important;
-  aspect-ratio: 1 / 1;
-  padding: 0 !important;
-  border-radius: 999px !important;
-  flex: 0 0 44px;
-}
-
-#send-btn {
-  background: #18b981;
-  color: #fff;
-  box-shadow: 0 8px 18px rgba(16, 185, 129, .22);
-}
-
-#send-btn .icon-svg,
-#scroll-bottom-btn .icon-svg {
-  width: 23px;
-  height: 23px;
-  stroke-width: 2.4;
-}
-
-#scroll-bottom-btn {
-  right: calc(22px + env(safe-area-inset-right));
-  bottom: calc(86px + env(safe-area-inset-bottom));
-  background: #a9d7ff;
-  color: #0f2f57;
-  border: 0;
 }
 </style>
 <style data-ellivien-accessibility>
@@ -1266,731 +938,10 @@ html[data-reading-font="opendyslexic"] select {
     margin-left: 12px;
   }
 }
-
-/* Tatjana UI overrides: compact composer, settings, message tools */
-#sidebar-footer { display: none !important; }
-#header-controls { gap: 8px; }
-#settings-btn { font-size: 20px; }
-#input-container {
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) 40px 40px 44px;
-  align-items: end;
-  gap: 8px;
-  padding: 10px calc(12px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
-  background: var(--bg-main);
-  border-top: 1px solid var(--border);
-}
-#input { min-height: 40px; max-height: 130px; border-radius: 12px; padding: 10px 12px; }
-.composer-icon-btn, #send-btn {
-  width: 40px; height: 40px; min-width: 40px; min-height: 40px;
-  border: 1px solid var(--border); border-radius: 999px;
-  display: inline-flex; align-items: center; justify-content: center;
-  font-size: 21px; line-height: 1; background: var(--bg-user); color: var(--text-main);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
-}
-#send-btn { width: 44px; height: 44px; min-width: 44px; min-height: 44px; border: 0; background: var(--primary); color: white; font-size: 24px; font-weight: 800; }
-#stop-response-btn { background: #b91c1c; color: #fff; border-color: #b91c1c; font-size: 18px; }
-#stop-response-btn[hidden] { display: none !important; }
-.message-tools { display: flex; align-items: center; gap: 8px; margin-top: 12px; opacity: 0.72; }
-.message:hover .message-tools, .message:focus-within .message-tools { opacity: 1; }
-.message-tool-btn, .message-voice-select {
-  min-width: 34px; height: 34px; border: 1px solid transparent; border-radius: 999px;
-  background: rgba(255,255,255,0.72); color: var(--text-main);
-  display: inline-flex; align-items: center; justify-content: center; font-size: 16px;
-}
-.message-tool-btn.danger { color: var(--danger); }
-.message-voice-select { width: auto; max-width: 118px; padding: 0 8px; font-size: 12px; }
-.setting-field { margin: 16px 0; }
-.setting-field label { display: block; font-weight: 700; margin-bottom: 8px; }
-.setting-field input[type="range"] { width: 100%; accent-color: var(--primary); }
-.setting-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.danger-zone { margin-top: 18px; padding: 14px; border: 1px solid rgba(185,28,28,.35); border-radius: 12px; background: rgba(185,28,28,.08); }
-.danger-zone h4 { color: var(--danger); margin: 0 0 8px; }
-.danger-zone button { background: var(--danger); color: #fff; border: 0; border-radius: 10px; padding: 10px 14px; font-weight: 800; }
-@media (max-width: 480px) {
-  #input-container { grid-template-columns: 38px minmax(0,1fr) 38px 38px 42px; gap: 6px; }
-  .composer-icon-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
-  #send-btn { width: 42px; height: 42px; min-width: 42px; min-height: 42px; }
-  .message { max-width: 92%; }
-}
-
-/* Tatjana clean UI repair */
-#header {
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-main);
-}
-
-#header-left,
-#header-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.icon-svg {
-  width: 20px;
-  height: 20px;
-  display: block;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-#hamburger,
-#settings-btn,
-.composer-icon-btn,
-.message-tool-btn,
-#scroll-bottom-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#settings-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: #fff;
-  color: var(--text-main);
-}
-
-.tatjana-settings-modal .modal {
-  max-width: 520px;
-  width: min(92vw, 520px);
-}
-
-.settings-section {
-  display: grid;
-  gap: 12px;
-  padding: 14px 0;
-  border-top: 1px solid var(--border);
-}
-
-.settings-section:first-of-type {
-  border-top: 0;
-}
-
-.settings-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.settings-row input[type="range"] {
-  flex: 1;
-}
-
-.settings-help {
-  margin: 0;
-  color: var(--text-dim);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.danger-zone {
-  margin-top: 14px;
-  padding: 14px;
-  border: 1px solid rgba(185, 28, 28, .35);
-  border-radius: 12px;
-  background: rgba(185, 28, 28, .08);
-}
-
-.danger-zone h4 {
-  margin: 0 0 6px;
-  color: #991b1b;
-}
-
-.danger-zone button {
-  width: 100%;
-  min-height: 42px;
-  border: 0;
-  border-radius: 10px;
-  color: #fff;
-  background: #b91c1c;
-  font-weight: 700;
-}
-
-.message-tools {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.message-tool-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, .72);
-  color: var(--text-dim);
-}
-
-.message-tool-btn.danger {
-  color: var(--danger);
-}
-
-.message-voice-select {
-  min-height: 32px;
-  max-width: 132px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, .76);
-  padding: 0 8px;
-  font-size: 13px;
-}
-
-#scroll-bottom-btn {
-  position: fixed;
-  right: calc(18px + env(safe-area-inset-right));
-  bottom: calc(86px + env(safe-area-inset-bottom));
-  z-index: 30;
-  width: 48px;
-  height: 48px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--text-main);
-  box-shadow: 0 10px 24px rgba(15, 23, 42, .18);
-}
-
-#scroll-bottom-btn[hidden] {
-  display: none;
-}
-
-@media (max-width: 700px) {
-  .message-voice-select {
-    max-width: 110px;
-  }
-
-  #scroll-bottom-btn {
-    right: calc(76px + env(safe-area-inset-right));
-    bottom: calc(92px + env(safe-area-inset-bottom));
-  }
-}
-
-/* Tatjana final UI cleanup */
-#header {
-  border-bottom: 1px solid var(--border);
-  gap: 12px;
-}
-#header h1 {
-  margin: 0;
-}
-#header-controls {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-#settings-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.modal-overlay.active.tatjana-settings-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
-  background: rgba(15, 23, 42, 0.48);
-}
-.tatjana-settings-modal .modal {
-  width: min(94vw, 520px);
-  max-height: min(88vh, 760px);
-  overflow: auto;
-  padding: 22px;
-  border-radius: 14px;
-  background: var(--bg-main);
-  color: var(--text-main);
-  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.28);
-}
-.tatjana-settings-modal .modal-close {
-  float: right;
-  width: 36px;
-  height: 36px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--bg-chat);
-  color: var(--text-main);
-  font-size: 22px;
-}
-.tatjana-settings-modal h3 {
-  margin: 0 44px 18px 0;
-}
-.settings-section {
-  padding: 14px 0;
-  border-top: 1px solid var(--border);
-}
-.settings-row {
-  display: grid;
-  grid-template-columns: 1fr 48px;
-  gap: 12px;
-  align-items: center;
-  margin-top: 10px;
-}
-.settings-help {
-  margin: 8px 0 0;
-  color: var(--text-dim);
-  font-size: 14px;
-}
-.danger-zone {
-  margin-top: 16px;
-  padding: 14px;
-  border: 1px solid rgba(185, 28, 28, 0.35);
-  border-radius: 12px;
-  background: rgba(185, 28, 28, 0.08);
-}
-.danger-zone h4 {
-  margin: 0 0 6px;
-  color: var(--danger);
-}
-.danger-zone button {
-  width: 100%;
-  margin-top: 12px;
-  border: 0;
-  border-radius: 10px;
-  padding: 12px;
-  color: white;
-  background: var(--danger);
-  font-weight: 700;
-}
-.message-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  margin-top: 10px;
-}
-.message-tool-btn {
-  width: 34px;
-  height: 34px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.55);
-  color: var(--text-dim);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.message-tool-btn.danger {
-  color: var(--danger);
-}
-.message-voice-select {
-  height: 34px;
-  max-width: 150px;
-  border: 0;
-  border-radius: 999px;
-  padding: 0 28px 0 12px;
-  background: rgba(255,255,255,0.68);
-  color: var(--text-main);
-}
-#scroll-bottom-btn {
-  right: calc(22px + env(safe-area-inset-right));
-  bottom: calc(86px + env(safe-area-inset-bottom));
-}
-
-/* Final compact round send and scroll buttons */
-:root,
-body,
-body[data-theme],
-html[data-theme] {
-  --primary: #10b981 !important;
-  --primary-hover: #059669 !important;
-  --secondary: #8b5cf6 !important;
-  --bg-main: #f5f5f7 !important;
-  --bg-chat: #ffffff !important;
-  --bg-user: #ffffff !important;
-  --bg-assistant: #e9d5ff !important;
-  --text-main: #1f2937 !important;
-  --text-dim: #6b7280 !important;
-  --border: #e5e7eb !important;
-}
-
-.sidebar-action-btn {
-  min-height: 42px !important;
-  margin-bottom: 10px !important;
-  padding: 9px 12px !important;
-  border-radius: 7px !important;
-  font-size: 14px !important;
-  line-height: 1.2 !important;
-  box-shadow: none !important;
-}
-
-#thread-section {
-  padding: 14px 16px !important;
-}
-
-#thread-search {
-  min-height: 40px !important;
-  margin-bottom: 10px !important;
-  padding: 9px 11px !important;
-  font-size: 13px !important;
-}
-
-.thread-item {
-  padding: 10px 12px !important;
-  border-radius: 7px !important;
-}
-
-.danger-zone button,
-.tatjana-settings-modal .danger-zone button,
-button[data-delete-all] {
-  background-color: #dc2626 !important;
-  color: #ffffff !important;
-  font-weight: bold !important;
-  opacity: 1 !important;
-  text-shadow: none !important;
-  box-shadow: 0 8px 18px rgba(220, 38, 38, .22) !important;
-}
-
-#send-btn,
-#scroll-bottom-btn {
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px !important;
-  min-height: 44px !important;
-  max-width: 44px !important;
-  max-height: 44px !important;
-  aspect-ratio: 1 / 1;
-  padding: 0 !important;
-  border-radius: 999px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  flex: 0 0 44px;
-}
-
-#send-btn {
-  border: 0 !important;
-  background: #18b981 !important;
-  color: #fff !important;
-  box-shadow: 0 8px 18px rgba(16, 185, 129, .22);
-}
-
-#scroll-bottom-btn {
-  position: fixed !important;
-  left: 50% !important;
-  right: auto !important;
-  bottom: calc(78px + env(safe-area-inset-bottom)) !important;
-  transform: translateX(-50%) !important;
-  border: 0 !important;
-  background: #a9d7ff !important;
-  color: #0f2f57 !important;
-  box-shadow: 0 8px 18px rgba(15, 47, 87, .18);
-}
-
-#send-btn .icon-svg,
-#scroll-bottom-btn .icon-svg {
-  width: 23px !important;
-  height: 23px !important;
-  stroke-width: 2.4 !important;
-}
-
-/* Mobile finishing: fixed Tatjana theme, no color picker, compact send arrow */
-#theme-modal,
-button[data-open-theme] {
-  display: none !important;
-}
-
-#send-btn {
-  width: 40px !important;
-  height: 40px !important;
-  min-width: 40px !important;
-  min-height: 40px !important;
-  max-width: 40px !important;
-  max-height: 40px !important;
-  flex-basis: 40px !important;
-  background: #10b981 !important;
-  color: #ffffff !important;
-  box-shadow: 0 6px 14px rgba(16, 185, 129, .22) !important;
-}
-
-#send-btn .icon-svg {
-  width: 20px !important;
-  height: 20px !important;
-  stroke-width: 2.7 !important;
-}
-
-#send-btn .icon-svg path:first-child {
-  d: path("M12 18V6");
-}
-
-#send-btn .icon-svg path:last-child {
-  d: path("M6.5 11.5 12 6l5.5 5.5");
-}
-
-@media (max-width: 520px) {
-  #input-container {
-    grid-template-columns: 36px minmax(0, 1fr) 36px 40px !important;
-    gap: 7px !important;
-  }
-
-  #stop-response-btn {
-    display: none !important;
-  }
-
-  #send-btn {
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    min-height: 38px !important;
-    max-width: 38px !important;
-    max-height: 38px !important;
-    flex-basis: 38px !important;
-  }
-
-  #send-btn .icon-svg {
-    width: 19px !important;
-    height: 19px !important;
-  }
-}
-
-/* Final send button: same simple arrow style as the scroll button, only upward and green */
-#send-btn {
-  position: relative !important;
-  width: 40px !important;
-  height: 40px !important;
-  min-width: 40px !important;
-  min-height: 40px !important;
-  max-width: 40px !important;
-  max-height: 40px !important;
-  overflow: hidden !important;
-  background: #10b981 !important;
-  color: #ffffff !important;
-}
-
-#send-btn > svg {
-  display: none !important;
-}
-
-#send-btn::before,
-#send-btn::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  background: #ffffff;
-  border-radius: 999px;
-  transform: translateX(-50%);
-}
-
-#send-btn::before {
-  top: 11px;
-  width: 3px;
-  height: 18px;
-}
-
-#send-btn::after {
-  top: 10px;
-  width: 13px;
-  height: 13px;
-  background: transparent;
-  border-left: 3px solid #ffffff;
-  border-top: 3px solid #ffffff;
-  border-radius: 2px 0 0 0;
-  transform: translateX(-50%) rotate(45deg);
-}
-
-/* Final iOS-style green send button */
-#send-btn {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  min-height: 36px !important;
-  max-width: 36px !important;
-  max-height: 36px !important;
-  flex: 0 0 36px !important;
-  align-self: center !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 999px !important;
-  background: #10b981 !important;
-  color: #ffffff !important;
-  box-shadow: 0 6px 14px rgba(16, 185, 129, .24) !important;
-  overflow: hidden !important;
-}
-
-#send-btn::before,
-#send-btn::after {
-  content: none !important;
-  display: none !important;
-}
-
-#send-btn > svg,
-#send-btn .icon-svg {
-  display: block !important;
-  width: 21px !important;
-  height: 21px !important;
-  min-width: 21px !important;
-  min-height: 21px !important;
-  stroke: #ffffff !important;
-  color: #ffffff !important;
-  stroke-width: 2.6 !important;
-  stroke-linecap: round !important;
-  stroke-linejoin: round !important;
-  fill: none !important;
-  transform: none !important;
-}
-
-#voice-btn {
-  align-self: center !important;
-}
-
-/* Final send button: original SVG arrow, shorter and cleaner */
-#input-container {
-  align-items: center !important;
-}
-
-#send-btn {
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px !important;
-  min-height: 44px !important;
-  max-width: 44px !important;
-  max-height: 44px !important;
-  flex: 0 0 44px !important;
-  align-self: center !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 50% !important;
-  background: #10b981 !important;
-  box-shadow: 0 6px 14px rgba(16, 185, 129, .22) !important;
-  color: #ffffff !important;
-  overflow: hidden !important;
-}
-
-#send-btn > svg,
-#send-btn .icon-svg {
-  display: block !important;
-  width: 22px !important;
-  height: 22px !important;
-  stroke: #ffffff !important;
-  stroke-width: 2.6 !important;
-  stroke-linecap: round !important;
-  stroke-linejoin: round !important;
-  fill: none !important;
-}
-
-#send-btn::before,
-#send-btn::after {
-  content: none !important;
-  display: none !important;
-}
-
-@media (max-width: 520px) {
-  #send-btn {
-    width: 40px !important;
-    height: 40px !important;
-    min-width: 40px !important;
-    min-height: 40px !important;
-    max-width: 40px !important;
-    max-height: 40px !important;
-    flex-basis: 40px !important;
-  }
-}
-
-.settings-text-input {
-  width: 100% !important;
-  min-height: 42px !important;
-  padding: 10px 12px !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 8px !important;
-  background: #ffffff !important;
-  color: var(--text-main) !important;
-  font: inherit !important;
-  font-size: 14px !important;
-}
-
-.tatjana-settings-modal .settings-section h4 {
-  margin: 0 0 12px !important;
-  font-size: 15px !important;
-  line-height: 1.25 !important;
-}
-
-.tatjana-settings-modal .settings-section label {
-  display: block !important;
-  margin: 12px 0 8px !important;
-}
-
-.settings-textarea {
-  width: 100% !important;
-  min-height: 92px !important;
-  resize: vertical !important;
-  padding: 10px 12px !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 8px !important;
-  background: #ffffff !important;
-  color: var(--text-main) !important;
-  font: inherit !important;
-  font-size: 14px !important;
-  line-height: 1.45 !important;
-}
-
-.settings-details {
-  border: 1px solid var(--border) !important;
-  border-radius: 10px !important;
-  background: rgba(255, 255, 255, .72) !important;
-  padding: 0 !important;
-}
-
-.settings-details > summary {
-  cursor: pointer !important;
-  list-style: none !important;
-  padding: 12px 14px !important;
-  font-weight: 700 !important;
-}
-
-.settings-details > summary::-webkit-details-marker {
-  display: none !important;
-}
-
-.settings-details[open] > summary {
-  border-bottom: 1px solid var(--border) !important;
-}
-
-.settings-details .danger-zone {
-  margin: 14px !important;
-}
-
-#send-btn.is-stopping {
-  background: #dc2626 !important;
-  box-shadow: 0 6px 14px rgba(220, 38, 38, .24) !important;
-}
-
-#send-btn.is-stopping > svg {
-  display: none !important;
-}
-
-#send-btn.is-stopping::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  left: 50% !important;
-  top: 50% !important;
-  width: 13px !important;
-  height: 13px !important;
-  border-radius: 2px !important;
-  background: #ffffff !important;
-  transform: translate(-50%, -50%) !important;
-}
-
-#send-btn.is-stopping::after {
-  content: none !important;
-  display: none !important;
-}
 </style>
 </head>
 <body>
+
 <!-- Password gate for cloud sync security. This protects the Netlify sync proxy. -->
 <div id="auth-gate" style="display:none;position:fixed;inset:0;background:#f9f9f9;z-index:10000;align-items:center;justify-content:center;padding:20px;">
   <div style="background:white;padding:32px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.1);max-width:400px;width:100%;">
@@ -2003,78 +954,85 @@ button[data-open-theme] {
   </div>
 </div>
 
-
 <div id="app">
   <!-- Sidebar -->
   <div id="sidebar">
     <div id="sidebar-header">
-      <h3>Unterhaltungen</h3>
-      <button id="sidebar-close" type="button" onclick="closeSidebar(event)" ontouchend="closeSidebar(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeSidebar(event)}">×</button>
+      <h3>Threads</h3>
+      <button id="sidebar-close" type="button" onclick="closeSidebar(event)" ontouchend="closeSidebar(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();closeSidebar(event)}">✕</button>
     </div>
     
     <div id="thread-section">
-      <button class="sidebar-action-btn" type="button" onclick="createNewThread(event)" ontouchend="createNewThread(event)">Neuer Chat</button>
-      <button class="sidebar-action-btn secondary" type="button" onclick="showStorageSecurityInfo()">Speicher &amp; Sicherheit</button>
-      <input id="thread-search" type="search" placeholder="Unterhaltungen durchsuchen..." aria-label="Unterhaltungen durchsuchen">
-      <button class="sidebar-action-btn secondary" type="button" onclick="performFullSearch()">In Unterhaltungen suchen</button>
+      <button class="sidebar-action-btn" type="button" onclick="createNewThread(event)" ontouchend="createNewThread(event)">New thread</button>
+      <button class="sidebar-action-btn" type="button" onclick="showStorageSyncModal()" style="background:var(--secondary);">Storage & sync</button>
+      <input id="thread-search" type="search" placeholder="Search threads..." aria-label="Search threads">
+      <button class="sidebar-action-btn secondary" type="button" onclick="performFullSearch()">Search conversations</button>
       <div id="thread-list" aria-label="Thread list"></div>
     </div>
 
     <details class="sidebar-settings">
       <summary>
-        <span data-i18n="displayContext">Anzeige und Kontext</span>
+        <span data-i18n="displayContext">Display &amp; context</span>
         <span class="sidebar-settings-chevron" aria-hidden="true">⌄</span>
       </summary>
     <div class="context-window-setting">
       <p style="font-size:13px;color:var(--text-main);font-weight:600;margin-bottom:8px;line-height:1.5;">
-        Kontextfenster
+        Context window
       </p>
       <input class="context-window-control" id="context-window-input" type="number" min="0" step="1" value="10">
       <p style="font-size:12px;color:var(--text-dim);line-height:1.45;margin-top:8px;">
-        Standard: 10 letzte Nachrichten. Mit 0 werden alle gespeicherten Nachrichten gesendet. Höhere Werte können mehr kosten oder Modellgrenzen erreichen.
+        Default: 10 recent messages. Use 0 to send all saved messages. Higher numbers can cost more or hit model limits.
       </p>
     </div>
 
     <section class="accessibility-setting" aria-labelledby="accessibility-heading">
-      <h4 id="accessibility-heading" data-i18n="accessibility">Barrierefreiheit</h4>
+      <h4 id="accessibility-heading" data-i18n="accessibility">Accessibility</h4>
       <div class="accessibility-field">
-        <span class="accessibility-field-label" data-i18n="readingFont">Leseschrift</span>
+        <span class="accessibility-field-label" data-i18n="readingFont">Reading font</span>
         <label class="accessibility-toggle-row" for="opendyslexic-toggle">
-          <span data-i18n="openDyslexic">OpenDyslexic verwenden</span>
+          <span data-i18n="openDyslexic">Use OpenDyslexic</span>
           <input id="opendyslexic-toggle" type="checkbox">
         </label>
       </div>
       <label class="accessibility-field" for="interface-language-select">
-        <span class="accessibility-field-label" data-i18n="interfaceLanguage">Sprache der Benutzeroberfläche</span>
+        <span class="accessibility-field-label" data-i18n="interfaceLanguage">Interface language</span>
         <select class="accessibility-select" id="interface-language-select"></select>
       </label>
-      <p class="accessibility-note" data-i18n="localOnly">Ändert nur die Portalbeschriftungen. Deine Unterhaltungen werden nicht übersetzt.</p>
+      <p class="accessibility-note" data-i18n="localOnly">Changes portal labels only. Your conversations are not translated.</p>
     </section>
     </details>
     
-    <div id="sidebar-footer" aria-hidden="true"></div>
+    <div id="sidebar-footer">
+      © Ellivien ✨ 2026
+    </div>
   </div>
   
   <!-- Main chat -->
   <div id="main">
     <div id="header">
       <div id="header-left">
-        <button id="hamburger" type="button" aria-label="Menü öffnen" onclick="openSidebar(event)" ontouchend="openSidebar(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSidebar(event)}"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+        <button id="hamburger" type="button" aria-label="Open menu" onclick="openSidebar(event)" ontouchend="openSidebar(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSidebar(event)}">☰</button>
         <div id="title">Tatjana</div>
       </div>
-      <div id="header-controls"><button class="icon-btn" id="settings-btn" type="button" title="Einstellungen" aria-label="Einstellungen"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6V20a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.22.34.42.67.6 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-.51 1Z"></path></svg></button></div>
+      <div id="header-controls">
+        <button class="icon-btn" id="theme-btn" type="button" title="Change color palette" aria-label="Change color palette" onclick="showThemePicker(); return false;" ontouchend="event.preventDefault(); showThemePicker(); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showThemePicker()}">🎨</button>
+        <button class="icon-btn" id="mode-btn" type="button" title="Toggle light/dark mode" aria-label="Toggle light/dark mode" onclick="toggleMode(); return false;" ontouchend="event.preventDefault(); toggleMode(); return false;" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleMode()}">☀️</button>
+      </div>
     </div>
     
     <div id="messages"></div>
     
-    <div id="input-container"><button id="attach-btn" class="composer-icon-btn" type="button" aria-label="Datei oder Foto hinzufuegen" title="Datei oder Foto hinzufuegen">+</button><textarea id="input" placeholder="Nachricht eingeben..." rows="1" aria-label="Nachrichtenfeld"></textarea><button id="stop-response-btn" class="composer-icon-btn danger" type="button" aria-label="Antwort stoppen" title="Antwort stoppen" hidden>Stopp</button><button id="voice-btn" class="composer-icon-btn" type="button" aria-label="Nachricht diktieren" title="Nachricht diktieren"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><path d="M12 19v3"></path></svg></button><button id="send-btn" type="button" aria-label="Nachricht senden" title="Nachricht senden"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17V8"></path><path d="m7 12 5-5 5 5"></path></svg></button><input id="file-input" type="file" accept="image/*,.pdf,.txt,.md,.doc,.docx" multiple hidden></div>
+    <div id="input-container">
+      <textarea id="input" placeholder="Type your message..." rows="1" aria-label="Message input"></textarea>
+      <button id="send-btn" type="button" aria-label="Send message">Send</button>
+    </div>
   </div>
 </div>
 
 <!-- Theme picker modal -->
 <div id="theme-modal" class="modal-overlay">
   <div class="modal">
-    <h3>Farbpalette auswählen</h3>
+    <h3>Choose color palette</h3>
     <div id="theme-options"></div>
   </div>
 </div>
@@ -2083,19 +1041,21 @@ button[data-open-theme] {
 <div id="search-modal" class="modal-overlay">
   <div class="modal">
     <div class="search-modal-header">
-      <h3>Suchergebnisse</h3>
-      <button class="search-close-btn" type="button" onclick="closeSearchModal()" aria-label="Suchergebnisse schließen">×</button>
+      <h3>Search Results</h3>
+      <button class="search-close-btn" type="button" onclick="closeSearchModal()" aria-label="Close search results">×</button>
     </div>
     <div id="search-results-content"></div>
   </div>
 </div>
 
 <script>
-/* ============================== */
-/* Added and updated inside the Portal. Existing embedded prompts migrate once. */
-/* ============================== */
+/* ═══════════════════════════════════════════════════════════════
+   COMPANION PROMPT
+   Added and updated inside the Portal. Existing embedded prompts migrate once.
+   ═══════════════════════════════════════════════════════════════ */
+
 const EMBEDDED_SYSTEM_PROMPT = `[PASTE YOUR SYSTEM PROMPT HERE]`;
-const COMPANION_PROMPT_STORAGE_KEY = 'ellivien-companion-system-prompt-v2-tatjana';
+const COMPANION_PROMPT_STORAGE_KEY = 'ellivien-companion-system-prompt-v1';
 
 function getCompanionSystemPrompt() {
   const savedPrompt = (localStorage.getItem(COMPANION_PROMPT_STORAGE_KEY) || '').trim();
@@ -2112,24 +1072,24 @@ function getCompanionSystemPrompt() {
 function getLocalTimeContext() {
   const now = new Date();
   const hour = now.getHours();
-  const timeOfDay = hour < 5 ? 'späte Nacht' : hour < 12 ? 'Morgen' : hour < 17 ? 'Nachmittag' : hour < 21 ? 'Abend' : 'Nacht';
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'die lokale Zeitzone der Nutzerin';
+  const timeOfDay = hour < 5 ? 'late night' : hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : hour < 21 ? 'evening' : 'night';
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'the user’s local time zone';
   const formatted = new Intl.DateTimeFormat(undefined, {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
   }).format(now);
-  return `Das Gerät der Nutzerin meldet aktuell: ${formatted} (${timeZone}). Bei der Nutzerin ist gerade ${timeOfDay}. Nutze dies als aktuelles lokales Datum und aktuelle lokale Uhrzeit, wenn zeitbezogene Formulierungen wichtig sind. Erwähne es nicht, außer es ist relevant.`;
+  return `The user’s device currently reports ${formatted} (${timeZone}). It is ${timeOfDay} for the user. Treat this as the current local date and time when choosing time-sensitive wording. Do not mention it unless it is relevant.`;
 }
 
 function updateCompanionPromptButton() {
   const button = document.getElementById('companion-prompt-btn');
   if (!button) return;
   const ready = Boolean(getCompanionSystemPrompt());
-  button.textContent = ready ? 'Prompt bearbeiten' : 'Prompt einfügen';
+  button.textContent = ready ? 'Edit companion prompt' : 'Add companion prompt';
   button.style.background = ready ? '' : 'var(--secondary)';
 }
 
-function showCompanionPromptBearbeitenor() {
+function showCompanionPromptEditor() {
   document.getElementById('companion-prompt-modal')?.remove();
 
   const overlay = document.createElement('div');
@@ -2144,13 +1104,13 @@ function showCompanionPromptBearbeitenor() {
   modal.setAttribute('aria-labelledby', 'companion-prompt-title');
   modal.style.cssText = 'box-sizing:border-box;width:min(100%,680px);max-width:680px;margin:0 auto;padding:20px';
   modal.innerHTML = [
-    '<h3 id="companion-prompt-title" style="margin:0 0 10px">Begleiter-Prompt</h3>',
-    '<p style="margin:0 0 12px;font-size:14px;line-height:1.45">Füge den Prompt ein oder ändere ihn. Er wird privat in diesem Browser gespeichert und gilt ab deiner nächsten Nachricht.</p>',
-    '<textarea id="companion-prompt-input" aria-label="Begleiter-Prompt" placeholder="Begleiter-Prompt hier einfügen..." style="box-sizing:border-box;width:100%;min-height:min(48vh,420px);max-height:60vh;resize:vertical;padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--bg-main);color:var(--text-main);font:inherit;line-height:1.45"></textarea>',
+    '<h3 id="companion-prompt-title" style="margin:0 0 10px">Companion prompt</h3>',
+    '<p style="margin:0 0 12px;font-size:14px;line-height:1.45">Paste or update the prompt that defines your companion. It is saved privately in this browser and changes take effect on your next message.</p>',
+    '<textarea id="companion-prompt-input" aria-label="Companion prompt" placeholder="Paste or write the companion prompt here..." style="box-sizing:border-box;width:100%;min-height:min(48vh,420px);max-height:60vh;resize:vertical;padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--bg-main);color:var(--text-main);font:inherit;line-height:1.45"></textarea>',
     '<p id="companion-prompt-error" style="display:none;margin:8px 0 0;color:#dc2626;font-size:13px">Add a prompt before saving.</p>',
     '<div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px">',
-    '<button id="save-companion-prompt" class="sidebar-action-btn" type="button" style="margin:0;flex:1 1 150px">Prompt speichern</button>',
-    '<button id="cancel-companion-prompt" class="sidebar-action-btn secondary" type="button" style="margin:0;flex:1 1 110px">Abbrechen</button>',
+    '<button id="save-companion-prompt" class="sidebar-action-btn" type="button" style="margin:0;flex:1 1 150px">Save prompt</button>',
+    '<button id="cancel-companion-prompt" class="sidebar-action-btn secondary" type="button" style="margin:0;flex:1 1 110px">Cancel</button>',
     '</div>'
   ].join('');
 
@@ -2178,7 +1138,7 @@ function showCompanionPromptBearbeitenor() {
   });
 }
 
-function initialiseCompanionPromptBearbeitenor() {
+function initialiseCompanionPromptEditor() {
   if (document.getElementById('companion-prompt-btn')) return;
   const newThreadButton = document.querySelector('#thread-section .sidebar-action-btn[onclick*="createNewThread"]');
   if (!newThreadButton) return;
@@ -2186,15 +1146,19 @@ function initialiseCompanionPromptBearbeitenor() {
   button.id = 'companion-prompt-btn';
   button.className = 'sidebar-action-btn secondary';
   button.type = 'button';
-  button.addEventListener('click', showCompanionPromptBearbeitenor);
+  button.addEventListener('click', showCompanionPromptEditor);
   newThreadButton.insertAdjacentElement('afterend', button);
   updateCompanionPromptButton();
 }
 
-initialiseCompanionPromptBearbeitenor();
-const DEFAULT_CONTEXT_WINDOW_MESSAGES = 30;
+initialiseCompanionPromptEditor();
+const DEFAULT_CONTEXT_WINDOW_MESSAGES = 10;
 const CONTEXT_WINDOW_STORAGE_KEY = 'contextWindowMessages';
-/* ============================== */
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE VIEWPORT FIXES
+   ═══════════════════════════════════════════════════════════════ */
+
 function applyViewportHeight() {
   const vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--app-vh', `${vh}px`);
@@ -2203,10 +1167,14 @@ function applyViewportHeight() {
 applyViewportHeight();
 window.addEventListener('resize', applyViewportHeight);
 window.addEventListener('orientationchange', applyViewportHeight);
-/* ============================== */
+
+/* ═══════════════════════════════════════════════════════════════
+   SIDEBAR CONTROLS
+   ═══════════════════════════════════════════════════════════════ */
+
 const sidebar = document.getElementById('sidebar');
 const hamburger = document.getElementById('hamburger');
-const sidebarSchließen = document.getElementById('sidebar-close');
+const sidebarClose = document.getElementById('sidebar-close');
 
 function openSidebar(event) {
   if (event) {
@@ -2256,7 +1224,11 @@ if (contextWindowInput) {
     localStorage.setItem(CONTEXT_WINDOW_STORAGE_KEY, String(value));
   });
 }
-/* ============================== */
+
+/* ═══════════════════════════════════════════════════════════════
+   THEME SYSTEM
+   ═══════════════════════════════════════════════════════════════ */
+
 const THEMES = {
   purple: {
     name: 'Purple & Green',
@@ -2386,8 +1358,7 @@ function applyTheme(palette, mode) {
   root.style.setProperty('--text-dim', theme.textDim);
   root.style.setProperty('--border', theme.border);
   
-  const modeButton = document.getElementById('mode-btn');
-  if (modeButton) modeButton.textContent = mode === 'light' ? 'Hell' : 'Dunkel';
+  document.getElementById('mode-btn').textContent = mode === 'light' ? '☀️' : '🌙';
   
   currentTheme = palette;
   currentMode = mode;
@@ -2444,58 +1415,6 @@ function showThemePicker() {
 // Apply saved theme on load
 applyTheme(currentTheme, currentMode);
 
-function showStorageSecurityInfo() {
-  const checklistKey = 'ellivien-security-sync-checklist-v1';
-  const saved = JSON.parse(localStorage.getItem(checklistKey) || '{}');
-  const checks = [
-    ['password-gate', 'Ich habe das Passwort-Gate auf derselben Portaladresse aktiviert.'],
-    ['wrong-password', 'Ich habe getestet, dass ein falsches Passwort abgelehnt wird, und mich danach mit dem richtigen angemeldet.'],
-    ['cloud-sync', 'Ich habe „Cloud-Sync jetzt“ genutzt und gesehen, dass es erfolgreich abgeschlossen wurde.'],
-    ['restore-test', 'Ich habe geprüft, dass meine Threads aus Cloudflare KV in einem zweiten Browser oder Gerät wiederhergestellt werden können.'],
-    ['backup', 'Ich habe einen frischen Voll-Export als zusätzliche Sicherung gespeichert.']
-  ];
-  const existing = document.getElementById('storage-security-info-modal');
-  if (existing) existing.remove();
-  const overlay = document.createElement('div');
-  overlay.id = 'storage-security-info-modal';
-  overlay.className = 'modal-overlay active';
-  overlay.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="storage-security-title">
-    <h3 id="storage-security-title">Lokaler Modus ist aktiv</h3>
-    <p>Dein Thread-Portal arbeitet normal. Chats werden aktuell lokal in IndexedDB auf diesem Browser und Gerät gespeichert.</p>
-    <p>Passwortschutz und dauerhafte Cloudflare-KV-Synchronisierung liegen kostenlos im Download-Ordner <strong>Password + KV Sync - Activate Later</strong>.</p>
-    <p>Passwortschutz schützt den Zugriff auf Portal und Modell-Proxy. KV schützt dich davor, nur von einer Browserdatenbank abhängig zu sein, und ermöglicht Sync über mehrere Geräte.</p>
-    <p>Keep regular exports. When you feel ready, follow the included activation guide on this same Netlify site. Only complete this checklist <strong>after</strong> you have activated the secure version.</p>
-    <div id="security-sync-checklist" style="margin:16px 0;text-align:left"></div>
-    <p id="security-sync-complete" style="display:none;color:var(--secondary);font-weight:700;line-height:1.45;">Sicherheit und Cloud-Sync bestätigt. Dieser Hinweis wird jetzt ausgeblendet.</p>
-    <button class="sidebar-action-btn" type="button" onclick="document.getElementById('storage-security-info-modal')?.remove()">Schließen</button>
-  </div>`;
-  const checklist = overlay.querySelector('#security-sync-checklist');
-  const complete = overlay.querySelector('#security-sync-complete');
-  const update = () => {
-    localStorage.setItem(checklistKey, JSON.stringify(saved));
-    const allDone = checks.every(([key]) => saved[key]);
-    complete.style.display = allDone ? 'block' : 'none';
-    if (allDone) {
-      setTimeout(() => {
-        overlay.remove();
-        document.querySelector('[onclick="showStorageSecurityInfo()"]')?.remove();
-      }, 1200);
-    }
-  };
-  checks.forEach(([key, label]) => {
-    const row = document.createElement('label');
-    row.style.cssText = 'display:flex;gap:9px;align-items:flex-start;margin:10px 0;font-size:13px;line-height:1.4;cursor:pointer';
-    row.innerHTML = `<input type="checkbox" ${saved[key] ? 'checked' : ''} style="margin-top:3px"><span>${label}</span>`;
-    row.querySelector('input').addEventListener('change', event => { saved[key] = event.target.checked; update(); });
-    checklist.appendChild(row);
-  });
-  update();
-  overlay.addEventListener('click', event => {
-    if (event.target === overlay) overlay.remove();
-  });
-  document.body.appendChild(overlay);
-}
-
 // Theme modal close
 document.getElementById('theme-modal').addEventListener('click', (e) => {
   if (e.target.id === 'theme-modal') {
@@ -2522,7 +1441,11 @@ document.getElementById('search-modal').addEventListener('touchend', (e) => {
     e.target.classList.remove('active');
   }
 }, { passive: false });
-/* ============================== */
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN CHAT FUNCTIONALITY
+   ═══════════════════════════════════════════════════════════════ */
+
 const messagesDiv = document.getElementById('messages');
 const input = document.getElementById('input');
 const sendBtn = document.getElementById('send-btn');
@@ -2552,29 +1475,6 @@ let dirtyThreadIds = new Set();
 let deletedThreadIds = new Set();
 let kvThreadIndexDirty = false;
 let cloudSyncInFlight = null;
-const TEMPERATURE_STORAGE_KEY = 'tatjana-temperature-v1';
-const OUTPUT_TOKENS_STORAGE_KEY = 'tatjana-output-tokens-v1';
-const TATJANA_MEMORY_STORAGE_KEY = 'tatjana-memory-notes-v1';
-const TATJANA_FAST_MEMORY_STORAGE_KEY = 'tatjana-memory-fast-v1';
-let activeRequestController = null;
-function getTemperatureSetting() {
-  const raw = localStorage.getItem(TEMPERATURE_STORAGE_KEY);
-  const value = raw === null ? 1.1 : Number(raw);
-  return Number.isFinite(value) ? Math.min(1.5, Math.max(0, value)) : 1.1;
-}
-function setTemperatureSetting(value) {
-  localStorage.setItem(TEMPERATURE_STORAGE_KEY, String(Math.min(1.5, Math.max(0, Number(value)))));
-}
-
-function getOutputTokenLimit() {
-  const raw = localStorage.getItem(OUTPUT_TOKENS_STORAGE_KEY);
-  const value = raw === null ? 3500 : Number(raw);
-  return Number.isFinite(value) ? Math.min(8000, Math.max(500, Math.round(value))) : 3500;
-}
-
-function setOutputTokenLimit(value) {
-  localStorage.setItem(OUTPUT_TOKENS_STORAGE_KEY, String(Math.min(8000, Math.max(500, Math.round(Number(value) || 3500)))));
-}
 
 function getPortalAuthToken() {
   return localStorage.getItem(AUTH_TOKEN_KEY) || '';
@@ -2689,97 +1589,6 @@ async function ensureAuthenticatedBeforeBoot() {
   return false;
 }
 
-
-function getChatModel() {
-  return 'gpt-4o-2024-11-20';
-}
-
-function getMiniAssistantModel() {
-  return 'gpt-4o-mini-2024-07-18';
-}
-
-async function runMiniAssistantTask(task, messages, options = {}) {
-  const response = await fetch('/.netlify/functions/openai-proxy', {
-    method: 'POST',
-    headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
-    body: JSON.stringify({
-      model: getMiniAssistantModel(),
-      messages: [
-        {
-          role: 'system',
-          content: `Du bist Tatjanas Mini-Assistent fuer kleine Nebenaufgaben. Bearbeite nur die Aufgabe: ${task}. Antworte kurz, sachlich und ohne zusaetzliche Erklaerung.`
-        },
-        ...messages
-      ],
-      temperature: Number.isFinite(Number(options.temperature)) ? options.temperature : 0.2,
-      max_tokens: Number.isFinite(Number(options.max_tokens)) ? options.max_tokens : 120
-    })
-  });
-
-  if (!response.ok) {
-    throw new Error(`Mini assistant error: ${response.status}`);
-  }
-
-  const data = await response.json();
-  return (data?.choices?.[0]?.message?.content || '').trim();
-}
-
-function cleanMiniTitle(title) {
-  return String(title || '')
-    .replace(/^["'“”„]+|["'“”„]+$/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 42);
-}
-
-async function refineThreadTitleWithMiniAssistant(thread) {
-  const firstUserMessage = getFirstUserMessage(thread);
-  if (!thread || !firstUserMessage || thread.miniTitleDone) return;
-
-  thread.miniTitleDone = true;
-
-  try {
-    const title = cleanMiniTitle(await runMiniAssistantTask(
-      'Erstelle einen sehr kurzen deutschen Thread-Titel mit maximal 5 Woertern.',
-      [{ role: 'user', content: firstUserMessage.content }],
-      { temperature: 0.1, max_tokens: 40 }
-    ));
-
-    if (title) {
-      thread.title = title;
-      thread.updated = Date.now();
-      saveThreads();
-      renderThreadList();
-      await markThreadDirty(thread.id, { indexChanged: true });
-    }
-  } catch (error) {
-    console.warn('Mini assistant title task skipped:', error);
-  }
-}
-
-function getMemoryText(key) {
-  return (localStorage.getItem(key) || '').trim();
-}
-
-function setMemoryText(key, value) {
-  const text = String(value || '').trim();
-  if (text) localStorage.setItem(key, text);
-  else localStorage.removeItem(key);
-}
-
-function getTatjanaMemoryMessages() {
-  const notes = getMemoryText(TATJANA_MEMORY_STORAGE_KEY);
-  const fast = getMemoryText(TATJANA_FAST_MEMORY_STORAGE_KEY);
-  const sections = [];
-  if (fast) sections.push(`Schnell abrufbare Informationen:\n${fast}`);
-  if (notes) sections.push(`Gespeicherte Erinnerungen und wichtige Notizen:\n${notes}`);
-  if (!sections.length) return [];
-  return [{
-    role: 'system',
-    content: `Tatjana-Memory ist getrennt vom Companion-Prompt gespeichert. Nutze diese Informationen nur, wenn sie zur aktuellen Unterhaltung passen. Erfinde keine fehlenden Details.\n\n${sections.join('\n\n')}`
-  }];
-}
-
 function openPortalDb() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(IDB_NAME, IDB_VERSION);
@@ -2799,15 +1608,15 @@ function openPortalDb() {
 function openExistingDb(name) {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(name);
-    let existedBeforeÖffnen = true;
+    let existedBeforeOpen = true;
 
     request.onupgradeneeded = () => {
-      existedBeforeÖffnen = false;
+      existedBeforeOpen = false;
     };
 
     request.onsuccess = () => {
       const db = request.result;
-      if (!existedBeforeÖffnen) {
+      if (!existedBeforeOpen) {
         db.close();
         indexedDB.deleteDatabase(name);
         resolve(null);
@@ -2886,7 +1695,7 @@ function saveCurrentThreadId() {
   });
 }
 
-function makeThread(title = 'Neue Unterhaltung', messages = []) {
+function makeThread(title = 'New conversation', messages = []) {
   const now = Date.now();
   const id = `thread_${now}_${Math.random().toString(36).slice(2, 8)}`;
   return {
@@ -2965,6 +1774,8 @@ async function loadThreads() {
     })[0];
     saveCurrentThreadId();
   }
+
+  await loadKvSyncState();
 }
 
 function saveThreads() {
@@ -2972,7 +1783,6 @@ function saveThreads() {
     console.warn('Could not save threads to IndexedDB:', error);
   });
 }
-
 
 async function saveThreadsLocal() {
   await setPortalState(THREADS_KEY, threads);
@@ -2983,7 +1793,7 @@ function getCloudThreadIds() {
     .filter(id => {
       const thread = threads[id];
       if (!thread) return false;
-      if ((thread.title || 'Neue Unterhaltung') === 'Neue Unterhaltung' && (thread.messages?.length || 0) === 0) return false;
+      if ((thread.title || 'New conversation') === 'New conversation' && (thread.messages?.length || 0) === 0) return false;
       return true;
     })
     .sort();
@@ -3092,7 +1902,7 @@ function shouldReplaceThread(existingThread, incomingThread, force = false) {
 
 function shouldPushLocalThreadToKV(localThread, remoteThread) {
   if (!localThread) return false;
-  if ((localThread.title || 'Neue Unterhaltung') === 'Neue Unterhaltung' && (localThread.messages?.length || 0) === 0) return false;
+  if ((localThread.title || 'New conversation') === 'New conversation' && (localThread.messages?.length || 0) === 0) return false;
   if (!remoteThread) return true;
   return shouldReplaceThread(remoteThread, localThread);
 }
@@ -3154,7 +1964,7 @@ async function markThreadDirty(threadId, options = {}) {
   if (!threadId || !threads[threadId]) return;
   deletedThreadIds.delete(threadId);
   const thread = threads[threadId];
-  if ((thread.title || 'Neue Unterhaltung') === 'Neue Unterhaltung' && (thread.messages?.length || 0) === 0) {
+  if ((thread.title || 'New conversation') === 'New conversation' && (thread.messages?.length || 0) === 0) {
     if (options.indexChanged) {
       kvThreadIndexDirty = true;
       await persistKvSyncState();
@@ -3367,7 +2177,7 @@ async function showStorageSyncModal() {
   const modal = document.createElement('div');
   modal.className = 'modal';
   modal.innerHTML = `
-    <h3>Cloud-Sync</h3>
+    <h3>Storage & sync</h3>
     <div style="text-align:left;line-height:1.55;margin:0 0 16px;padding:14px 16px;border-radius:14px;background:#f8fafc;border:1px solid #e2e8f0;color:#334155;">
       <div><strong style="color:#6d28d9;">Last cloud sync</strong><br>${formatRelativeSyncTime(lastCloudSync)}</div>
       <div style="margin-top:10px;"><strong style="color:#6d28d9;">Last sync failure</strong><br>${formatRelativeSyncTime(lastFailure)}</div>
@@ -3377,12 +2187,12 @@ async function showStorageSyncModal() {
   `;
 
   const actions = [
-    { text: 'Jetzt manuell synchronisieren', action: async () => runCloudSync({ showSuccessToast: true, showFailureToast: true, showSuccessWhenNoChanges: true, verifyLocalThreads: true }) },
-    { text: 'Aus Cloud wiederherstellen', action: async () => {
+    { text: 'Cloud sync now', action: async () => runCloudSync({ showSuccessToast: true, showFailureToast: true, showSuccessWhenNoChanges: true, verifyLocalThreads: true }) },
+    { text: 'Restore from cloud', action: async () => {
       const result = await restoreThreadsFromKV(true);
       showSyncToast(`✓ Restored ${result.restoredCount} cloud thread${result.restoredCount === 1 ? '' : 's'}`);
     }},
-    { text: 'Schliessen', action: async () => {} }
+    { text: 'Close', action: async () => {} }
   ];
 
   actions.forEach(item => {
@@ -3481,7 +2291,7 @@ function updateThreadTitle(thread) {
   const firstUserMessage = getFirstUserMessage(thread);
   if (!firstUserMessage) return;
   
-  if (!thread.title || thread.title === 'Neue Unterhaltung' || thread.title === 'Imported conversation') {
+  if (!thread.title || thread.title === 'New conversation' || thread.title === 'Imported conversation') {
     thread.title = cleanPreview(firstUserMessage.content, 42);
   }
 }
@@ -3522,7 +2332,7 @@ function exportThreadToMarkdown(threadId) {
   if (!thread) return;
 
   const companionName = getCompanionName();
-  const title = thread.title || 'Neue Unterhaltung';
+  const title = thread.title || 'New conversation';
   const lines = [
     `# ${title}`,
     '',
@@ -3627,7 +2437,7 @@ function restoreThreadFromMarkdown(threadId) {
         return;
       }
 
-      if (!confirm(`Replace "${thread.title || 'Neue Unterhaltung'}" with ${parsed.messages.length} imported messages?`)) {
+      if (!confirm(`Replace "${thread.title || 'New conversation'}" with ${parsed.messages.length} imported messages?`)) {
         return;
       }
 
@@ -3635,6 +2445,7 @@ function restoreThreadFromMarkdown(threadId) {
       thread.messages = parsed.messages;
       thread.updated = Date.now();
       saveThreads();
+      markThreadDirty(threadId, { indexChanged: true });
       switchThread(threadId);
       renderThreadList();
     };
@@ -3691,7 +2502,7 @@ function restoreThreadFromJson(threadId) {
         return;
       }
 
-      if (!confirm(`Replace "${thread.title || 'Neue Unterhaltung'}" with ${parsed.messages.length} imported messages?`)) {
+      if (!confirm(`Replace "${thread.title || 'New conversation'}" with ${parsed.messages.length} imported messages?`)) {
         return;
       }
 
@@ -3699,6 +2510,7 @@ function restoreThreadFromJson(threadId) {
       thread.messages = parsed.messages;
       thread.updated = Date.now();
       saveThreads();
+      markThreadDirty(threadId, { indexChanged: true });
       switchThread(threadId);
       renderThreadList();
     };
@@ -3736,7 +2548,7 @@ function renderThreadList() {
   matchingThreads.forEach(thread => {
     updateThreadTitle(thread);
     
-    const titleText = thread.pinned ? `Anpinnenned: ${thread.title || 'Neue Unterhaltung'}` : thread.title || 'Neue Unterhaltung';
+    const titleText = thread.pinned ? `Pinned: ${thread.title || 'New conversation'}` : thread.title || 'New conversation';
     const dateText = formatThreadDate(thread.updated);
     const previewText = getSearchPreview(thread, query);
     const button = document.createElement('button');
@@ -3799,7 +2611,7 @@ function performFullSearch() {
   if (!modal || !content) return;
 
   if (!query) {
-    content.innerHTML = '<div class="empty-thread-list">Bitte erst einen Suchbegriff eingeben.</div>';
+    content.innerHTML = '<div class="empty-thread-list">Enter a search term first.</div>';
     modal.classList.add('active');
     return;
   }
@@ -3807,7 +2619,7 @@ function performFullSearch() {
   const lowerQuery = query.toLowerCase();
   const results = Object.values(threads).map(thread => {
     const matches = [];
-    const title = thread.title || 'Neue Unterhaltung';
+    const title = thread.title || 'New conversation';
     if (title.toLowerCase().includes(lowerQuery)) {
       matches.push({ type: 'title', content: title, messageIndex: null });
     }
@@ -3843,7 +2655,7 @@ function performFullSearch() {
     const header = document.createElement('button');
     header.type = 'button';
     header.className = 'search-result-thread-title';
-    header.innerHTML = highlightSearchTerm(result.thread.title || 'Neue Unterhaltung', query);
+    header.innerHTML = highlightSearchTerm(result.thread.title || 'New conversation', query);
     header.onclick = () => openThreadAtMessage(result.thread.id);
     wrapper.appendChild(header);
 
@@ -3904,18 +2716,18 @@ function showThreadModal(threadId, event) {
   
   const title = document.createElement('div');
   title.className = 'thread-action-title';
-  title.textContent = thread.title || 'Neue Unterhaltung';
+  title.textContent = thread.title || 'New conversation';
   modal.appendChild(title);
   
   const actions = [
-    { text: 'Öffnen', action: () => { overlay.remove(); switchThread(threadId); } },
-    { text: 'Umbenennen', action: () => { overlay.remove(); renameThread(threadId); } },
-    { text: thread.pinned ? 'Loslösen' : 'Anpinnen', action: () => { overlay.remove(); toggleAnpinnen(threadId); } },
-    { text: 'Als .md exportieren', action: () => { overlay.remove(); exportThreadToMarkdown(threadId); } },
-    { text: 'Aus .md wiederherstellen', action: () => { overlay.remove(); restoreThreadFromMarkdown(threadId); } },
-    { text: 'Aus .json wiederherstellen', action: () => { overlay.remove(); restoreThreadFromJson(threadId); } },
-    { text: 'Löschen', danger: true, action: () => { overlay.remove(); deleteThread(threadId); } },
-    { text: 'Abbrechen', action: () => overlay.remove() }
+    { text: 'Open Thread', action: () => { overlay.remove(); switchThread(threadId); } },
+    { text: 'Rename', action: () => { overlay.remove(); renameThread(threadId); } },
+    { text: thread.pinned ? 'Unpin' : 'Pin', action: () => { overlay.remove(); togglePin(threadId); } },
+    { text: 'Export to .md', action: () => { overlay.remove(); exportThreadToMarkdown(threadId); } },
+    { text: 'Restore from .md', action: () => { overlay.remove(); restoreThreadFromMarkdown(threadId); } },
+    { text: 'Restore from .json', action: () => { overlay.remove(); restoreThreadFromJson(threadId); } },
+    { text: 'Delete', danger: true, action: () => { overlay.remove(); deleteThread(threadId); } },
+    { text: 'Cancel', action: () => overlay.remove() }
   ];
   
   actions.forEach(action => {
@@ -3941,22 +2753,24 @@ function renameThread(threadId) {
   const thread = threads[threadId];
   if (!thread) return;
   
-  const newName = prompt('Umbenennen thread:', thread.title || 'Neue Unterhaltung');
+  const newName = prompt('Rename thread:', thread.title || 'New conversation');
   if (!newName || !newName.trim()) return;
   
   thread.title = newName.trim();
   thread.updated = Date.now();
   saveThreads();
+  markThreadDirty(threadId);
   renderThreadList();
 }
 
-function toggleAnpinnen(threadId) {
+function togglePin(threadId) {
   const thread = threads[threadId];
   if (!thread) return;
   
   thread.pinned = !thread.pinned;
   thread.updated = Date.now();
   saveThreads();
+  markThreadDirty(threadId);
   renderThreadList();
 }
 
@@ -3964,10 +2778,9 @@ function deleteThread(threadId) {
   const thread = threads[threadId];
   if (!thread) return;
   
-  if (!confirm(`Löschen "${thread.title || 'Neue Unterhaltung'}"?`)) return;
+  if (!confirm(`Delete "${thread.title || 'New conversation'}"?`)) return;
   
   delete threads[threadId];
-  markThreadDeleted(threadId).catch(error => console.warn('Could not mark thread deleted:', error));
   
   if (threadId === currentThreadId) {
     const remainingThreads = Object.values(threads).sort((a, b) => {
@@ -3987,6 +2800,7 @@ function deleteThread(threadId) {
   }
   
   saveThreads();
+  markThreadDeleted(threadId);
   renderThreadList();
 }
 
@@ -4001,6 +2815,7 @@ function createNewThread(event) {
   currentThreadId = thread.id;
   saveCurrentThreadId();
   saveThreads();
+  markThreadDirty(thread.id, { indexChanged: true });
   
   input.value = '';
   input.style.height = 'auto';
@@ -4040,22 +2855,16 @@ input.addEventListener('input', () => {
   input.style.height = input.scrollHeight + 'px';
 });
 
-// Enter makes a new line. Ctrl/Cmd+Enter sends on desktop.
+// Send on Enter (Shift+Enter for new line)
 input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+  if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
 });
 
 // Send button click
-sendBtn.addEventListener('click', () => {
-  if (activeRequestController) {
-    activeRequestController.abort();
-    return;
-  }
-  sendMessage();
-});
+sendBtn.addEventListener('click', sendMessage);
 
 threadSearch.addEventListener('input', renderThreadList);
 threadSearch.addEventListener('keydown', (event) => {
@@ -4086,135 +2895,6 @@ function escapeHtml(value) {
     .replace(/'/g, '&#039;');
 }
 
-
-function getStoredVoiceName() {
-  return localStorage.getItem('tatjana-tts-voice-name') || '';
-}
-
-function setStoredVoiceName(name) {
-  localStorage.setItem('tatjana-tts-voice-name', name || '');
-}
-
-function getSpeechVoices() {
-  return window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
-}
-
-function speakText(text, voiceName) {
-  if (!window.speechSynthesis) {
-    alert('Vorlesen wird von diesem Browser leider nicht unterstützt.');
-    return;
-  }
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'de-DE';
-  const voices = getSpeechVoices();
-  const chosenVoice = voices.find(voice => voice.name === voiceName) || voices.find(voice => voice.lang && voice.lang.toLowerCase().startsWith('de'));
-  if (chosenVoice) utterance.voice = chosenVoice;
-  window.speechSynthesis.speak(utterance);
-}
-
-function deleteMessageAt(index) {
-  const thread = getCurrentThread();
-  if (!thread || !Number.isInteger(index)) return;
-  thread.messages.splice(index, 1);
-  thread.updated = Date.now();
-  saveThreads();
-  renderMessages();
-  renderThreadList();
-}
-
-function tatjanaSvgIcon(name) {
-  const icons = {
-    copy: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><rect x="4" y="4" width="11" height="11" rx="2"></rect></svg>',
-    volume: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>',
-    trash: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M6 6l1 16h10l1-16"></path><path d="M10 11v6M14 11v6"></path></svg>',
-    refresh: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.2 6.5"></path><path d="M3 12A9 9 0 0 1 18.2 5.5"></path><path d="M18 2v4h4"></path><path d="M6 22v-4H2"></path></svg>',
-    arrowDown: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>',
-    arrowUp: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"></path><path d="m5 12 7-7 7 7"></path></svg>'
-  };
-  return icons[name] || '';
-}
-function regenerateAssistantAt(messageIndex) {
-  if (activeRequestController) return;
-  const thread = getCurrentThread();
-  if (!thread || !Number.isInteger(messageIndex)) return;
-  const previousUserIndex = thread.messages.slice(0, messageIndex).map((message, index) => ({ message, index })).reverse().find(item => item.message.role === 'user')?.index;
-  if (!Number.isInteger(previousUserIndex)) return;
-  const userText = thread.messages[previousUserIndex].content || '';
-  thread.messages.splice(messageIndex, 1);
-  thread.updated = Date.now();
-  saveThreads();
-  renderMessages();
-  input.value = userText;
-  input.dispatchEvent(new Event('input'));
-  sendMessage();
-}
-function enhanceMessageElement(div, role, content, messageIndex) {
-  if (!Number.isInteger(messageIndex)) return;
-  const tools = document.createElement('div');
-  tools.className = 'message-tools';
-
-  const copyButton = document.createElement('button');
-  copyButton.type = 'button';
-  copyButton.className = 'message-tool-btn';
-  copyButton.title = 'Kopieren';
-  copyButton.setAttribute('aria-label', 'Nachricht kopieren');
-  copyButton.innerHTML = tatjanaSvgIcon('copy');
-  copyButton.addEventListener('click', () => navigator.clipboard?.writeText(content));
-  tools.appendChild(copyButton);
-
-  if (role === 'assistant') {
-    const speakButton = document.createElement('button');
-    speakButton.type = 'button';
-    speakButton.className = 'message-tool-btn';
-    speakButton.title = 'Vorlesen';
-    speakButton.setAttribute('aria-label', 'Antwort vorlesen');
-    speakButton.innerHTML = tatjanaSvgIcon('volume');
-    speakButton.addEventListener('click', () => speakText(content, getStoredVoiceName()));
-    tools.appendChild(speakButton);
-
-    const voiceSelect = document.createElement('select');
-    voiceSelect.className = 'message-voice-select';
-    voiceSelect.title = 'Stimme wählen';
-    voiceSelect.setAttribute('aria-label', 'Stimme für diese Antwort wählen');
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Stimme';
-    voiceSelect.appendChild(defaultOption);
-    getSpeechVoices().filter(voice => !voice.lang || voice.lang.toLowerCase().startsWith('de')).slice(0, 12).forEach(voice => {
-      const option = document.createElement('option');
-      option.value = voice.name;
-      option.textContent = voice.name.replace(/\s*\(.+?\)\s*/g, '').slice(0, 18);
-      voiceSelect.appendChild(option);
-    });
-    voiceSelect.value = getStoredVoiceName();
-    voiceSelect.addEventListener('change', () => {
-      setStoredVoiceName(voiceSelect.value);
-      speakText(content, voiceSelect.value);
-    });
-    tools.appendChild(voiceSelect);
-
-    const regenerateButton = document.createElement('button');
-    regenerateButton.type = 'button';
-    regenerateButton.className = 'message-tool-btn';
-    regenerateButton.title = 'Erneut generieren';
-    regenerateButton.setAttribute('aria-label', 'Antwort erneut generieren');
-    regenerateButton.innerHTML = tatjanaSvgIcon('refresh');
-    regenerateButton.addEventListener('click', () => regenerateAssistantAt(messageIndex));
-    tools.appendChild(regenerateButton);
-  }
-
-  const deleteButton = document.createElement('button');
-  deleteButton.type = 'button';
-  deleteButton.className = 'message-tool-btn danger';
-  deleteButton.title = 'Löschen';
-  deleteButton.setAttribute('aria-label', 'Nachricht löschen');
-  deleteButton.innerHTML = tatjanaSvgIcon('trash');
-  deleteButton.addEventListener('click', () => deleteMessageAt(messageIndex));
-  tools.appendChild(deleteButton);
-
-  div.appendChild(tools);
-}
 function displayMessage(role, content, messageIndex = null) {
   const div = document.createElement('div');
   div.className = `message ${role}`;
@@ -4222,7 +2902,6 @@ function displayMessage(role, content, messageIndex = null) {
     div.dataset.messageIndex = String(messageIndex);
   }
   div.innerHTML = renderMessageMarkup(content);
-  enhanceMessageElement(div, role, content, messageIndex);
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
@@ -4248,38 +2927,24 @@ function showTyping() {
   return typing;
 }
 
-function setSendButtonGenerating(isGenerating) {
-  sendBtn.disabled = false;
-  sendBtn.classList.toggle('is-stopping', Boolean(isGenerating));
-  sendBtn.setAttribute('aria-label', isGenerating ? 'Antwort stoppen' : 'Nachricht senden');
-  sendBtn.title = isGenerating ? 'Antwort stoppen' : 'Nachricht senden';
-}
-
 async function sendMessage() {
-  if (activeRequestController) {
-    activeRequestController.abort();
-    return;
-  }
   const text = input.value.trim();
   if (!text) return;
   const systemPrompt = getCompanionSystemPrompt();
   if (!systemPrompt) {
-    showCompanionPromptBearbeitenor();
+    showCompanionPromptEditor();
     return;
   }
-input.disabled = true;
-  setSendButtonGenerating(true);
-  const stopBtn = document.getElementById('stop-response-btn');
-  if (stopBtn) stopBtn.hidden = false;
-  activeRequestController = new AbortController();
+  
+  input.disabled = true;
+  sendBtn.disabled = true;
   const thread = getCurrentThread();
   
-  displayMessage('user', text, thread.messages.length);
-  thread.messages.push({ role: 'user', content: text });
+  displayMessage('user', text);
+  thread.messages.push({ role: 'user', content: text, timestamp: new Date().toISOString() });
   thread.updated = Date.now();
   updateThreadTitle(thread);
   saveThreads();
-  refineThreadTitleWithMiniAssistant(thread);
   await markThreadDirty(thread.id, { indexChanged: true });
   renderThreadList();
   
@@ -4292,8 +2957,7 @@ input.disabled = true;
   const contextWindowSize = getContextWindowSize();
   const liveMessages = contextWindowSize === 0 ? thread.messages : thread.messages.slice(-contextWindowSize);
   const apiMessages = [
-    { role: 'system', content: systemPrompt },
-    ...getTatjanaMemoryMessages(),
+    { role: 'system', content: `${systemPrompt}\n\n${getLocalTimeContext()}` },
     ...liveMessages
   ];
     
@@ -4302,11 +2966,8 @@ input.disabled = true;
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({
         messages: apiMessages,
-        model: getChatModel(),
-        temperature: getTemperatureSetting(),
-        max_tokens: getOutputTokenLimit()
-      }),
-      signal: activeRequestController.signal
+        model: 'gpt-4o-2024-11-20'
+      })
     });
     
     if (!response.ok) {
@@ -4318,8 +2979,8 @@ input.disabled = true;
     
     typing.remove();
     
-    displayMessage('assistant', assistantMessage, thread.messages.length);
-    thread.messages.push({ role: 'assistant', content: assistantMessage });
+    displayMessage('assistant', assistantMessage);
+    thread.messages.push({ role: 'assistant', content: assistantMessage, timestamp: new Date().toISOString() });
     thread.updated = Date.now();
     
     saveThreads();
@@ -4329,23 +2990,10 @@ input.disabled = true;
   } catch (error) {
     typing.remove();
     console.error('Error:', error);
-    if (error.name === 'AbortError') {
-      displayMessage('assistant', 'Okay, ich habe gestoppt. Du kannst deine Nachricht anpassen und neu schicken.');
-    } else if (error.message && error.message.includes('401')) {
-      localStorage.removeItem(AUTH_TOKEN_KEY);
-      displayMessage('assistant', 'Die geschuetzte Sitzung ist abgelaufen. Bitte melde dich neu mit dem Portal-Passwort an.');
-      ensureAuthenticatedBeforeBoot();
-    } else if (location.protocol === 'file:') {
-      displayMessage('assistant', 'Bitte oeffne das Portal ueber den lokalen Testserver oder spaeter ueber Netlify. Als file://-Datei darf der Browser geschuetzte API-Anfragen blockieren.');
-    } else {
-      displayMessage('assistant', 'Da ist gerade technisch etwas schiefgelaufen. Schau bitte in die Konsole, wenn du Details brauchst.');
-    }
+    displayMessage('assistant', 'Sorry, something went wrong. Check the console for details.');
   } finally {
     input.disabled = false;
-    setSendButtonGenerating(false);
-    activeRequestController = null;
-    const stopBtn = document.getElementById('stop-response-btn');
-    if (stopBtn) stopBtn.hidden = true;
+    sendBtn.disabled = false;
     input.focus();
   }
 }
@@ -4353,16 +3001,17 @@ input.disabled = true;
 async function bootPortal() {
   const authenticated = await ensureAuthenticatedBeforeBoot();
   if (!authenticated) return;
-  const securityChecklist = JSON.parse(localStorage.getItem('ellivien-security-sync-checklist-v1') || '{}');
-  if (['password-gate', 'wrong-password', 'cloud-sync', 'restore-test', 'backup'].every(key => securityChecklist[key])) {
-    document.querySelector('[onclick="showStorageSecurityInfo()"]')?.remove();
-  }
   await loadThreads();
-  await loadKvSyncState();
   renderMessages();
   renderThreadList();
   input.focus();
 }
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    saveThreads();
+  }
+});
 
 bootPortal().catch(error => {
   console.error('Portal boot failed:', error);
@@ -4375,7 +3024,7 @@ bootPortal().catch(error => {
 });
 
 
-if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.protocol !== 'file:') {
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js')
       .catch(error => console.warn('Service worker registration failed:', error));
@@ -4388,55 +3037,43 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
   'use strict';
 
   const FONT_KEY = 'ellivien-reading-font';
-  const LANGUAGE_KEY = 'ellivien-ui-language-v2-tatjana';
+  const LANGUAGE_KEY = 'ellivien-ui-language';
 
-  const languages = [['de', 'Deutsch']];
+  const languages = [
+    ['en', 'English'], ['es', 'Español'], ['fr', 'Français'], ['pt', 'Português'],
+    ['de', 'Deutsch'], ['it', 'Italiano'], ['pl', 'Polski'], ['ru', 'Русский'],
+    ['ja', '日本語'], ['ko', '한국어'], ['zh', '中文'], ['ar', 'العربية'], ['hi', 'हिन्दी']
+  ];
 
   const copy = {
-    de: {
-      displayContext: 'Anzeige und Kontext',
-      accessibility: 'Barrierefreiheit',
-      readingFont: 'Leseschrift',
-      openDyslexic: 'OpenDyslexic verwenden',
-      interfaceLanguage: 'Sprache der Benutzeroberfläche',
-      localOnly: 'Ändert nur die Portalbeschriftungen. Deine Unterhaltungen werden nicht übersetzt.',
-      contextWindow: 'Kontextfenster',
-      contextHelp: 'Standard: 10 letzte Nachrichten. Mit 0 werden alle gespeicherten Nachrichten gesendet. Höhere Werte können mehr kosten oder Modellgrenzen erreichen.',
-      upgrades: 'Erweiterungen',
-      threads: 'Unterhaltungen',
-      newThread: 'Neuer Chat',
-      storageSync: 'Speicher & Sicherheit',
-      searchThreads: 'Unterhaltungen durchsuchen...',
-      searchConversations: 'In Unterhaltungen suchen',
-      conversationBackup: 'Chat-Sicherung',
-      exportMarkdown: 'Chat als Markdown exportieren',
-      restoreMarkdown: 'Chat aus Markdown wiederherstellen',
-      backupHelp: 'Nutze das vor Updates oder um diesen Chat in ein neues Portal mitzunehmen.',
-      openMenu: 'Menü öffnen',
-      closeMenu: 'Menü schließen',
-      changePalette: 'Farbpalette ändern',
-      toggleMode: 'Hell/Dunkel wechseln',
-      messagePlaceholder: 'Nachricht eingeben...',
-      messageInput: 'Nachrichtenfeld',
-      send: 'Senden',
-      choosePalette: 'Farbpalette wählen',
-      searchResults: 'Suchergebnisse',
-      closeSearch: 'Suchergebnisse schließen'
-    }
+    en: { displayContext:'Display & context', accessibility:'Accessibility', readingFont:'Reading font', openDyslexic:'Use OpenDyslexic', interfaceLanguage:'Interface language', localOnly:'Changes portal labels only. Your conversations are not translated.', contextWindow:'Context window', contextHelp:'Default: 10 recent messages. Use 0 to send all saved messages. Higher numbers can cost more or hit model limits.', upgrades:'Upgrades', threads:'Threads', newThread:'New thread', storageSync:'Storage & sync', searchThreads:'Search threads...', searchConversations:'Search conversations', conversationBackup:'Conversation backup', exportMarkdown:'Export chat as Markdown', restoreMarkdown:'Restore chat from Markdown', backupHelp:'Use this before upgrades or if you need to move this one chat into a fresh portal.', openMenu:'Open menu', closeMenu:'Close menu', changePalette:'Change color palette', toggleMode:'Toggle light/dark mode', messagePlaceholder:'Type your message...', messageInput:'Message input', send:'Send', choosePalette:'Choose color palette', searchResults:'Search Results', closeSearch:'Close search results' },
+    es: { displayContext:'Pantalla y contexto', accessibility:'Accesibilidad', readingFont:'Fuente de lectura', openDyslexic:'Usar OpenDyslexic', interfaceLanguage:'Idioma de la interfaz', localOnly:'Solo cambia las etiquetas del portal. Tus conversaciones no se traducen.', contextWindow:'Ventana de contexto', contextHelp:'Predeterminado: 10 mensajes recientes. Usa 0 para enviar todos los mensajes guardados. Los números altos pueden costar más o alcanzar los límites del modelo.', upgrades:'Mejoras', threads:'Conversaciones', newThread:'Nueva conversación', storageSync:'Almacenamiento y sincronización', searchThreads:'Buscar conversaciones...', searchConversations:'Buscar en conversaciones', conversationBackup:'Copia de seguridad', exportMarkdown:'Exportar chat como Markdown', restoreMarkdown:'Restaurar chat desde Markdown', backupHelp:'Úsalo antes de actualizar o para mover este chat a un portal nuevo.', openMenu:'Abrir menú', closeMenu:'Cerrar menú', changePalette:'Cambiar paleta de colores', toggleMode:'Cambiar modo claro/oscuro', messagePlaceholder:'Escribe tu mensaje...', messageInput:'Campo de mensaje', send:'Enviar', choosePalette:'Elegir paleta de colores', searchResults:'Resultados de búsqueda', closeSearch:'Cerrar resultados' },
+    fr: { displayContext:'Affichage et contexte', accessibility:'Accessibilité', readingFont:'Police de lecture', openDyslexic:'Utiliser OpenDyslexic', interfaceLanguage:'Langue de l’interface', localOnly:'Modifie uniquement les libellés du portail. Vos conversations ne sont pas traduites.', contextWindow:'Fenêtre de contexte', contextHelp:'Par défaut : 10 messages récents. Utilisez 0 pour envoyer tous les messages enregistrés. Une valeur élevée peut coûter plus cher ou atteindre les limites du modèle.', upgrades:'Améliorations', threads:'Conversations', newThread:'Nouvelle conversation', storageSync:'Stockage et synchronisation', searchThreads:'Rechercher des conversations...', searchConversations:'Rechercher dans les conversations', conversationBackup:'Sauvegarde de la conversation', exportMarkdown:'Exporter le chat en Markdown', restoreMarkdown:'Restaurer le chat depuis Markdown', backupHelp:'À utiliser avant une mise à niveau ou pour déplacer ce chat vers un nouveau portail.', openMenu:'Ouvrir le menu', closeMenu:'Fermer le menu', changePalette:'Changer la palette de couleurs', toggleMode:'Basculer le mode clair/sombre', messagePlaceholder:'Écrivez votre message...', messageInput:'Champ de message', send:'Envoyer', choosePalette:'Choisir une palette de couleurs', searchResults:'Résultats de recherche', closeSearch:'Fermer les résultats' },
+    pt: { displayContext:'Ecrã e contexto', accessibility:'Acessibilidade', readingFont:'Fonte de leitura', openDyslexic:'Usar OpenDyslexic', interfaceLanguage:'Idioma da interface', localOnly:'Altera apenas os rótulos do portal. As suas conversas não são traduzidas.', contextWindow:'Janela de contexto', contextHelp:'Predefinição: 10 mensagens recentes. Use 0 para enviar todas as mensagens guardadas. Números altos podem custar mais ou atingir os limites do modelo.', upgrades:'Melhorias', threads:'Conversas', newThread:'Nova conversa', storageSync:'Armazenamento e sincronização', searchThreads:'Pesquisar conversas...', searchConversations:'Pesquisar nas conversas', conversationBackup:'Cópia de segurança', exportMarkdown:'Exportar conversa como Markdown', restoreMarkdown:'Restaurar conversa do Markdown', backupHelp:'Use antes de atualizar ou para mover esta conversa para um portal novo.', openMenu:'Abrir menu', closeMenu:'Fechar menu', changePalette:'Alterar paleta de cores', toggleMode:'Alternar modo claro/escuro', messagePlaceholder:'Escreva a sua mensagem...', messageInput:'Campo de mensagem', send:'Enviar', choosePalette:'Escolher paleta de cores', searchResults:'Resultados da pesquisa', closeSearch:'Fechar resultados' },
+    de: { displayContext:'Anzeige und Kontext', accessibility:'Barrierefreiheit', readingFont:'Leseschrift', openDyslexic:'OpenDyslexic verwenden', interfaceLanguage:'Sprache der Benutzeroberfläche', localOnly:'Ändert nur die Portalbeschriftungen. Deine Unterhaltungen werden nicht übersetzt.', contextWindow:'Kontextfenster', contextHelp:'Standard: 10 letzte Nachrichten. Mit 0 werden alle gespeicherten Nachrichten gesendet. Höhere Werte können mehr kosten oder Modellgrenzen erreichen.', upgrades:'Erweiterungen', threads:'Unterhaltungen', newThread:'Neue Unterhaltung', storageSync:'Speicher und Synchronisierung', searchThreads:'Unterhaltungen durchsuchen...', searchConversations:'In Unterhaltungen suchen', conversationBackup:'Unterhaltung sichern', exportMarkdown:'Chat als Markdown exportieren', restoreMarkdown:'Chat aus Markdown wiederherstellen', backupHelp:'Vor Aktualisierungen verwenden oder um diesen Chat in ein neues Portal zu übertragen.', openMenu:'Menü öffnen', closeMenu:'Menü schließen', changePalette:'Farbpalette ändern', toggleMode:'Hell-/Dunkelmodus wechseln', messagePlaceholder:'Nachricht eingeben...', messageInput:'Nachrichtenfeld', send:'Senden', choosePalette:'Farbpalette auswählen', searchResults:'Suchergebnisse', closeSearch:'Suchergebnisse schließen' },
+    it: { displayContext:'Aspetto e contesto', accessibility:'Accessibilità', readingFont:'Carattere di lettura', openDyslexic:'Usa OpenDyslexic', interfaceLanguage:'Lingua dell’interfaccia', localOnly:'Cambia solo le etichette del portale. Le conversazioni non vengono tradotte.', contextWindow:'Finestra di contesto', contextHelp:'Predefinito: 10 messaggi recenti. Usa 0 per inviare tutti i messaggi salvati. Valori elevati possono costare di più o raggiungere i limiti del modello.', upgrades:'Aggiornamenti', threads:'Conversazioni', newThread:'Nuova conversazione', storageSync:'Archiviazione e sincronizzazione', searchThreads:'Cerca conversazioni...', searchConversations:'Cerca nelle conversazioni', conversationBackup:'Backup della conversazione', exportMarkdown:'Esporta chat come Markdown', restoreMarkdown:'Ripristina chat da Markdown', backupHelp:'Usalo prima degli aggiornamenti o per spostare questa chat in un nuovo portale.', openMenu:'Apri menu', closeMenu:'Chiudi menu', changePalette:'Cambia tavolozza colori', toggleMode:'Cambia modalità chiara/scura', messagePlaceholder:'Scrivi il tuo messaggio...', messageInput:'Campo del messaggio', send:'Invia', choosePalette:'Scegli la tavolozza colori', searchResults:'Risultati della ricerca', closeSearch:'Chiudi risultati' },
+    pl: { displayContext:'Widok i kontekst', accessibility:'Ułatwienia dostępu', readingFont:'Czcionka do czytania', openDyslexic:'Użyj OpenDyslexic', interfaceLanguage:'Język interfejsu', localOnly:'Zmienia tylko etykiety portalu. Rozmowy nie są tłumaczone.', contextWindow:'Okno kontekstu', contextHelp:'Domyślnie: 10 ostatnich wiadomości. Ustaw 0, aby wysłać wszystkie zapisane wiadomości. Wyższe wartości mogą kosztować więcej lub przekroczyć limity modelu.', upgrades:'Ulepszenia', threads:'Rozmowy', newThread:'Nowa rozmowa', storageSync:'Pamięć i synchronizacja', searchThreads:'Szukaj rozmów...', searchConversations:'Przeszukaj rozmowy', conversationBackup:'Kopia zapasowa rozmowy', exportMarkdown:'Eksportuj czat jako Markdown', restoreMarkdown:'Przywróć czat z Markdown', backupHelp:'Użyj przed aktualizacją lub aby przenieść ten czat do nowego portalu.', openMenu:'Otwórz menu', closeMenu:'Zamknij menu', changePalette:'Zmień paletę kolorów', toggleMode:'Przełącz tryb jasny/ciemny', messagePlaceholder:'Wpisz wiadomość...', messageInput:'Pole wiadomości', send:'Wyślij', choosePalette:'Wybierz paletę kolorów', searchResults:'Wyniki wyszukiwania', closeSearch:'Zamknij wyniki' },
+    ru: { displayContext:'Отображение и контекст', accessibility:'Специальные возможности', readingFont:'Шрифт для чтения', openDyslexic:'Использовать OpenDyslexic', interfaceLanguage:'Язык интерфейса', localOnly:'Меняет только надписи портала. Ваши разговоры не переводятся.', contextWindow:'Окно контекста', contextHelp:'По умолчанию: 10 последних сообщений. Укажите 0, чтобы отправить все сохранённые сообщения. Большие значения могут стоить дороже или достигнуть лимитов модели.', upgrades:'Улучшения', threads:'Диалоги', newThread:'Новый диалог', storageSync:'Хранилище и синхронизация', searchThreads:'Поиск диалогов...', searchConversations:'Искать в диалогах', conversationBackup:'Резервная копия диалога', exportMarkdown:'Экспортировать чат в Markdown', restoreMarkdown:'Восстановить чат из Markdown', backupHelp:'Используйте перед обновлением или чтобы перенести этот чат в новый портал.', openMenu:'Открыть меню', closeMenu:'Закрыть меню', changePalette:'Изменить цветовую палитру', toggleMode:'Переключить светлый/тёмный режим', messagePlaceholder:'Введите сообщение...', messageInput:'Поле сообщения', send:'Отправить', choosePalette:'Выберите цветовую палитру', searchResults:'Результаты поиска', closeSearch:'Закрыть результаты' },
+    ja: { displayContext:'表示とコンテキスト', accessibility:'アクセシビリティ', readingFont:'読書用フォント', openDyslexic:'OpenDyslexicを使用', interfaceLanguage:'表示言語', localOnly:'ポータルのラベルだけを変更します。会話は翻訳されません。', contextWindow:'コンテキスト範囲', contextHelp:'初期値：最近の10件。保存済みの全メッセージを送るには0を指定します。数値を増やすと費用やモデル上限に影響する場合があります。', upgrades:'アップグレード', threads:'会話', newThread:'新しい会話', storageSync:'保存と同期', searchThreads:'会話を検索...', searchConversations:'会話内を検索', conversationBackup:'会話のバックアップ', exportMarkdown:'チャットをMarkdownで書き出す', restoreMarkdown:'Markdownからチャットを復元', backupHelp:'更新前、またはこのチャットを新しいポータルへ移すときに使用します。', openMenu:'メニューを開く', closeMenu:'メニューを閉じる', changePalette:'カラーパレットを変更', toggleMode:'ライト／ダークモード切替', messagePlaceholder:'メッセージを入力...', messageInput:'メッセージ入力欄', send:'送信', choosePalette:'カラーパレットを選択', searchResults:'検索結果', closeSearch:'検索結果を閉じる' },
+    ko: { displayContext:'화면 및 컨텍스트', accessibility:'접근성', readingFont:'읽기 글꼴', openDyslexic:'OpenDyslexic 사용', interfaceLanguage:'인터페이스 언어', localOnly:'포털의 고정 문구만 변경합니다. 대화는 번역되지 않습니다.', contextWindow:'컨텍스트 범위', contextHelp:'기본값: 최근 메시지 10개. 저장된 모든 메시지를 보내려면 0을 사용하세요. 숫자가 크면 비용이 늘거나 모델 한도에 도달할 수 있습니다.', upgrades:'업그레이드', threads:'대화', newThread:'새 대화', storageSync:'저장 및 동기화', searchThreads:'대화 검색...', searchConversations:'대화 내용 검색', conversationBackup:'대화 백업', exportMarkdown:'채팅을 Markdown으로 내보내기', restoreMarkdown:'Markdown에서 채팅 복원', backupHelp:'업그레이드 전 또는 이 채팅을 새 포털로 옮길 때 사용하세요.', openMenu:'메뉴 열기', closeMenu:'메뉴 닫기', changePalette:'색상 팔레트 변경', toggleMode:'라이트/다크 모드 전환', messagePlaceholder:'메시지를 입력하세요...', messageInput:'메시지 입력', send:'보내기', choosePalette:'색상 팔레트 선택', searchResults:'검색 결과', closeSearch:'검색 결과 닫기' },
+    zh: { displayContext:'显示与上下文', accessibility:'无障碍功能', readingFont:'阅读字体', openDyslexic:'使用 OpenDyslexic', interfaceLanguage:'界面语言', localOnly:'只更改门户界面文字，不翻译对话内容。', contextWindow:'上下文窗口', contextHelp:'默认：最近10条消息。输入0可发送所有已保存的消息。数值越高，费用可能越高或达到模型限制。', upgrades:'升级', threads:'对话', newThread:'新对话', storageSync:'存储与同步', searchThreads:'搜索对话...', searchConversations:'搜索对话内容', conversationBackup:'对话备份', exportMarkdown:'将聊天导出为 Markdown', restoreMarkdown:'从 Markdown 恢复聊天', backupHelp:'请在升级前使用，或用它将此聊天移至新门户。', openMenu:'打开菜单', closeMenu:'关闭菜单', changePalette:'更改配色', toggleMode:'切换明暗模式', messagePlaceholder:'输入消息...', messageInput:'消息输入框', send:'发送', choosePalette:'选择配色', searchResults:'搜索结果', closeSearch:'关闭搜索结果' },
+    ar: { displayContext:'العرض والسياق', accessibility:'إمكانية الوصول', readingFont:'خط القراءة', openDyslexic:'استخدام OpenDyslexic', interfaceLanguage:'لغة الواجهة', localOnly:'يغيّر تسميات البوابة فقط. لن تُترجم محادثاتك.', contextWindow:'نافذة السياق', contextHelp:'الافتراضي: آخر 10 رسائل. استخدم 0 لإرسال جميع الرسائل المحفوظة. قد تزيد الأرقام الكبيرة التكلفة أو تبلغ حدود النموذج.', upgrades:'الترقيات', threads:'المحادثات', newThread:'محادثة جديدة', storageSync:'التخزين والمزامنة', searchThreads:'البحث في المحادثات...', searchConversations:'البحث داخل المحادثات', conversationBackup:'نسخة احتياطية للمحادثة', exportMarkdown:'تصدير المحادثة بصيغة Markdown', restoreMarkdown:'استعادة المحادثة من Markdown', backupHelp:'استخدم هذا قبل الترقية أو لنقل هذه المحادثة إلى بوابة جديدة.', openMenu:'فتح القائمة', closeMenu:'إغلاق القائمة', changePalette:'تغيير لوحة الألوان', toggleMode:'التبديل بين الوضع الفاتح والداكن', messagePlaceholder:'اكتب رسالتك...', messageInput:'حقل الرسالة', send:'إرسال', choosePalette:'اختيار لوحة الألوان', searchResults:'نتائج البحث', closeSearch:'إغلاق النتائج' },
+    hi: { displayContext:'डिस्प्ले और कॉन्टेक्स्ट', accessibility:'सुगम्यता', readingFont:'पढ़ने का फ़ॉन्ट', openDyslexic:'OpenDyslexic का उपयोग करें', interfaceLanguage:'इंटरफ़ेस भाषा', localOnly:'यह केवल पोर्टल के लेबल बदलता है। आपकी बातचीत का अनुवाद नहीं होता।', contextWindow:'कॉन्टेक्स्ट विंडो', contextHelp:'डिफ़ॉल्ट: हाल के 10 संदेश। सभी सहेजे गए संदेश भेजने के लिए 0 चुनें। बड़ी संख्या की लागत अधिक हो सकती है या मॉडल की सीमा तक पहुँच सकती है।', upgrades:'अपग्रेड', threads:'बातचीत', newThread:'नई बातचीत', storageSync:'स्टोरेज और सिंक', searchThreads:'बातचीत खोजें...', searchConversations:'बातचीत में खोजें', conversationBackup:'बातचीत का बैकअप', exportMarkdown:'चैट को Markdown में एक्सपोर्ट करें', restoreMarkdown:'Markdown से चैट बहाल करें', backupHelp:'अपग्रेड से पहले या इस चैट को नए पोर्टल में ले जाने के लिए इसका उपयोग करें।', openMenu:'मेनू खोलें', closeMenu:'मेनू बंद करें', changePalette:'रंग पैलेट बदलें', toggleMode:'लाइट/डार्क मोड बदलें', messagePlaceholder:'अपना संदेश लिखें...', messageInput:'संदेश इनपुट', send:'भेजें', choosePalette:'रंग पैलेट चुनें', searchResults:'खोज परिणाम', closeSearch:'खोज परिणाम बंद करें' }
   };
+
   function savedLanguage() {
-    const value = localStorage.getItem(LANGUAGE_KEY) || 'de';
-    return copy[value] ? value : 'de';
+    const value = localStorage.getItem(LANGUAGE_KEY) || 'en';
+    return copy[value] ? value : 'en';
   }
 
   function setText(selector, key) {
     const element = document.querySelector(selector);
-    if (element) element.textContent = copy[savedLanguage()][key] || copy.de[key];
+    if (element) element.textContent = copy[savedLanguage()][key] || copy.en[key];
   }
 
   function setAttribute(selector, attribute, key) {
     const element = document.querySelector(selector);
-    if (element) element.setAttribute(attribute, copy[savedLanguage()][key] || copy.de[key]);
+    if (element) element.setAttribute(attribute, copy[savedLanguage()][key] || copy.en[key]);
   }
 
   function applyLanguage() {
@@ -4446,13 +3083,14 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
 
     document.querySelectorAll('[data-i18n]').forEach(element => {
       const key = element.dataset.i18n;
-      element.textContent = copy[language][key] || copy.de[key] || element.textContent;
+      element.textContent = copy[language][key] || copy.en[key] || element.textContent;
     });
 
     setText('#sidebar-header h3', document.querySelector('#thread-section') ? 'threads' : 'upgrades');
     setText('.sidebar-action-btn[onclick*="createNewThread"]', 'newThread');
     setText('.sidebar-action-btn[onclick*="showStorageSyncModal"]', 'storageSync');
     setText('.sidebar-action-btn[onclick*="performFullSearch"]', 'searchConversations');
+    setText('#send-btn', 'send');
     setText('#theme-modal h3', 'choosePalette');
     setText('#search-modal .search-modal-header h3', 'searchResults');
     setText('.context-window-setting > p:first-child', 'contextWindow');
@@ -4464,10 +3102,13 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
 
     setAttribute('#hamburger', 'aria-label', 'openMenu');
     setAttribute('#sidebar-close', 'aria-label', 'closeMenu');
-
+    setAttribute('#theme-btn', 'title', 'changePalette');
+    setAttribute('#theme-btn', 'aria-label', 'changePalette');
+    setAttribute('#mode-btn', 'title', 'toggleMode');
+    setAttribute('#mode-btn', 'aria-label', 'toggleMode');
     setAttribute('#input', 'placeholder', 'messagePlaceholder');
     setAttribute('#input', 'aria-label', 'messageInput');
-    setAttribute('#send-btn', 'aria-label', 'Nachricht senden');
+    setAttribute('#send-btn', 'aria-label', 'send');
     setAttribute('#thread-search', 'placeholder', 'searchThreads');
     setAttribute('#thread-search', 'aria-label', 'searchThreads');
     setAttribute('#search-modal .search-close-btn', 'aria-label', 'closeSearch');
@@ -4510,258 +3151,5 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
 })();
 </script>
 
-
-<script id="tatjana-ui-enhancements">
-(function () {
-  'use strict';
-
-  function openSettingsModal() {
-    const existing = document.getElementById('tatjana-settings-modal');
-    if (existing) existing.remove();
-
-    const overlay = document.createElement('div');
-    overlay.id = 'tatjana-settings-modal';
-    overlay.className = 'modal-overlay active tatjana-settings-modal';
-    overlay.innerHTML = `
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tatjana-settings-title">
-        <button class="modal-close" type="button" aria-label="Schließen">×</button>
-        <h3 id="tatjana-settings-title">Einstellungen</h3>
-
-        <section class="settings-section">
-          <h4>Antwortverhalten</h4>
-          <label for="temperature-slider"><strong>Temperatur</strong></label>
-          <div class="settings-row">
-            <input id="temperature-slider" type="range" min="0" max="1.5" step="0.1" value="${getTemperatureSetting()}">
-            <strong id="temperature-value">${getTemperatureSetting().toFixed(1)}</strong>
-          </div>
-          <p class="settings-help">Standard ist 1.1. Höher wirkt lebendiger, niedriger ruhiger.</p>
-          <label for="output-tokens-slider"><strong>Antwortlänge / Output-Tokens</strong></label>
-          <div class="settings-row">
-            <input id="output-tokens-slider" type="range" min="500" max="8000" step="100" value="${getOutputTokenLimit()}">
-            <strong id="output-tokens-value">${getOutputTokenLimit()}</strong>
-          </div>
-          <p class="settings-help">Startwert ist 3500. Das gibt Tatjana mehr Ausgaberaum, ohne den Prompt oder das Modell zu ändern.</p>
-        </section>
-        <section class="settings-section">
-          <h4>Verbindung</h4>
-          <p class="settings-help">Der OpenAI-Zugriff laeuft in der Online-Version geschuetzt ueber die Netlify-Funktion. Der echte API-Key wird nicht im Browser gespeichert.</p>
-        </section>
-<section class="settings-section">
-          <h4>Prompt und Darstellung</h4>
-          <button class="sidebar-action-btn secondary" type="button" data-open-prompt>Prompt bearbeiten</button>
-          <button class="sidebar-action-btn secondary" type="button" data-open-theme>Farben / Hell-Dunkel</button>
-        </section>
-
-        <section class="settings-section">
-          <h4>Tatjana-Memory</h4>
-          <label for="memory-fast-input"><strong>Schnell abrufbare Informationen</strong></label>
-          <textarea id="memory-fast-input" class="settings-textarea" rows="4" placeholder="Wichtige Fakten, die Tatjana besonders schnell finden soll.">${escapeHtml(getMemoryText(TATJANA_FAST_MEMORY_STORAGE_KEY))}</textarea>
-          <label for="memory-notes-input"><strong>Erinnerungen und Notizen</strong></label>
-          <textarea id="memory-notes-input" class="settings-textarea" rows="6" placeholder="Notizen, Fragmente und Erinnerungen bleiben getrennt vom Companion-Prompt.">${escapeHtml(getMemoryText(TATJANA_MEMORY_STORAGE_KEY))}</textarea>
-          <button class="sidebar-action-btn" type="button" data-save-memory>Memory speichern</button>
-          <p id="memory-status" class="settings-help" aria-live="polite"></p>
-        </section>
-
-        <section class="settings-section">
-          <h4>Speicher &amp; Sicherheit</h4>
-          <button class="sidebar-action-btn secondary" type="button" data-open-cloud-sync>Cloud-Sync verwalten</button>
-          <p class="settings-help">KV-Sync ist vorbereitet und startet nur manuell ueber diese Verwaltung.</p>
-          <details class="settings-details">
-            <summary>Datenverwaltung / Erweiterte Einstellungen</summary>
-            <div class="danger-zone">
-              <h4>Gefahrenbereich</h4>
-              <p class="settings-help">Löscht alle lokalen Chats in diesem Browser. Das kann nicht rückgängig gemacht werden.</p>
-              <label for="delete-confirm-input"><strong>Sicherheitsabfrage</strong></label>
-              <input id="delete-confirm-input" class="settings-text-input" type="text" autocomplete="off" placeholder="Zum Löschen ALLE CHATS LÖSCHEN eingeben">
-              <button type="button" data-delete-all>Alle Chats löschen</button>
-            </div>
-          </details>
-        </section>
-      </div>`;
-
-    document.body.appendChild(overlay);
-
-    const close = () => overlay.remove();
-    overlay.querySelector('.modal-close').addEventListener('click', close);
-    overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
-
-    const slider = overlay.querySelector('#temperature-slider');
-    const value = overlay.querySelector('#temperature-value');
-    slider.addEventListener('input', () => {
-      setTemperatureSetting(slider.value);
-      value.textContent = getTemperatureSetting().toFixed(1);
-    });
-
-    const outputSlider = overlay.querySelector('#output-tokens-slider');
-    const outputValue = overlay.querySelector('#output-tokens-value');
-    outputSlider.addEventListener('input', () => {
-      setOutputTokenLimit(outputSlider.value);
-      outputValue.textContent = String(getOutputTokenLimit());
-    });
-const memoryFastInput = overlay.querySelector('#memory-fast-input');
-    const memoryNotesInput = overlay.querySelector('#memory-notes-input');
-    const memoryStatus = overlay.querySelector('#memory-status');
-    overlay.querySelector('[data-save-memory]').addEventListener('click', () => {
-      setMemoryText(TATJANA_FAST_MEMORY_STORAGE_KEY, memoryFastInput.value);
-      setMemoryText(TATJANA_MEMORY_STORAGE_KEY, memoryNotesInput.value);
-      memoryStatus.textContent = 'Memory wurde lokal gespeichert.';
-    });
-
-    overlay.querySelector('[data-open-prompt]').addEventListener('click', () => {
-      close();
-      showCompanionPromptBearbeitenor();
-    });
-
-    overlay.querySelector('[data-open-theme]').addEventListener('click', () => {
-      close();
-      showThemePicker();
-    });
-
-    overlay.querySelector('[data-delete-all]').addEventListener('click', () => {
-      const confirmation = overlay.querySelector('#delete-confirm-input')?.value.trim();
-      if (confirmation !== 'ALLE CHATS LÖSCHEN') {
-        alert('Bitte gib zur Bestätigung exakt ALLE CHATS LÖSCHEN ein.');
-        return;
-      }
-      if (!confirm('Alle lokalen Chats wirklich endgültig löschen? Das kann nicht rückgängig gemacht werden.')) return;
-      localStorage.removeItem('threads');
-      localStorage.removeItem(STORAGE_KEY);
-      threads = {};
-      const thread = makeThread();
-      threads[thread.id] = thread;
-      currentThreadId = thread.id;
-      saveThreads();
-      renderMessages();
-      renderThreadList();
-      close();
-    });
-  }
-
-  function ensureScrollButton() {
-    if (document.getElementById('scroll-bottom-btn')) return;
-    const button = document.createElement('button');
-    button.id = 'scroll-bottom-btn';
-    button.type = 'button';
-    let direction = 'down';
-    const setDirection = nextDirection => {
-      direction = nextDirection;
-      const isUp = direction === 'up';
-      button.title = isUp ? 'Zum Anfang springen' : 'Zum neuesten Beitrag';
-      button.setAttribute('aria-label', isUp ? 'Zum Anfang springen' : 'Zum neuesten Beitrag springen');
-      button.innerHTML = tatjanaSvgIcon(isUp ? 'arrowUp' : 'arrowDown');
-    };
-    setDirection('down');
-    button.hidden = true;
-    document.body.appendChild(button);
-
-    button.addEventListener('click', () => {
-      const top = direction === 'up' ? 0 : messagesDiv.scrollHeight;
-      messagesDiv.scrollTo({ top, behavior: 'smooth' });
-    });
-
-    const update = () => {
-      const distance = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight;
-      const canScrollDown = distance > 180;
-      const canScrollUp = messagesDiv.scrollTop > 360;
-      if (canScrollDown) {
-        setDirection('down');
-        button.hidden = false;
-      } else if (canScrollUp) {
-        setDirection('up');
-        button.hidden = false;
-      } else {
-        button.hidden = true;
-      }
-    };
-
-    messagesDiv.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  }
-
-  function initComposerExtras() {
-    document.getElementById('settings-btn')?.addEventListener('click', openSettingsModal);
-    document.getElementById('attach-btn')?.addEventListener('click', () => document.getElementById('file-input')?.click());
-    document.getElementById('file-input')?.addEventListener('change', event => {
-      const files = Array.from(event.target.files || []).map(file => file.name);
-      if (files.length) {
-        input.value = `${input.value}${input.value ? '\n' : ''}[Anhang vorbereitet: ${files.join(', ')}]`;
-        input.dispatchEvent(new Event('input'));
-      }
-      event.target.value = '';
-    });
-    document.getElementById('stop-response-btn')?.addEventListener('click', () => activeRequestController?.abort());
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const voiceButton = document.getElementById('voice-btn');
-    if (voiceButton && SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      let isListening = false;
-      recognition.lang = 'de-DE';
-      recognition.interimResults = false;
-      recognition.addEventListener('result', event => {
-        const spoken = Array.from(event.results).map(result => result[0]?.transcript || '').join(' ').trim();
-        if (spoken) {
-          input.value = `${input.value}${input.value ? ' ' : ''}${spoken}`;
-          input.dispatchEvent(new Event('input'));
-          input.focus();
-        }
-      });
-      recognition.addEventListener('start', () => {
-        isListening = true;
-        voiceButton.classList.add('active');
-        voiceButton.setAttribute('aria-pressed', 'true');
-        voiceButton.title = 'Diktat stoppen';
-      });
-      recognition.addEventListener('end', () => {
-        isListening = false;
-        voiceButton.classList.remove('active');
-        voiceButton.setAttribute('aria-pressed', 'false');
-        voiceButton.title = 'Nachricht diktieren';
-      });
-      recognition.addEventListener('error', () => {
-        isListening = false;
-        voiceButton.classList.remove('active');
-        voiceButton.setAttribute('aria-pressed', 'false');
-      });
-      voiceButton.setAttribute('aria-pressed', 'false');
-      voiceButton.addEventListener('click', () => {
-        try {
-          if (isListening) recognition.stop();
-          else recognition.start();
-        } catch (error) {
-          isListening = false;
-          voiceButton.classList.remove('active');
-          voiceButton.setAttribute('aria-pressed', 'false');
-        }
-      });
-    } else if (voiceButton) {
-      voiceButton.addEventListener('click', () => alert('Diktat wird von diesem Browser leider nicht unterstützt.'));
-    }
-
-    ensureScrollButton();
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initComposerExtras);
-  else initComposerExtras();
-  if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => renderMessages();
-})();
-</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

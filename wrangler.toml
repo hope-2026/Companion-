@@ -1,0 +1,7 @@
+name = "companion-portal-sync"
+main = "cloudflare-worker.js"
+compatibility_date = "2026-05-10"
+
+[[kv_namespaces]]
+binding = "PORTAL_STORAGE"
+id = "PASTE_YOUR_KV_NAMESPACE_ID_HERE"
