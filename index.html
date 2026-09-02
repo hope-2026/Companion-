@@ -1994,10 +1994,10 @@ button[data-open-theme] {
 <!-- Password gate for cloud sync security. This protects the Netlify sync proxy. -->
 <div id="auth-gate" style="display:none;position:fixed;inset:0;background:#f9f9f9;z-index:10000;align-items:center;justify-content:center;padding:20px;">
   <div style="background:white;padding:32px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.1);max-width:400px;width:100%;">
-    <h2 style="margin:0 0 18px;color:#1f2937;">Enter portal password</h2>
+    <h2 style="margin:0 0 18px;color:#1f2937;">Portal-Passwort eingeben</h2>
     <form onsubmit="checkPassword();return false;">
-      <input type="password" id="auth-password" placeholder="Password" style="width:100%;padding:14px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;margin-bottom:14px;">
-      <button type="submit" id="auth-submit" style="width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:16px;font-weight:700;">Continue</button>
+      <input type="password" id="auth-password" placeholder="Passwort" style="width:100%;padding:14px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;margin-bottom:14px;">
+      <button type="submit" id="auth-submit" style="width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:16px;font-weight:700;">Weiter</button>
     </form>
     <div id="auth-error" style="display:none;color:#dc2626;margin-top:12px;font-size:14px;"></div>
   </div>
@@ -2593,7 +2593,7 @@ async function cloudflareSyncFetch(url, options = {}) {
 
   if (response.status === 401) {
     localStorage.removeItem(AUTH_TOKEN_KEY);
-    throw new Error('Cloud sync auth expired. Reload and enter the portal password again.');
+    throw new Error('Die geschuetzte Sitzung ist abgelaufen. Bitte lade die Seite neu und gib das Portal-Passwort erneut ein.');
   }
 
   return response;
@@ -2631,7 +2631,7 @@ async function checkPassword() {
   const password = passwordInput.value.trim();
 
   if (!password) {
-    errorDiv.textContent = 'Please enter the portal password';
+    errorDiv.textContent = 'Bitte gib das Portal-Passwort ein';
     errorDiv.style.display = 'block';
     return;
   }
@@ -2649,7 +2649,7 @@ async function checkPassword() {
     const data = await response.json();
 
     if (!response.ok || !data.authenticated || !data.token) {
-      throw new Error(data.error || 'Incorrect password');
+      throw new Error(data.error || 'Falsches Passwort');
     }
 
     localStorage.setItem(AUTH_TOKEN_KEY, data.token);
@@ -2660,7 +2660,7 @@ async function checkPassword() {
     errorDiv.textContent = error.message || 'Authentication failed';
     errorDiv.style.display = 'block';
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Continue';
+    submitBtn.textContent = 'Weiter';
     passwordInput.value = '';
     passwordInput.focus();
   }
@@ -4749,6 +4749,8 @@ const memoryFastInput = overlay.querySelector('#memory-fast-input');
 </script>
 </body>
 </html>
+
+
 
 
 
