@@ -5050,7 +5050,7 @@ input.disabled = true;
   input.value = '';
   input.style.height = 'auto';
   pendingImageAttachments = [];
-  renderPendingImageAttachments();
+  window.renderPendingImageAttachments?.();
   
   const typing = showTyping();
   
@@ -5572,6 +5572,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
       container.appendChild(item);
     });
   }
+  window.renderPendingImageAttachments = renderPendingImageAttachments;
 
   function readImageAttachment(file) {
     return new Promise((resolve, reject) => {
