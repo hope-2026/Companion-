@@ -252,6 +252,68 @@ body {
   color: #dc2626;
 }
 
+.thread-menu-popover {
+  position: fixed;
+  z-index: 12000;
+  width: min(250px, calc(100vw - 24px));
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-chat);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, .18);
+}
+
+.thread-menu-title {
+  padding: 8px 10px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.thread-menu-action {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-main);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.thread-menu-action:hover {
+  background: var(--bg-main);
+}
+
+.thread-menu-action .icon-svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+.thread-menu-separator {
+  height: 1px;
+  margin: 6px 4px;
+  background: var(--border);
+}
+
+.thread-menu-action.danger {
+  color: #dc2626;
+}
+
+.thread-menu-action.danger:hover {
+  background: rgba(220, 38, 38, .08);
+}
+
 .search-highlight {
   background: #ffd700;
   color: #000;
@@ -607,34 +669,6 @@ body {
   font-size: 18px;
 }
 
-#storage-security-info-modal {
-  align-items: flex-start;
-  overflow-y: auto;
-  padding: max(16px, env(safe-area-inset-top)) 12px max(16px, env(safe-area-inset-bottom));
-}
-
-#storage-security-info-modal .modal {
-  box-sizing: border-box;
-  width: min(100%, 520px);
-  max-width: 520px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-#storage-security-info-modal .modal h3 {
-  margin: 0 0 10px;
-}
-
-#storage-security-info-modal .modal p {
-  margin: 0 0 10px;
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-#storage-security-info-modal #security-sync-checklist {
-  margin: 12px 0 !important;
-}
-
 .theme-option {
   padding: 12px;
   margin: 8px 0;
@@ -728,6 +762,7 @@ body {
 
 #hamburger,
 #settings-btn,
+#logout-btn,
 .composer-icon-btn,
 .message-tool-btn,
 #scroll-bottom-btn {
@@ -736,7 +771,8 @@ body {
   justify-content: center;
 }
 
-#settings-btn {
+#settings-btn,
+#logout-btn {
   width: 40px;
   height: 40px;
   border-radius: 12px;
@@ -821,6 +857,39 @@ body {
   color: var(--danger);
 }
 
+.tatjana-audio-player {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tatjana-audio-player .message-tool-btn.is-active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.audio-rate-select {
+  min-width: 58px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .78);
+  color: var(--text-main);
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.message-time {
+  display: block;
+  margin-top: 10px;
+  color: var(--text-dim);
+  font-size: 12px;
+  line-height: 1.2;
+}
+
 .message-voice-select {
   min-height: 32px;
   max-width: 132px;
@@ -874,7 +943,8 @@ body {
   align-items: center;
   gap: 8px;
 }
-#settings-btn {
+#settings-btn,
+#logout-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1299,7 +1369,8 @@ html[data-reading-font="opendyslexic"] select {
   display: inline-flex; align-items: center; justify-content: center; font-size: 16px;
 }
 .message-tool-btn.danger { color: var(--danger); }
-.message-voice-select { width: auto; max-width: 118px; padding: 0 8px; font-size: 12px; }
+.message-voice-select { width: 34px; max-width: 34px; padding: 0 6px; font-size: 0; color: transparent; }
+.message-voice-select option { color: var(--text-main); font-size: 13px; }
 .setting-field { margin: 16px 0; }
 .setting-field label { display: block; font-weight: 700; margin-bottom: 8px; }
 .setting-field input[type="range"] { width: 100%; accent-color: var(--primary); }
@@ -1958,8 +2029,197 @@ button[data-open-theme] {
   border-bottom: 1px solid var(--border) !important;
 }
 
+.settings-details-content {
+  display: grid !important;
+  gap: 10px !important;
+  padding: 14px !important;
+}
+
+.settings-details-content .settings-help {
+  margin: 0 !important;
+}
+
+.cloud-sync-summary {
+  display: grid !important;
+  gap: 8px !important;
+  padding: 12px 14px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  background: rgba(248, 250, 252, .92) !important;
+  color: var(--text-main) !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.cloud-sync-summary strong {
+  color: var(--secondary) !important;
+}
+
 .settings-details .danger-zone {
   margin: 14px !important;
+}
+
+.memory-overview {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+
+.memory-overview-item {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .7);
+  color: var(--text-main);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.memory-overview-empty {
+  color: var(--text-dim);
+}
+
+.memory-edit-fields {
+  padding: 14px;
+}
+
+.memory-fragment-list {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0 14px;
+}
+
+.memory-search-input {
+  width: 100%;
+  min-height: 42px;
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--text-main);
+  font: inherit;
+  font-size: 14px;
+}
+
+.memory-fragment-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .72);
+  overflow: hidden;
+}
+
+.memory-fragment-card > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  list-style: none;
+  padding: 12px 14px;
+  font-weight: 700;
+}
+
+.memory-fragment-card > summary::-webkit-details-marker {
+  display: none;
+}
+
+.memory-fragment-keywords {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composer-attachments {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  padding: 0 16px 8px !important;
+}
+
+.composer-attachment {
+  position: relative !important;
+  width: 84px !important;
+  height: 84px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: #fff !important;
+}
+
+.composer-attachment img,
+.message-image-preview img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.composer-attachment button {
+  position: absolute !important;
+  top: 4px !important;
+  right: 4px !important;
+  width: 24px !important;
+  height: 24px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(15, 23, 42, .78) !important;
+  color: #fff !important;
+  cursor: pointer !important;
+}
+
+.message-attachments {
+  display: grid !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+}
+
+.message-image-preview {
+  width: min(100%, 280px) !important;
+  aspect-ratio: 4 / 3 !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: rgba(255, 255, 255, .72) !important;
+}
+
+.memory-fragment-actions {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.memory-fragment-body {
+  display: grid;
+  gap: 10px;
+  padding: 0 14px 14px;
+}
+
+.memory-fragment-text {
+  margin: 0;
+  color: var(--text-main);
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.memory-fragment-form {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .55);
+}
+
+.memory-fragment-form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.memory-fragment-form-actions button {
+  flex: 1;
 }
 
 #send-btn.is-stopping {
@@ -1988,16 +2248,52 @@ button[data-open-theme] {
   content: none !important;
   display: none !important;
 }
+
+#scroll-bottom-btn {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  bottom: calc(142px + env(safe-area-inset-bottom)) !important;
+  transform: translateX(-50%) !important;
+  z-index: 35 !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  min-height: 42px !important;
+  max-width: 42px !important;
+  max-height: 42px !important;
+  border: 1px solid rgba(15, 23, 42, .08) !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, .16) !important;
+}
+
+#scroll-bottom-btn[hidden] {
+  display: none !important;
+}
+
+#scroll-bottom-btn .icon-svg {
+  width: 22px !important;
+  height: 22px !important;
+  stroke-width: 2.3 !important;
+}
+
+@media (max-width: 700px) {
+  #scroll-bottom-btn {
+    bottom: calc(154px + env(safe-area-inset-bottom)) !important;
+  }
+}
 </style>
 </head>
 <body>
 <!-- Password gate for cloud sync security. This protects the Netlify sync proxy. -->
 <div id="auth-gate" style="display:none;position:fixed;inset:0;background:#f9f9f9;z-index:10000;align-items:center;justify-content:center;padding:20px;">
   <div style="background:white;padding:32px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.1);max-width:400px;width:100%;">
-    <h2 style="margin:0 0 18px;color:#1f2937;">Portal-Passwort eingeben</h2>
+    <h2 style="margin:0 0 18px;color:#1f2937;">Passwort</h2>
     <form onsubmit="checkPassword();return false;">
       <input type="password" id="auth-password" placeholder="Passwort" style="width:100%;padding:14px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;margin-bottom:14px;">
-      <button type="submit" id="auth-submit" style="width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:16px;font-weight:700;">Weiter</button>
+      <button type="submit" id="auth-submit" style="width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:16px;font-weight:700;">Anmelden</button>
     </form>
     <div id="auth-error" style="display:none;color:#dc2626;margin-top:12px;font-size:14px;"></div>
   </div>
@@ -2014,10 +2310,9 @@ button[data-open-theme] {
     
     <div id="thread-section">
       <button class="sidebar-action-btn" type="button" onclick="createNewThread(event)" ontouchend="createNewThread(event)">Neuer Chat</button>
-      <button class="sidebar-action-btn secondary" type="button" onclick="showStorageSecurityInfo()">Speicher &amp; Sicherheit</button>
       <input id="thread-search" type="search" placeholder="Unterhaltungen durchsuchen..." aria-label="Unterhaltungen durchsuchen">
       <button class="sidebar-action-btn secondary" type="button" onclick="performFullSearch()">In Unterhaltungen suchen</button>
-      <div id="thread-list" aria-label="Thread list"></div>
+      <div id="thread-list" aria-label="Chatliste"></div>
     </div>
 
     <details class="sidebar-settings">
@@ -2035,21 +2330,6 @@ button[data-open-theme] {
       </p>
     </div>
 
-    <section class="accessibility-setting" aria-labelledby="accessibility-heading">
-      <h4 id="accessibility-heading" data-i18n="accessibility">Barrierefreiheit</h4>
-      <div class="accessibility-field">
-        <span class="accessibility-field-label" data-i18n="readingFont">Leseschrift</span>
-        <label class="accessibility-toggle-row" for="opendyslexic-toggle">
-          <span data-i18n="openDyslexic">OpenDyslexic verwenden</span>
-          <input id="opendyslexic-toggle" type="checkbox">
-        </label>
-      </div>
-      <label class="accessibility-field" for="interface-language-select">
-        <span class="accessibility-field-label" data-i18n="interfaceLanguage">Sprache der Benutzeroberfläche</span>
-        <select class="accessibility-select" id="interface-language-select"></select>
-      </label>
-      <p class="accessibility-note" data-i18n="localOnly">Ändert nur die Portalbeschriftungen. Deine Unterhaltungen werden nicht übersetzt.</p>
-    </section>
     </details>
     
     <div id="sidebar-footer" aria-hidden="true"></div>
@@ -2062,12 +2342,15 @@ button[data-open-theme] {
         <button id="hamburger" type="button" aria-label="Menü öffnen" onclick="openSidebar(event)" ontouchend="openSidebar(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSidebar(event)}"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
         <div id="title">Tatjana</div>
       </div>
-      <div id="header-controls"><button class="icon-btn" id="settings-btn" type="button" title="Einstellungen" aria-label="Einstellungen"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6V20a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.22.34.42.67.6 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-.51 1Z"></path></svg></button></div>
+      <div id="header-controls">
+        <button class="icon-btn" id="logout-btn" type="button" title="Abmelden" aria-label="Abmelden"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></button>
+        <button class="icon-btn" id="settings-btn" type="button" title="Einstellungen" aria-label="Einstellungen"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6V20a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.22.34.42.67.6 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-.51 1Z"></path></svg></button>
+      </div>
     </div>
     
     <div id="messages"></div>
     
-    <div id="input-container"><button id="attach-btn" class="composer-icon-btn" type="button" aria-label="Datei oder Foto hinzufuegen" title="Datei oder Foto hinzufuegen">+</button><textarea id="input" placeholder="Nachricht eingeben..." rows="1" aria-label="Nachrichtenfeld"></textarea><button id="stop-response-btn" class="composer-icon-btn danger" type="button" aria-label="Antwort stoppen" title="Antwort stoppen" hidden>Stopp</button><button id="voice-btn" class="composer-icon-btn" type="button" aria-label="Nachricht diktieren" title="Nachricht diktieren"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><path d="M12 19v3"></path></svg></button><button id="send-btn" type="button" aria-label="Nachricht senden" title="Nachricht senden"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17V8"></path><path d="m7 12 5-5 5 5"></path></svg></button><input id="file-input" type="file" accept="image/*,.pdf,.txt,.md,.doc,.docx" multiple hidden></div>
+    <div id="input-container"><button id="attach-btn" class="composer-icon-btn" type="button" aria-label="Datei oder Foto hinzufuegen" title="Datei oder Foto hinzufuegen">+</button><textarea id="input" placeholder="Nachricht eingeben..." rows="1" aria-label="Nachrichtenfeld"></textarea><button id="stop-response-btn" class="composer-icon-btn danger" type="button" aria-label="Antwort stoppen" title="Antwort stoppen" hidden>Stopp</button><button id="voice-btn" class="composer-icon-btn" type="button" aria-label="Nachricht diktieren" title="Nachricht diktieren"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><path d="M12 19v3"></path></svg></button><button id="send-btn" type="button" aria-label="Nachricht senden" title="Nachricht senden"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17V8"></path><path d="m7 12 5-5 5 5"></path></svg></button><input id="file-input" type="file" accept="image/*" multiple hidden></div>
   </div>
 </div>
 
@@ -2114,11 +2397,26 @@ function getLocalTimeContext() {
   const hour = now.getHours();
   const timeOfDay = hour < 5 ? 'späte Nacht' : hour < 12 ? 'Morgen' : hour < 17 ? 'Nachmittag' : hour < 21 ? 'Abend' : 'Nacht';
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'die lokale Zeitzone der Nutzerin';
+  const formatDate = (offsetDays) => {
+    const date = new Date(now);
+    date.setDate(now.getDate() + offsetDays);
+    return new Intl.DateTimeFormat('de-DE', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(date);
+  };
   const formatted = new Intl.DateTimeFormat(undefined, {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     hour: 'numeric', minute: '2-digit', timeZoneName: 'short'
   }).format(now);
-  return `Das Gerät der Nutzerin meldet aktuell: ${formatted} (${timeZone}). Bei der Nutzerin ist gerade ${timeOfDay}. Nutze dies als aktuelles lokales Datum und aktuelle lokale Uhrzeit, wenn zeitbezogene Formulierungen wichtig sind. Erwähne es nicht, außer es ist relevant.`;
+  return [
+    `Aktueller lokaler Zeitpunkt der Nutzerin: ${formatted} (${timeZone}).`,
+    `Tageszeit bei der Nutzerin: ${timeOfDay}.`,
+    `Relative Datumsbegriffe: gestern = ${formatDate(-1)}, heute = ${formatDate(0)}, morgen = ${formatDate(1)}, übermorgen = ${formatDate(2)}.`,
+    'Nutze diese Angaben, um heute, morgen, gestern, Wochentage, Datum und Uhrzeit richtig einzuordnen. Erwähne den Zeitkontext nur, wenn er für die Antwort relevant ist.'
+  ].join(' ');
 }
 
 function updateCompanionPromptButton() {
@@ -2444,58 +2742,6 @@ function showThemePicker() {
 // Apply saved theme on load
 applyTheme(currentTheme, currentMode);
 
-function showStorageSecurityInfo() {
-  const checklistKey = 'ellivien-security-sync-checklist-v1';
-  const saved = JSON.parse(localStorage.getItem(checklistKey) || '{}');
-  const checks = [
-    ['password-gate', 'Ich habe das Passwort-Gate auf derselben Portaladresse aktiviert.'],
-    ['wrong-password', 'Ich habe getestet, dass ein falsches Passwort abgelehnt wird, und mich danach mit dem richtigen angemeldet.'],
-    ['cloud-sync', 'Ich habe „Cloud-Sync jetzt“ genutzt und gesehen, dass es erfolgreich abgeschlossen wurde.'],
-    ['restore-test', 'Ich habe geprüft, dass meine Threads aus Cloudflare KV in einem zweiten Browser oder Gerät wiederhergestellt werden können.'],
-    ['backup', 'Ich habe einen frischen Voll-Export als zusätzliche Sicherung gespeichert.']
-  ];
-  const existing = document.getElementById('storage-security-info-modal');
-  if (existing) existing.remove();
-  const overlay = document.createElement('div');
-  overlay.id = 'storage-security-info-modal';
-  overlay.className = 'modal-overlay active';
-  overlay.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="storage-security-title">
-    <h3 id="storage-security-title">Lokaler Modus ist aktiv</h3>
-    <p>Dein Thread-Portal arbeitet normal. Chats werden aktuell lokal in IndexedDB auf diesem Browser und Gerät gespeichert.</p>
-    <p>Passwortschutz und dauerhafte Cloudflare-KV-Synchronisierung liegen kostenlos im Download-Ordner <strong>Password + KV Sync - Activate Later</strong>.</p>
-    <p>Passwortschutz schützt den Zugriff auf Portal und Modell-Proxy. KV schützt dich davor, nur von einer Browserdatenbank abhängig zu sein, und ermöglicht Sync über mehrere Geräte.</p>
-    <p>Keep regular exports. When you feel ready, follow the included activation guide on this same Netlify site. Only complete this checklist <strong>after</strong> you have activated the secure version.</p>
-    <div id="security-sync-checklist" style="margin:16px 0;text-align:left"></div>
-    <p id="security-sync-complete" style="display:none;color:var(--secondary);font-weight:700;line-height:1.45;">Sicherheit und Cloud-Sync bestätigt. Dieser Hinweis wird jetzt ausgeblendet.</p>
-    <button class="sidebar-action-btn" type="button" onclick="document.getElementById('storage-security-info-modal')?.remove()">Schließen</button>
-  </div>`;
-  const checklist = overlay.querySelector('#security-sync-checklist');
-  const complete = overlay.querySelector('#security-sync-complete');
-  const update = () => {
-    localStorage.setItem(checklistKey, JSON.stringify(saved));
-    const allDone = checks.every(([key]) => saved[key]);
-    complete.style.display = allDone ? 'block' : 'none';
-    if (allDone) {
-      setTimeout(() => {
-        overlay.remove();
-        document.querySelector('[onclick="showStorageSecurityInfo()"]')?.remove();
-      }, 1200);
-    }
-  };
-  checks.forEach(([key, label]) => {
-    const row = document.createElement('label');
-    row.style.cssText = 'display:flex;gap:9px;align-items:flex-start;margin:10px 0;font-size:13px;line-height:1.4;cursor:pointer';
-    row.innerHTML = `<input type="checkbox" ${saved[key] ? 'checked' : ''} style="margin-top:3px"><span>${label}</span>`;
-    row.querySelector('input').addEventListener('change', event => { saved[key] = event.target.checked; update(); });
-    checklist.appendChild(row);
-  });
-  update();
-  overlay.addEventListener('click', event => {
-    if (event.target === overlay) overlay.remove();
-  });
-  document.body.appendChild(overlay);
-}
-
 // Theme modal close
 document.getElementById('theme-modal').addEventListener('click', (e) => {
   if (e.target.id === 'theme-modal') {
@@ -2528,6 +2774,7 @@ const input = document.getElementById('input');
 const sendBtn = document.getElementById('send-btn');
 const threadSearch = document.getElementById('thread-search');
 const threadList = document.getElementById('thread-list');
+let pendingImageAttachments = [];
 
 const AUTH_TOKEN_KEY = 'companionPortalAuthToken';
 const LOCAL_AUTH_BYPASS_TOKEN = 'local-dev-bypass';
@@ -2556,6 +2803,7 @@ const TEMPERATURE_STORAGE_KEY = 'tatjana-temperature-v1';
 const OUTPUT_TOKENS_STORAGE_KEY = 'tatjana-output-tokens-v1';
 const TATJANA_MEMORY_STORAGE_KEY = 'tatjana-memory-notes-v1';
 const TATJANA_FAST_MEMORY_STORAGE_KEY = 'tatjana-memory-fast-v1';
+const TATJANA_MEMORY_FRAGMENTS_STORAGE_KEY = 'tatjana-memory-fragments-v1';
 let activeRequestController = null;
 function getTemperatureSetting() {
   const raw = localStorage.getItem(TEMPERATURE_STORAGE_KEY);
@@ -2593,7 +2841,7 @@ async function cloudflareSyncFetch(url, options = {}) {
 
   if (response.status === 401) {
     localStorage.removeItem(AUTH_TOKEN_KEY);
-    throw new Error('Die geschuetzte Sitzung ist abgelaufen. Bitte lade die Seite neu und gib das Portal-Passwort erneut ein.');
+    throw new Error('Die Cloud-Sync-Sitzung ist abgelaufen. Bitte lade neu und melde dich erneut mit dem Portal-Passwort an.');
   }
 
   return response;
@@ -2631,13 +2879,13 @@ async function checkPassword() {
   const password = passwordInput.value.trim();
 
   if (!password) {
-    errorDiv.textContent = 'Bitte gib das Portal-Passwort ein';
+    errorDiv.textContent = 'Bitte trage das Portal-Passwort ein.';
     errorDiv.style.display = 'block';
     return;
   }
 
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Checking...';
+  submitBtn.textContent = 'Prüfen...';
   errorDiv.style.display = 'none';
 
   try {
@@ -2649,7 +2897,7 @@ async function checkPassword() {
     const data = await response.json();
 
     if (!response.ok || !data.authenticated || !data.token) {
-      throw new Error(data.error || 'Falsches Passwort');
+      throw new Error(data.error || 'Das Passwort stimmt nicht.');
     }
 
     localStorage.setItem(AUTH_TOKEN_KEY, data.token);
@@ -2657,10 +2905,10 @@ async function checkPassword() {
     document.getElementById('app').style.display = 'flex';
     await bootPortal();
   } catch (error) {
-    errorDiv.textContent = error.message || 'Authentication failed';
+    errorDiv.textContent = error.message || 'Anmeldung fehlgeschlagen.';
     errorDiv.style.display = 'block';
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Weiter';
+    submitBtn.textContent = 'Anmelden';
     passwordInput.value = '';
     passwordInput.focus();
   }
@@ -2673,8 +2921,12 @@ async function ensureAuthenticatedBeforeBoot() {
   const isLocalDevHost = isLocalhost || isPrivateLanHost || hostname.endsWith('.local');
   const existingToken = localStorage.getItem(AUTH_TOKEN_KEY);
 
-  if (isLocalDevHost && !existingToken) {
-    localStorage.setItem(AUTH_TOKEN_KEY, LOCAL_AUTH_BYPASS_TOKEN);
+  if (isLocalDevHost) {
+    if (existingToken !== LOCAL_AUTH_BYPASS_TOKEN) {
+      localStorage.setItem(AUTH_TOKEN_KEY, LOCAL_AUTH_BYPASS_TOKEN);
+    }
+    document.getElementById('auth-gate').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
     return true;
   }
 
@@ -2687,6 +2939,41 @@ async function ensureAuthenticatedBeforeBoot() {
   authGate.style.display = 'flex';
   document.getElementById('auth-password').focus();
   return false;
+}
+
+function logoutPortalSession() {
+  if (activeRequestController) {
+    activeRequestController.abort();
+    activeRequestController = null;
+  }
+
+  localStorage.removeItem(AUTH_TOKEN_KEY);
+  input.disabled = false;
+  setSendButtonGenerating(false);
+  const stopResponseBtn = document.getElementById('stop-response-btn');
+  if (stopResponseBtn) stopResponseBtn.hidden = true;
+  document.getElementById('app').style.display = 'none';
+
+  const authGate = document.getElementById('auth-gate');
+  const passwordInput = document.getElementById('auth-password');
+  const errorDiv = document.getElementById('auth-error');
+  const submitBtn = document.getElementById('auth-submit');
+
+  if (errorDiv) {
+    errorDiv.textContent = '';
+    errorDiv.style.display = 'none';
+  }
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Anmelden';
+  }
+  if (passwordInput) {
+    passwordInput.value = '';
+  }
+  if (authGate) {
+    authGate.style.display = 'flex';
+  }
+  passwordInput?.focus();
 }
 
 
@@ -2767,13 +3054,147 @@ function setMemoryText(key, value) {
   else localStorage.removeItem(key);
 }
 
-function getTatjanaMemoryMessages() {
+function splitMemoryKeywords(value) {
+  return String(value || '')
+    .split(/[,;/\n]+/)
+    .map(keyword => keyword.trim())
+    .filter(Boolean);
+}
+
+function getMemoryFragments() {
+  try {
+    const raw = localStorage.getItem(TATJANA_MEMORY_FRAGMENTS_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        return parsed
+          .map(fragment => ({
+            id: fragment.id || `memory-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+            keywords: Array.isArray(fragment.keywords) ? fragment.keywords.map(String).map(item => item.trim()).filter(Boolean) : splitMemoryKeywords(fragment.keywords),
+            text: String(fragment.text || '').trim()
+          }))
+          .filter(fragment => fragment.keywords.length && fragment.text);
+      }
+    }
+  } catch (error) {
+    console.warn('Memory fragments could not be read:', error);
+  }
+  return parseLegacyMemoryFragments();
+}
+
+function setMemoryFragments(fragments) {
+  const cleaned = fragments
+    .map(fragment => ({
+      id: fragment.id || `memory-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      keywords: splitMemoryKeywords(Array.isArray(fragment.keywords) ? fragment.keywords.join(', ') : fragment.keywords),
+      text: String(fragment.text || '').trim()
+    }))
+    .filter(fragment => fragment.keywords.length && fragment.text);
+
+  if (cleaned.length) {
+    localStorage.setItem(TATJANA_MEMORY_FRAGMENTS_STORAGE_KEY, JSON.stringify(cleaned));
+    setMemoryText(TATJANA_FAST_MEMORY_STORAGE_KEY, cleaned.map(fragment => fragment.keywords.join(' / ')).join('\n'));
+    setMemoryText(TATJANA_MEMORY_STORAGE_KEY, cleaned.map(fragment => `${fragment.keywords.join(' / ')}\n${fragment.text}`).join('\n\n'));
+  } else {
+    localStorage.removeItem(TATJANA_MEMORY_FRAGMENTS_STORAGE_KEY);
+    localStorage.removeItem(TATJANA_FAST_MEMORY_STORAGE_KEY);
+    localStorage.removeItem(TATJANA_MEMORY_STORAGE_KEY);
+  }
+}
+
+function parseLegacyMemoryFragments() {
+  const fastLines = getMemoryText(TATJANA_FAST_MEMORY_STORAGE_KEY)
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(Boolean);
   const notes = getMemoryText(TATJANA_MEMORY_STORAGE_KEY);
-  const fast = getMemoryText(TATJANA_FAST_MEMORY_STORAGE_KEY);
-  const sections = [];
-  if (fast) sections.push(`Schnell abrufbare Informationen:\n${fast}`);
-  if (notes) sections.push(`Gespeicherte Erinnerungen und wichtige Notizen:\n${notes}`);
-  if (!sections.length) return [];
+  const blocks = notes.split(/\n\s*\n/).map(block => block.trim()).filter(Boolean);
+  const fragments = [];
+
+  blocks.forEach((block, index) => {
+    const lines = block.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+    if (!lines.length) return;
+    const firstLine = lines[0].replace(/^Stichwörter:\s*/i, '').replace(/^Stichwoerter:\s*/i, '');
+    const hasKeywordLine = lines.length > 1 && (lines[0].includes('/') || lines[0].includes(',') || /^Stichw(ö|oe)rter:/i.test(lines[0]));
+    const keywords = hasKeywordLine ? splitMemoryKeywords(firstLine) : splitMemoryKeywords(fastLines[index] || firstLine);
+    const text = hasKeywordLine ? lines.slice(1).join('\n') : block;
+    if (keywords.length && text) {
+      fragments.push({ id: `legacy-${index}-${Date.now()}`, keywords, text });
+    }
+  });
+
+  if (!fragments.length && fastLines.length) {
+    fastLines.forEach((line, index) => {
+      fragments.push({
+        id: `legacy-fast-${index}-${Date.now()}`,
+        keywords: splitMemoryKeywords(line),
+        text: line
+      });
+    });
+  }
+
+  return fragments;
+}
+
+function findMatchingMemoryFragments(userText) {
+  const normalizedText = String(userText || '').toLocaleLowerCase('de-DE');
+  if (!normalizedText.trim()) return [];
+  return getMemoryFragments().filter(fragment =>
+    fragment.keywords.some(keyword => normalizedText.includes(keyword.toLocaleLowerCase('de-DE')))
+  );
+}
+
+function renderMemorySettingsOverview() {
+  const fragments = getMemoryFragments();
+
+  if (!fragments.length) {
+    return '<div class="memory-overview-item memory-overview-empty">Noch keine Memory-Eintraege gespeichert.</div>';
+  }
+
+  return fragments.slice(0, 8)
+    .map(fragment => fragment.keywords.join(' / '))
+    .map(line => `<div class="memory-overview-item">${escapeHtml(line)}</div>`)
+    .join('');
+}
+
+function renderMemoryFragmentCards(searchTerm = '') {
+  const fragments = getMemoryFragments();
+  if (!fragments.length) {
+    return '<p class="settings-help">Noch keine Fragmente angelegt.</p>';
+  }
+
+  const normalizedSearch = String(searchTerm || '').trim().toLocaleLowerCase('de-DE');
+  const visibleFragments = normalizedSearch
+    ? fragments.filter(fragment => {
+        const haystack = `${fragment.keywords.join(' ')} ${fragment.text}`.toLocaleLowerCase('de-DE');
+        return haystack.includes(normalizedSearch);
+      })
+    : fragments;
+
+  if (!visibleFragments.length) {
+    return '<p class="settings-help">Keine passenden Fragmente gefunden.</p>';
+  }
+
+  return visibleFragments.map(fragment => `
+    <details class="memory-fragment-card" data-fragment-id="${escapeHtml(fragment.id)}">
+      <summary>
+        <span class="memory-fragment-keywords">${escapeHtml(fragment.keywords.join(' / '))}</span>
+        <span class="memory-fragment-actions">
+          <button class="message-tool-btn" type="button" data-edit-fragment="${escapeHtml(fragment.id)}" title="Bearbeiten" aria-label="Fragment bearbeiten"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></button>
+          <button class="message-tool-btn danger" type="button" data-delete-fragment="${escapeHtml(fragment.id)}" title="Löschen" aria-label="Fragment löschen"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg></button>
+        </span>
+      </summary>
+      <div class="memory-fragment-body">
+        <p class="memory-fragment-text">${escapeHtml(fragment.text)}</p>
+      </div>
+    </details>
+  `).join('');
+}
+
+function getTatjanaMemoryMessages(userText = '') {
+  const matches = findMatchingMemoryFragments(userText);
+  if (!matches.length) return [];
+  const sections = matches.map(fragment => `Stichwörter: ${fragment.keywords.join(', ')}\n${fragment.text}`);
   return [{
     role: 'system',
     content: `Tatjana-Memory ist getrennt vom Companion-Prompt gespeichert. Nutze diese Informationen nur, wenn sie zur aktuellen Unterhaltung passen. Erfinde keine fehlenden Details.\n\n${sections.join('\n\n')}`
@@ -2942,7 +3363,7 @@ async function loadThreads() {
   }
   
   if (!hasThreads && legacyMessages.length) {
-    const migrated = makeThread('Imported conversation', legacyMessages);
+    const migrated = makeThread('Importierte Unterhaltung', legacyMessages);
     threads[migrated.id] = migrated;
     currentThreadId = migrated.id;
     saveThreads();
@@ -3261,7 +3682,7 @@ async function syncThreadsToKV(options = {}) {
   const ids = Array.from(threadIdsToSync);
   if (ids.length === 0 && !shouldUpdateIndex) {
     if (showSuccessToast && showSuccessWhenNoChanges) {
-      showSyncToast(verifyLocalThreads ? '✓ Cloud already up to date' : '✓ No cloud changes pending');
+      showSyncToast(verifyLocalThreads ? 'Cloud ist bereits aktuell.' : 'Keine Cloud-Änderungen offen.');
     }
     markCloudSyncSuccess();
     return { syncedThreadCount: 0, indexUpdated: false };
@@ -3302,12 +3723,12 @@ async function syncThreadsToKV(options = {}) {
     await clearSyncedThreads(ids, shouldUpdateIndex);
     markCloudSyncSuccess();
     if (showSuccessToast) {
-      showSyncToast(ids.length > 0 ? `✓ Synced ${ids.length} thread${ids.length === 1 ? '' : 's'} to cloud` : '✓ Synced cloud index');
+      showSyncToast(ids.length > 0 ? `${ids.length} Chat${ids.length === 1 ? '' : 's'} in der Cloud gespeichert.` : 'Cloud-Index gespeichert.');
     }
     return { syncedThreadCount: ids.length, indexUpdated: shouldUpdateIndex };
   } catch (error) {
     markCloudSyncFailure();
-    if (showFailureToast) showSyncToast('✗ Cloud sync failed', 'error');
+    if (showFailureToast) showSyncToast('Cloud-Sync fehlgeschlagen.', 'error');
     throw error;
   }
 }
@@ -3346,10 +3767,29 @@ async function syncToKVIfDue() {
 }
 
 function formatRelativeSyncTime(value) {
-  if (!value) return 'never';
+  if (!value) return 'Nie';
   const ms = Number(value);
-  if (!Number.isFinite(ms)) return 'unknown';
-  return new Date(ms).toLocaleString('en-GB');
+  if (!Number.isFinite(ms)) return 'Unbekannt';
+  return new Date(ms).toLocaleString('de-DE');
+}
+
+function getCloudSyncStatusText(lastCloudSync, lastFailure, pendingCount) {
+  if (lastFailure) return 'Letzter Cloud-Versuch hatte einen Fehler.';
+  if (pendingCount > 0) return `${pendingCount} offene Änderung${pendingCount === 1 ? '' : 'en'} wartet/warten auf manuelles Speichern.`;
+  if (lastCloudSync) return 'Cloud-Sync ist bereit. Keine offenen Änderungen erkannt.';
+  return 'Cloud-Sync ist vorbereitet, wurde aber noch nicht ausgeführt.';
+}
+
+function renderCloudSyncSummary() {
+  const lastCloudSync = localStorage.getItem(LAST_KV_SYNC_KEY);
+  const lastFailure = localStorage.getItem(LAST_KV_SYNC_FAILURE_KEY);
+  const pendingCount = Array.from(dirtyThreadIds).filter(id => threads[id]).length + (kvThreadIndexDirty ? 1 : 0);
+  return `
+    <div class="cloud-sync-summary">
+      <div><strong>Letzter Sync</strong><br>${formatRelativeSyncTime(lastCloudSync)}</div>
+      <div><strong>Status</strong><br>${getCloudSyncStatusText(lastCloudSync, lastFailure, pendingCount)}</div>
+      <div><strong>Handy ↔ PC</strong><br>Später: auf Gerät A in Cloud speichern, auf Gerät B aus Cloud laden.</div>
+    </div>`;
 }
 
 async function showStorageSyncModal() {
@@ -3359,6 +3799,7 @@ async function showStorageSyncModal() {
   const lastCloudSync = localStorage.getItem(LAST_KV_SYNC_KEY) || await getPortalState(LAST_KV_SYNC_KEY).catch(() => null);
   const lastFailure = localStorage.getItem(LAST_KV_SYNC_FAILURE_KEY) || await getPortalState(LAST_KV_SYNC_FAILURE_KEY).catch(() => null);
   const pendingCount = Array.from(dirtyThreadIds).filter(id => threads[id]).length + (kvThreadIndexDirty ? 1 : 0);
+  const statusText = getCloudSyncStatusText(lastCloudSync, lastFailure, pendingCount);
 
   const overlay = document.createElement('div');
   overlay.id = 'storage-sync-modal';
@@ -3369,20 +3810,22 @@ async function showStorageSyncModal() {
   modal.innerHTML = `
     <h3>Cloud-Sync</h3>
     <div style="text-align:left;line-height:1.55;margin:0 0 16px;padding:14px 16px;border-radius:14px;background:#f8fafc;border:1px solid #e2e8f0;color:#334155;">
-      <div><strong style="color:#6d28d9;">Last cloud sync</strong><br>${formatRelativeSyncTime(lastCloudSync)}</div>
-      <div style="margin-top:10px;"><strong style="color:#6d28d9;">Last sync failure</strong><br>${formatRelativeSyncTime(lastFailure)}</div>
-      <div style="margin-top:10px;"><strong style="color:#6d28d9;">Threads in browser</strong><br>${Object.keys(threads).length}</div>
-      <div style="margin-top:10px;"><strong style="color:#6d28d9;">Pending cloud changes</strong><br>${pendingCount}</div>
+      <div><strong style="color:#6d28d9;">Letzter Cloud-Sync</strong><br>${formatRelativeSyncTime(lastCloudSync)}</div>
+      <div style="margin-top:10px;"><strong style="color:#6d28d9;">Letzter Sync-Fehler</strong><br>${formatRelativeSyncTime(lastFailure)}</div>
+      <div style="margin-top:10px;"><strong style="color:#6d28d9;">Chats im Browser</strong><br>${Object.keys(threads).length}</div>
+      <div style="margin-top:10px;"><strong style="color:#6d28d9;">Offene Cloud-Änderungen</strong><br>${pendingCount}</div>
+      <div style="margin-top:10px;"><strong style="color:#6d28d9;">Status</strong><br>${statusText}</div>
+      <div style="margin-top:10px;"><strong style="color:#6d28d9;">Handy ↔ PC später testen</strong><br>Erst auf einem Gerät speichern, danach auf dem anderen Gerät laden.</div>
     </div>
   `;
 
   const actions = [
-    { text: 'Jetzt manuell synchronisieren', action: async () => runCloudSync({ showSuccessToast: true, showFailureToast: true, showSuccessWhenNoChanges: true, verifyLocalThreads: true }) },
-    { text: 'Aus Cloud wiederherstellen', action: async () => {
+    { text: 'In Cloud speichern', action: async () => runCloudSync({ showSuccessToast: true, showFailureToast: true, showSuccessWhenNoChanges: true, verifyLocalThreads: true }) },
+    { text: 'Aus Cloud laden', action: async () => {
       const result = await restoreThreadsFromKV(true);
-      showSyncToast(`✓ Restored ${result.restoredCount} cloud thread${result.restoredCount === 1 ? '' : 's'}`);
+      showSyncToast(`${result.restoredCount} Cloud-Chat${result.restoredCount === 1 ? '' : 's'} wiederhergestellt.`);
     }},
-    { text: 'Schliessen', action: async () => {} }
+    { text: 'Schließen', action: async () => {} }
   ];
 
   actions.forEach(item => {
@@ -3481,14 +3924,14 @@ function updateThreadTitle(thread) {
   const firstUserMessage = getFirstUserMessage(thread);
   if (!firstUserMessage) return;
   
-  if (!thread.title || thread.title === 'Neue Unterhaltung' || thread.title === 'Imported conversation') {
+  if (!thread.title || thread.title === 'Neue Unterhaltung' || thread.title === 'Imported conversation' || thread.title === 'Importierte Unterhaltung') {
     thread.title = cleanPreview(firstUserMessage.content, 42);
   }
 }
 
 function formatThreadDate(timestamp) {
   const date = new Date(timestamp || Date.now());
-  return date.toLocaleDateString('en-GB', {
+  return date.toLocaleDateString('de-DE', {
     day: '2-digit',
     month: 'short',
     hour: '2-digit',
@@ -3500,9 +3943,91 @@ function renderMessages() {
   messagesDiv.innerHTML = '';
   getCurrentThread().messages.forEach((msg, index) => {
     if (msg.role !== 'system') {
-      displayMessage(msg.role, msg.content, index);
+      displayMessage(msg.role, msg.content, index, null, msg.attachments);
     }
   });
+}
+
+function getImageAttachments(attachments = []) {
+  return Array.isArray(attachments)
+    ? attachments.filter(item => item && item.type === 'image' && item.dataUrl)
+    : [];
+}
+
+function appendImagePreviews(container, attachments = []) {
+  const images = getImageAttachments(attachments);
+  if (!images.length) return;
+  const wrapper = document.createElement('div');
+  wrapper.className = 'message-attachments';
+  images.forEach(image => {
+    const preview = document.createElement('div');
+    preview.className = 'message-image-preview';
+    const img = document.createElement('img');
+    img.src = image.dataUrl;
+    img.alt = image.name || 'Bildanhang';
+    preview.appendChild(img);
+    wrapper.appendChild(preview);
+  });
+  container.appendChild(wrapper);
+}
+
+function messageToApiMessage(message) {
+  const images = getImageAttachments(message.attachments);
+  if (message.role !== 'user' || !images.length) {
+    return { role: message.role, content: message.content || '' };
+  }
+  const content = [];
+  if (message.content) content.push({ type: 'text', text: message.content });
+  images.forEach(image => {
+    content.push({
+      type: 'image_url',
+      image_url: { url: image.dataUrl }
+    });
+  });
+  return { role: 'user', content };
+}
+
+function shouldUseInternetResearch(text) {
+  const query = String(text || '').toLowerCase();
+  if (!query.trim()) return false;
+  return /\b(aktuell|aktuelle|aktueller|neuste|neueste|heute|jetzt|gerade|news|nachrichten|wetter|preis|preise|kurs|kurse|öffnungszeiten|oeffnungszeiten|quelle|quellen|link|internet|web|online|google|recherchier|recherche|suche im netz|was gibt es neues)\b/.test(query);
+}
+
+function formatInternetResearchForTatjana(result) {
+  const summary = String(result?.summary || '').trim();
+  const sources = Array.isArray(result?.sources) ? result.sources : [];
+  if (!summary && !sources.length) return '';
+  const sourceLines = sources
+    .filter(source => source?.url)
+    .map((source, index) => `${index + 1}. ${source.title || source.url} - ${source.url}`)
+    .join('\n');
+  return [
+    'Aktuelle Internet-Recherche fuer diese Nutzerfrage:',
+    summary || 'Keine Zusammenfassung erhalten.',
+    sourceLines ? `Quellen:\n${sourceLines}` : 'Quellen: keine Quellen im Suchergebnis erhalten.',
+    'Nutze diese Informationen nur, wenn sie zur Frage passen. Kennzeichne Unsicherheit und nenne Quellen, wenn du aktuelle Fakten verwendest.'
+  ].join('\n\n');
+}
+
+async function getInternetResearchContext(userText) {
+  if (!shouldUseInternetResearch(userText)) return null;
+  try {
+    const response = await fetch('/.netlify/functions/openai-web-search', {
+      method: 'POST',
+      headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ query: userText })
+    });
+    if (!response.ok) throw new Error(`Web search ${response.status}`);
+    const data = await response.json();
+    const content = formatInternetResearchForTatjana(data);
+    return content ? { role: 'system', content } : null;
+  } catch (error) {
+    console.warn('Internet-Recherche nicht verfügbar:', error);
+    return {
+      role: 'system',
+      content: 'Internet-Recherche wurde versucht, ist aber gerade nicht verfügbar. Behaupte keine aktuelle Recherche und weise bei aktuellen Fakten darauf hin, dass du sie nicht live prüfen konntest.'
+    };
+  }
 }
 
 function getCompanionName() {
@@ -3510,11 +4035,11 @@ function getCompanionName() {
 }
 
 function makeSafeFilename(value) {
-  return String(value || 'conversation')
+  return String(value || 'unterhaltung')
     .replace(/[\\/:*?"<>|]/g, '-')
     .replace(/\s+/g, ' ')
     .trim()
-    .slice(0, 80) || 'conversation';
+    .slice(0, 80) || 'unterhaltung';
 }
 
 function exportThreadToMarkdown(threadId) {
@@ -3526,8 +4051,8 @@ function exportThreadToMarkdown(threadId) {
   const lines = [
     `# ${title}`,
     '',
-    `Created: ${new Date(thread.created || Date.now()).toLocaleString('en-GB')}`,
-    `Updated: ${new Date(thread.updated || Date.now()).toLocaleString('en-GB')}`,
+    `Erstellt: ${new Date(thread.created || Date.now()).toLocaleString('de-DE')}`,
+    `Aktualisiert: ${new Date(thread.updated || Date.now()).toLocaleString('de-DE')}`,
     '',
     '---',
     ''
@@ -3536,7 +4061,7 @@ function exportThreadToMarkdown(threadId) {
   (thread.messages || []).forEach(message => {
     if (!message || message.role === 'system' || !message.content) return;
     const role = message.role === 'user' ? 'user' : 'assistant';
-    const label = role === 'user' ? 'You' : companionName;
+    const label = role === 'user' ? 'Du' : companionName;
     lines.push(`<!-- role:${role} -->`, `## ${label}`, '', message.content, '', '---', '');
   });
 
@@ -3595,7 +4120,7 @@ function parseThreadMarkdown(markdown, fallbackTitle) {
       }
     }
 
-    if (!currentRole && (/^#\s+/.test(line) || /^created:/i.test(line) || /^updated:/i.test(line) || !line.trim())) {
+      if (!currentRole && (/^#\s+/.test(line) || /^created:/i.test(line) || /^updated:/i.test(line) || /^erstellt:/i.test(line) || /^aktualisiert:/i.test(line) || !line.trim())) {
       return;
     }
 
@@ -3623,15 +4148,15 @@ function restoreThreadFromMarkdown(threadId) {
     reader.onload = () => {
       const parsed = parseThreadMarkdown(reader.result, file.name.replace(/\.(md|markdown|txt)$/i, ''));
       if (!parsed.messages.length) {
-        alert('No messages were found in that file.');
+        alert('In dieser Datei wurden keine Nachrichten gefunden.');
         return;
       }
 
-      if (!confirm(`Replace "${thread.title || 'Neue Unterhaltung'}" with ${parsed.messages.length} imported messages?`)) {
+      if (!confirm(`"${thread.title || 'Neue Unterhaltung'}" durch ${parsed.messages.length} importierte Nachrichten ersetzen?`)) {
         return;
       }
 
-      thread.title = parsed.title || thread.title || 'Imported conversation';
+      thread.title = parsed.title || thread.title || 'Importierte Unterhaltung';
       thread.messages = parsed.messages;
       thread.updated = Date.now();
       saveThreads();
@@ -3681,21 +4206,21 @@ function restoreThreadFromJson(threadId) {
       try {
         parsed = parseThreadJson(reader.result, file.name.replace(/\.json$/i, ''));
       } catch (error) {
-        alert('That JSON file could not be read.');
+        alert('Diese JSON-Datei konnte nicht gelesen werden.');
         console.error('JSON restore failed:', error);
         return;
       }
 
       if (!parsed.messages.length) {
-        alert('No messages were found in that JSON file.');
+        alert('In dieser JSON-Datei wurden keine Nachrichten gefunden.');
         return;
       }
 
-      if (!confirm(`Replace "${thread.title || 'Neue Unterhaltung'}" with ${parsed.messages.length} imported messages?`)) {
+      if (!confirm(`"${thread.title || 'Neue Unterhaltung'}" durch ${parsed.messages.length} importierte Nachrichten ersetzen?`)) {
         return;
       }
 
-      thread.title = parsed.title || thread.title || 'Imported conversation';
+      thread.title = parsed.title || thread.title || 'Importierte Unterhaltung';
       thread.messages = parsed.messages;
       thread.updated = Date.now();
       saveThreads();
@@ -3728,7 +4253,7 @@ function renderThreadList() {
   if (!matchingThreads.length) {
     const empty = document.createElement('div');
     empty.className = 'empty-thread-list';
-    empty.textContent = query ? 'No matching threads' : 'No threads yet';
+    empty.textContent = query ? 'Keine passenden Chats' : 'Noch keine Chats';
     threadList.appendChild(empty);
     return;
   }
@@ -3736,7 +4261,7 @@ function renderThreadList() {
   matchingThreads.forEach(thread => {
     updateThreadTitle(thread);
     
-    const titleText = thread.pinned ? `Anpinnenned: ${thread.title || 'Neue Unterhaltung'}` : thread.title || 'Neue Unterhaltung';
+    const titleText = thread.pinned ? `Angepinnt: ${thread.title || 'Neue Unterhaltung'}` : thread.title || 'Neue Unterhaltung';
     const dateText = formatThreadDate(thread.updated);
     const previewText = getSearchPreview(thread, query);
     const button = document.createElement('button');
@@ -3831,7 +4356,7 @@ function performFullSearch() {
   content.innerHTML = '';
 
   if (!results.length) {
-    content.innerHTML = '<div class="empty-thread-list">No matches found.</div>';
+    content.innerHTML = '<div class="empty-thread-list">Keine Treffer gefunden.</div>';
     modal.classList.add('active');
     return;
   }
@@ -3858,9 +4383,9 @@ function performFullSearch() {
       item.type = 'button';
       item.className = 'search-result-item';
       const roleLabel = match.type === 'title'
-        ? 'Thread title'
+        ? 'Chat-Titel'
         : match.role === 'user'
-          ? 'You'
+          ? 'Du'
           : getCompanionName();
       item.innerHTML = `
         <div class="search-result-role">${escapeHtml(roleLabel)}</div>
@@ -3873,7 +4398,7 @@ function performFullSearch() {
     if (result.matches.length > 8) {
       const more = document.createElement('div');
       more.className = 'empty-thread-list';
-      more.textContent = `${result.matches.length - 8} more matches in this thread`;
+      more.textContent = `${result.matches.length - 8} weitere Treffer in diesem Chat`;
       wrapper.appendChild(more);
     }
 
@@ -3881,6 +4406,24 @@ function performFullSearch() {
   });
 
   modal.classList.add('active');
+}
+
+function closeThreadMenu() {
+  document.getElementById('thread-menu-popover')?.remove();
+}
+
+function makeThreadMenuButton(label, iconName, action, danger = false) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = `thread-menu-action${danger ? ' danger' : ''}`;
+  button.innerHTML = `${tatjanaSvgIcon(iconName)}<span>${escapeHtml(label)}</span>`;
+  button.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+    closeThreadMenu();
+    action();
+  });
+  return button;
 }
 
 function showThreadModal(threadId, event) {
@@ -3892,47 +4435,40 @@ function showThreadModal(threadId, event) {
   const thread = threads[threadId];
   if (!thread) return false;
   
-  const existingModal = document.getElementById('thread-modal');
-  if (existingModal) existingModal.remove();
-  
-  const overlay = document.createElement('div');
-  overlay.id = 'thread-modal';
-  overlay.className = 'modal-overlay active';
-  
-  const modal = document.createElement('div');
-  modal.className = 'modal';
-  
+  closeThreadMenu();
+
+  const popover = document.createElement('div');
+  popover.id = 'thread-menu-popover';
+  popover.className = 'thread-menu-popover';
+
   const title = document.createElement('div');
-  title.className = 'thread-action-title';
+  title.className = 'thread-menu-title';
   title.textContent = thread.title || 'Neue Unterhaltung';
-  modal.appendChild(title);
-  
-  const actions = [
-    { text: 'Öffnen', action: () => { overlay.remove(); switchThread(threadId); } },
-    { text: 'Umbenennen', action: () => { overlay.remove(); renameThread(threadId); } },
-    { text: thread.pinned ? 'Loslösen' : 'Anpinnen', action: () => { overlay.remove(); toggleAnpinnen(threadId); } },
-    { text: 'Als .md exportieren', action: () => { overlay.remove(); exportThreadToMarkdown(threadId); } },
-    { text: 'Aus .md wiederherstellen', action: () => { overlay.remove(); restoreThreadFromMarkdown(threadId); } },
-    { text: 'Aus .json wiederherstellen', action: () => { overlay.remove(); restoreThreadFromJson(threadId); } },
-    { text: 'Löschen', danger: true, action: () => { overlay.remove(); deleteThread(threadId); } },
-    { text: 'Abbrechen', action: () => overlay.remove() }
-  ];
-  
-  actions.forEach(action => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'thread-action-btn' + (action.danger ? ' danger' : '');
-    button.textContent = action.text;
-    button.onclick = action.action;
-    modal.appendChild(button);
-  });
-  
-  overlay.appendChild(modal);
-  document.body.appendChild(overlay);
-  
-  overlay.onclick = (clickEvent) => {
-    if (clickEvent.target === overlay) overlay.remove();
-  };
+  popover.appendChild(title);
+  popover.appendChild(makeThreadMenuButton('Öffnen', 'open', () => switchThread(threadId)));
+  popover.appendChild(makeThreadMenuButton('Umbenennen', 'edit', () => renameThread(threadId)));
+  popover.appendChild(makeThreadMenuButton(thread.pinned ? 'Loslösen' : 'Anpinnen', 'pin', () => toggleAnpinnen(threadId)));
+  popover.appendChild(makeThreadMenuButton('Exportieren', 'download', () => exportThreadToMarkdown(threadId)));
+  popover.appendChild(makeThreadMenuButton('Wiederherstellen', 'upload', () => restoreThreadFromMarkdown(threadId)));
+
+  const separator = document.createElement('div');
+  separator.className = 'thread-menu-separator';
+  popover.appendChild(separator);
+  popover.appendChild(makeThreadMenuButton('Löschen', 'trash', () => deleteThread(threadId), true));
+
+  document.body.appendChild(popover);
+
+  const source = event?.currentTarget || event?.target;
+  const rect = source?.getBoundingClientRect?.();
+  const popoverRect = popover.getBoundingClientRect();
+  const top = rect ? Math.min(rect.bottom + 6, window.innerHeight - popoverRect.height - 10) : 80;
+  const left = rect ? Math.min(Math.max(rect.left, 10), window.innerWidth - popoverRect.width - 10) : 10;
+  popover.style.top = `${Math.max(10, top)}px`;
+  popover.style.left = `${Math.max(10, left)}px`;
+
+  setTimeout(() => {
+    document.addEventListener('click', closeThreadMenu, { once: true });
+  }, 0);
   
   return false;
 }
@@ -3941,7 +4477,7 @@ function renameThread(threadId) {
   const thread = threads[threadId];
   if (!thread) return;
   
-  const newName = prompt('Umbenennen thread:', thread.title || 'Neue Unterhaltung');
+  const newName = prompt('Chat umbenennen:', thread.title || 'Neue Unterhaltung');
   if (!newName || !newName.trim()) return;
   
   thread.title = newName.trim();
@@ -4099,19 +4635,184 @@ function getSpeechVoices() {
   return window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
 }
 
-function speakText(text, voiceName) {
+let currentTatjanaAudio = null;
+let currentTatjanaAudioKey = '';
+let currentTatjanaAudioButton = null;
+
+function getStoredPlaybackRate() {
+  const savedRate = Number(localStorage.getItem('tatjana-tts-playback-rate') || '1');
+  return [0.75, 1, 1.25, 1.5].includes(savedRate) ? savedRate : 1;
+}
+
+function setStoredPlaybackRate(rate) {
+  const nextRate = Number(rate) || 1;
+  localStorage.setItem('tatjana-tts-playback-rate', String(nextRate));
+  if (currentTatjanaAudio) currentTatjanaAudio.playbackRate = nextRate;
+}
+
+function updateTatjanaAudioButton(button, isPlaying) {
+  if (!button) return;
+  button.classList.toggle('is-active', Boolean(isPlaying));
+  button.title = isPlaying ? 'Pause' : 'Abspielen';
+  button.setAttribute('aria-label', isPlaying ? 'Vorlesen pausieren' : 'Antwort vorlesen');
+  button.innerHTML = tatjanaSvgIcon(isPlaying ? 'pause' : 'play');
+}
+
+function resetTatjanaAudioButton() {
+  updateTatjanaAudioButton(currentTatjanaAudioButton, false);
+  currentTatjanaAudioButton = null;
+}
+
+function stopCurrentTatjanaAudio() {
+  if (currentTatjanaAudio) {
+    currentTatjanaAudio.pause();
+    currentTatjanaAudio = null;
+  }
+  currentTatjanaAudioKey = '';
+  resetTatjanaAudioButton();
+}
+
+function seekTatjanaAudio(seconds) {
+  if (!currentTatjanaAudio) return;
+  const duration = Number.isFinite(currentTatjanaAudio.duration) ? currentTatjanaAudio.duration : currentTatjanaAudio.currentTime + Math.abs(seconds);
+  currentTatjanaAudio.currentTime = Math.max(0, Math.min(duration, currentTatjanaAudio.currentTime + seconds));
+}
+
+function setupTatjanaMediaSession(title, text) {
+  if (!('mediaSession' in navigator)) return;
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: title || 'Tatjana liest vor',
+    artist: 'Tatjana Portal',
+    album: cleanTextForSpeech(text).slice(0, 120)
+  });
+  navigator.mediaSession.setActionHandler('play', () => currentTatjanaAudio?.play());
+  navigator.mediaSession.setActionHandler('pause', () => currentTatjanaAudio?.pause());
+  navigator.mediaSession.setActionHandler('seekbackward', () => seekTatjanaAudio(-15));
+  navigator.mediaSession.setActionHandler('seekforward', () => seekTatjanaAudio(15));
+}
+
+function cleanTextForSpeech(text) {
+  return String(text || '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/[*_~#>\[\](){}|\\]/g, ' ')
+    .replace(/https?:\/\/\S+/g, 'Link')
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function speakTextWithBrowserVoice(text, voiceName) {
   if (!window.speechSynthesis) {
     alert('Vorlesen wird von diesem Browser leider nicht unterstützt.');
     return;
   }
   window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
+  const utterance = new SpeechSynthesisUtterance(cleanTextForSpeech(text));
   utterance.lang = 'de-DE';
   const voices = getSpeechVoices();
   const chosenVoice = voices.find(voice => voice.name === voiceName) || voices.find(voice => voice.lang && voice.lang.toLowerCase().startsWith('de'));
   if (chosenVoice) utterance.voice = chosenVoice;
   window.speechSynthesis.speak(utterance);
 }
+
+async function speakText(text, options = {}) {
+  const spokenText = cleanTextForSpeech(text);
+  if (!spokenText) return;
+
+  const audioKey = options.audioKey || spokenText;
+  const button = options.button || null;
+  if (currentTatjanaAudio && currentTatjanaAudioKey === audioKey) {
+    if (currentTatjanaAudio.paused) {
+      await currentTatjanaAudio.play();
+    } else {
+      currentTatjanaAudio.pause();
+    }
+    return;
+  }
+
+  try {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    stopCurrentTatjanaAudio();
+    currentTatjanaAudioKey = audioKey;
+    currentTatjanaAudioButton = button;
+    updateTatjanaAudioButton(button, false);
+
+    const response = await fetch('/.netlify/functions/openai-tts', {
+      method: 'POST',
+      headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ input: spokenText })
+    });
+
+    if (!response.ok) throw new Error(`TTS ${response.status}`);
+    const data = await response.json();
+    if (!data?.audioBase64) throw new Error('Keine Audiodaten erhalten.');
+
+    currentTatjanaAudio = new Audio(`data:${data.mimeType || 'audio/mpeg'};base64,${data.audioBase64}`);
+    currentTatjanaAudio.playbackRate = getStoredPlaybackRate();
+    currentTatjanaAudio.addEventListener('play', () => updateTatjanaAudioButton(button, true));
+    currentTatjanaAudio.addEventListener('pause', () => updateTatjanaAudioButton(button, false));
+    currentTatjanaAudio.addEventListener('ended', () => {
+      currentTatjanaAudio = null;
+      currentTatjanaAudioKey = '';
+      resetTatjanaAudioButton();
+    });
+    setupTatjanaMediaSession('Tatjana liest vor', spokenText);
+    await currentTatjanaAudio.play();
+  } catch (error) {
+    console.warn('OpenAI-TTS nicht verfügbar, Browser-Stimme wird genutzt:', error);
+    stopCurrentTatjanaAudio();
+    speakTextWithBrowserVoice(spokenText, options.voiceName || getStoredVoiceName());
+  }
+}
+
+/*
+function speakTextWithBrowserVoice(text, voiceName) {
+  if (!window.speechSynthesis) {
+    alert('Vorlesen wird von diesem Browser leider nicht unterstützt.');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(cleanTextForSpeech(text));
+  utterance.lang = 'de-DE';
+  const voices = getSpeechVoices();
+  const chosenVoice = voices.find(voice => voice.name === voiceName) || voices.find(voice => voice.lang && voice.lang.toLowerCase().startsWith('de'));
+  if (chosenVoice) utterance.voice = chosenVoice;
+  window.speechSynthesis.speak(utterance);
+}
+
+async function speakText(text, voiceName) {
+  const spokenText = cleanTextForSpeech(text);
+  if (!spokenText) return;
+
+  try {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    if (currentTatjanaAudio) {
+      currentTatjanaAudio.pause();
+      currentTatjanaAudio = null;
+    }
+
+    const response = await fetch('/.netlify/functions/openai-tts', {
+      method: 'POST',
+      headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ input: spokenText })
+    });
+
+    if (!response.ok) throw new Error(`TTS ${response.status}`);
+    const data = await response.json();
+    if (!data?.audioBase64) throw new Error('Keine Audiodaten erhalten.');
+
+    currentTatjanaAudio = new Audio(`data:${data.mimeType || 'audio/mpeg'};base64,${data.audioBase64}`);
+    currentTatjanaAudio.onended = () => {
+      currentTatjanaAudio = null;
+    };
+    await currentTatjanaAudio.play();
+  } catch (error) {
+    console.warn('OpenAI-TTS nicht verfügbar, Browser-Stimme wird genutzt:', error);
+    speakTextWithBrowserVoice(spokenText, voiceName);
+  }
+}
+*/
 
 function deleteMessageAt(index) {
   const thread = getCurrentThread();
@@ -4127,8 +4828,17 @@ function tatjanaSvgIcon(name) {
   const icons = {
     copy: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><rect x="4" y="4" width="11" height="11" rx="2"></rect></svg>',
     volume: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>',
+    play: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7Z"></path></svg>',
+    pause: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14"></path><path d="M16 5v14"></path></svg>',
+    back15: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 17a5 5 0 1 0-4.6-7"></path><path d="M6 7v3h3"></path><path d="M10 13h1v4"></path><path d="M14 13h2v2h-2v2h2"></path></svg>',
+    forward15: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 17a5 5 0 1 1 4.6-7"></path><path d="M18 7v3h-3"></path><path d="M8 13h1v4"></path><path d="M12 13h2v2h-2v2h2"></path></svg>',
     trash: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M6 6l1 16h10l1-16"></path><path d="M10 11v6M14 11v6"></path></svg>',
     refresh: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.2 6.5"></path><path d="M3 12A9 9 0 0 1 18.2 5.5"></path><path d="M18 2v4h4"></path><path d="M6 22v-4H2"></path></svg>',
+    open: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"></path></svg>',
+    edit: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>',
+    pin: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v5"></path><path d="M5 17h14"></path><path d="m7 9 5-5 5 5"></path><path d="M8 9h8l1 8H7Z"></path></svg>',
+    download: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>',
+    upload: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"></path><path d="m7 8 5-5 5 5"></path><path d="M5 21h14"></path></svg>',
     arrowDown: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>',
     arrowUp: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"></path><path d="m5 12 7-7 7 7"></path></svg>'
   };
@@ -4149,6 +4859,24 @@ function regenerateAssistantAt(messageIndex) {
   input.dispatchEvent(new Event('input'));
   sendMessage();
 }
+
+function formatMessageDateTime(value) {
+  const timestamp = value ? Date.parse(value) || Number(value) : Date.now();
+  const date = new Date(Number.isFinite(timestamp) ? timestamp : Date.now());
+  return date.toLocaleString('de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+function getMessageTimestampForIndex(messageIndex) {
+  const message = Number.isInteger(messageIndex) ? getCurrentThread().messages[messageIndex] : null;
+  return message?.timestamp || message?.created || null;
+}
+
 function enhanceMessageElement(div, role, content, messageIndex) {
   if (!Number.isInteger(messageIndex)) return;
   const tools = document.createElement('div');
@@ -4164,35 +4892,55 @@ function enhanceMessageElement(div, role, content, messageIndex) {
   tools.appendChild(copyButton);
 
   if (role === 'assistant') {
+    const audioPlayer = document.createElement('div');
+    audioPlayer.className = 'tatjana-audio-player';
+
     const speakButton = document.createElement('button');
     speakButton.type = 'button';
     speakButton.className = 'message-tool-btn';
-    speakButton.title = 'Vorlesen';
+    speakButton.title = 'Abspielen';
     speakButton.setAttribute('aria-label', 'Antwort vorlesen');
-    speakButton.innerHTML = tatjanaSvgIcon('volume');
-    speakButton.addEventListener('click', () => speakText(content, getStoredVoiceName()));
-    tools.appendChild(speakButton);
+    speakButton.innerHTML = tatjanaSvgIcon('play');
+    speakButton.addEventListener('click', () => speakText(content, {
+      audioKey: `message-${messageIndex}`,
+      button: speakButton,
+      voiceName: getStoredVoiceName()
+    }));
+    audioPlayer.appendChild(speakButton);
 
-    const voiceSelect = document.createElement('select');
-    voiceSelect.className = 'message-voice-select';
-    voiceSelect.title = 'Stimme wählen';
-    voiceSelect.setAttribute('aria-label', 'Stimme für diese Antwort wählen');
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Stimme';
-    voiceSelect.appendChild(defaultOption);
-    getSpeechVoices().filter(voice => !voice.lang || voice.lang.toLowerCase().startsWith('de')).slice(0, 12).forEach(voice => {
+    const backButton = document.createElement('button');
+    backButton.type = 'button';
+    backButton.className = 'message-tool-btn';
+    backButton.title = '15 Sekunden zurück';
+    backButton.setAttribute('aria-label', '15 Sekunden zurück');
+    backButton.innerHTML = tatjanaSvgIcon('back15');
+    backButton.addEventListener('click', () => seekTatjanaAudio(-15));
+    audioPlayer.appendChild(backButton);
+
+    const forwardButton = document.createElement('button');
+    forwardButton.type = 'button';
+    forwardButton.className = 'message-tool-btn';
+    forwardButton.title = '15 Sekunden vor';
+    forwardButton.setAttribute('aria-label', '15 Sekunden vor');
+    forwardButton.innerHTML = tatjanaSvgIcon('forward15');
+    forwardButton.addEventListener('click', () => seekTatjanaAudio(15));
+    audioPlayer.appendChild(forwardButton);
+
+    const rateSelect = document.createElement('select');
+    rateSelect.className = 'audio-rate-select';
+    rateSelect.title = 'Wiedergabegeschwindigkeit';
+    rateSelect.setAttribute('aria-label', 'Wiedergabegeschwindigkeit');
+    [0.75, 1, 1.25, 1.5].forEach(rate => {
       const option = document.createElement('option');
-      option.value = voice.name;
-      option.textContent = voice.name.replace(/\s*\(.+?\)\s*/g, '').slice(0, 18);
-      voiceSelect.appendChild(option);
+      option.value = String(rate);
+      option.textContent = rate === 1 ? '1x' : `${rate}x`;
+      rateSelect.appendChild(option);
     });
-    voiceSelect.value = getStoredVoiceName();
-    voiceSelect.addEventListener('change', () => {
-      setStoredVoiceName(voiceSelect.value);
-      speakText(content, voiceSelect.value);
-    });
-    tools.appendChild(voiceSelect);
+    rateSelect.value = String(getStoredPlaybackRate());
+    rateSelect.addEventListener('change', () => setStoredPlaybackRate(rateSelect.value));
+    audioPlayer.appendChild(rateSelect);
+
+    tools.appendChild(audioPlayer);
 
     const regenerateButton = document.createElement('button');
     regenerateButton.type = 'button';
@@ -4215,13 +4963,22 @@ function enhanceMessageElement(div, role, content, messageIndex) {
 
   div.appendChild(tools);
 }
-function displayMessage(role, content, messageIndex = null) {
+function displayMessage(role, content, messageIndex = null, timestampOverride = null, attachments = []) {
   const div = document.createElement('div');
   div.className = `message ${role}`;
   if (Number.isInteger(messageIndex)) {
     div.dataset.messageIndex = String(messageIndex);
   }
   div.innerHTML = renderMessageMarkup(content);
+  appendImagePreviews(div, attachments);
+  if (role === 'assistant') {
+    const time = document.createElement('time');
+    time.className = 'message-time';
+    const timestamp = timestampOverride || getMessageTimestampForIndex(messageIndex) || Date.now();
+    time.dateTime = new Date(timestamp).toISOString();
+    time.textContent = formatMessageDateTime(timestamp);
+    div.appendChild(time);
+  }
   enhanceMessageElement(div, role, content, messageIndex);
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -4261,7 +5018,8 @@ async function sendMessage() {
     return;
   }
   const text = input.value.trim();
-  if (!text) return;
+  const imageAttachments = pendingImageAttachments.slice();
+  if (!text && !imageAttachments.length) return;
   const systemPrompt = getCompanionSystemPrompt();
   if (!systemPrompt) {
     showCompanionPromptBearbeitenor();
@@ -4274,8 +5032,9 @@ input.disabled = true;
   activeRequestController = new AbortController();
   const thread = getCurrentThread();
   
-  displayMessage('user', text, thread.messages.length);
-  thread.messages.push({ role: 'user', content: text });
+  const userContent = text || 'Bitte schau dir das Bild an.';
+  displayMessage('user', userContent, thread.messages.length, null, imageAttachments);
+  thread.messages.push({ role: 'user', content: userContent, attachments: imageAttachments, timestamp: new Date().toISOString() });
   thread.updated = Date.now();
   updateThreadTitle(thread);
   saveThreads();
@@ -4285,16 +5044,21 @@ input.disabled = true;
   
   input.value = '';
   input.style.height = 'auto';
+  pendingImageAttachments = [];
+  renderPendingImageAttachments();
   
   const typing = showTyping();
   
   try {
   const contextWindowSize = getContextWindowSize();
   const liveMessages = contextWindowSize === 0 ? thread.messages : thread.messages.slice(-contextWindowSize);
+  const internetResearchContext = await getInternetResearchContext(text);
   const apiMessages = [
     { role: 'system', content: systemPrompt },
-    ...getTatjanaMemoryMessages(),
-    ...liveMessages
+    { role: 'system', content: getLocalTimeContext() },
+    ...(internetResearchContext ? [internetResearchContext] : []),
+    ...getTatjanaMemoryMessages(text),
+    ...liveMessages.map(messageToApiMessage)
   ];
     
     const response = await fetch('/.netlify/functions/openai-proxy', {
@@ -4318,8 +5082,9 @@ input.disabled = true;
     
     typing.remove();
     
-    displayMessage('assistant', assistantMessage, thread.messages.length);
-    thread.messages.push({ role: 'assistant', content: assistantMessage });
+    const assistantTimestamp = new Date().toISOString();
+    displayMessage('assistant', assistantMessage, thread.messages.length, assistantTimestamp);
+    thread.messages.push({ role: 'assistant', content: assistantMessage, timestamp: assistantTimestamp });
     thread.updated = Date.now();
     
     saveThreads();
@@ -4353,10 +5118,6 @@ input.disabled = true;
 async function bootPortal() {
   const authenticated = await ensureAuthenticatedBeforeBoot();
   if (!authenticated) return;
-  const securityChecklist = JSON.parse(localStorage.getItem('ellivien-security-sync-checklist-v1') || '{}');
-  if (['password-gate', 'wrong-password', 'cloud-sync', 'restore-test', 'backup'].every(key => securityChecklist[key])) {
-    document.querySelector('[onclick="showStorageSecurityInfo()"]')?.remove();
-  }
   await loadThreads();
   await loadKvSyncState();
   renderMessages();
@@ -4425,8 +5186,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
     }
   };
   function savedLanguage() {
-    const value = localStorage.getItem(LANGUAGE_KEY) || 'de';
-    return copy[value] ? value : 'de';
+    return 'de';
   }
 
   function setText(selector, key) {
@@ -4474,34 +5234,9 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
   }
 
   function init() {
-    const fontToggle = document.getElementById('opendyslexic-toggle');
-    const languageSelect = document.getElementById('interface-language-select');
-    const useOpenDyslexic = localStorage.getItem(FONT_KEY) === 'opendyslexic';
-
-    document.documentElement.dataset.readingFont = useOpenDyslexic ? 'opendyslexic' : 'default';
-    if (fontToggle) {
-      fontToggle.checked = useOpenDyslexic;
-      fontToggle.addEventListener('change', () => {
-        const value = fontToggle.checked ? 'opendyslexic' : 'default';
-        localStorage.setItem(FONT_KEY, value);
-        document.documentElement.dataset.readingFont = value;
-      });
-    }
-
-    if (languageSelect) {
-      languages.forEach(([value, label]) => {
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = label;
-        languageSelect.appendChild(option);
-      });
-      languageSelect.value = savedLanguage();
-      languageSelect.addEventListener('change', () => {
-        localStorage.setItem(LANGUAGE_KEY, languageSelect.value);
-        applyLanguage();
-      });
-    }
-
+    localStorage.removeItem(FONT_KEY);
+    localStorage.removeItem(LANGUAGE_KEY);
+    document.documentElement.dataset.readingFont = 'default';
     applyLanguage();
   }
 
@@ -4542,10 +5277,6 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
           </div>
           <p class="settings-help">Startwert ist 3500. Das gibt Tatjana mehr Ausgaberaum, ohne den Prompt oder das Modell zu ändern.</p>
         </section>
-        <section class="settings-section">
-          <h4>Verbindung</h4>
-          <p class="settings-help">Der OpenAI-Zugriff laeuft in der Online-Version geschuetzt ueber die Netlify-Funktion. Der echte API-Key wird nicht im Browser gespeichert.</p>
-        </section>
 <section class="settings-section">
           <h4>Prompt und Darstellung</h4>
           <button class="sidebar-action-btn secondary" type="button" data-open-prompt>Prompt bearbeiten</button>
@@ -4554,18 +5285,53 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
 
         <section class="settings-section">
           <h4>Tatjana-Memory</h4>
-          <label for="memory-fast-input"><strong>Schnell abrufbare Informationen</strong></label>
-          <textarea id="memory-fast-input" class="settings-textarea" rows="4" placeholder="Wichtige Fakten, die Tatjana besonders schnell finden soll.">${escapeHtml(getMemoryText(TATJANA_FAST_MEMORY_STORAGE_KEY))}</textarea>
-          <label for="memory-notes-input"><strong>Erinnerungen und Notizen</strong></label>
-          <textarea id="memory-notes-input" class="settings-textarea" rows="6" placeholder="Notizen, Fragmente und Erinnerungen bleiben getrennt vom Companion-Prompt.">${escapeHtml(getMemoryText(TATJANA_MEMORY_STORAGE_KEY))}</textarea>
-          <button class="sidebar-action-btn" type="button" data-save-memory>Memory speichern</button>
-          <p id="memory-status" class="settings-help" aria-live="polite"></p>
+          <div class="memory-overview">${renderMemorySettingsOverview()}</div>
+          <details class="settings-details">
+            <summary>Fragmente bearbeiten</summary>
+            <div class="memory-edit-fields">
+              <input id="memory-fragment-search" class="memory-search-input" type="search" placeholder="Fragmente durchsuchen..." aria-label="Memory-Fragmente durchsuchen">
+              <div class="memory-fragment-list" data-memory-fragment-list>${renderMemoryFragmentCards()}</div>
+              <div class="memory-fragment-form">
+                <input id="memory-fragment-id" type="hidden">
+                <label for="memory-fragment-keywords"><strong>Stichwörter / Trigger</strong></label>
+                <input id="memory-fragment-keywords" class="settings-text-input" type="text" placeholder="z.B. Edith / Mama / Mutter">
+                <label for="memory-fragment-text"><strong>Kurzer Erinnerungstext</strong></label>
+                <textarea id="memory-fragment-text" class="settings-textarea" rows="5" placeholder="Was Tatjana zu diesen Stichwörtern wissen soll."></textarea>
+                <div class="memory-fragment-form-actions">
+                  <button class="sidebar-action-btn" type="button" data-save-memory-fragment>Fragment speichern</button>
+                  <button class="sidebar-action-btn secondary" type="button" data-reset-memory-fragment>Neu</button>
+                </div>
+              </div>
+              <p id="memory-status" class="settings-help" aria-live="polite"></p>
+            </div>
+          </details>
         </section>
 
         <section class="settings-section">
           <h4>Speicher &amp; Sicherheit</h4>
-          <button class="sidebar-action-btn secondary" type="button" data-open-cloud-sync>Cloud-Sync verwalten</button>
-          <p class="settings-help">KV-Sync ist vorbereitet und startet nur manuell ueber diese Verwaltung.</p>
+          <details class="settings-details">
+            <summary>Cloud-Sync</summary>
+            <div class="settings-details-content">
+              <p class="settings-help">KV-Sync ist vorbereitet und startet nur manuell über diese Verwaltung.</p>
+              ${renderCloudSyncSummary()}
+              <button class="sidebar-action-btn secondary" type="button" data-open-cloud-sync>Cloud-Sync öffnen</button>
+            </div>
+          </details>
+          <details class="settings-details">
+            <summary>Export / Backup</summary>
+            <div class="settings-details-content">
+              <button class="sidebar-action-btn secondary" type="button" data-export-current-chat>Aktuellen Chat exportieren</button>
+              <p class="settings-help">Speichert den gerade geöffneten Chat als Markdown-Datei.</p>
+            </div>
+          </details>
+          <details class="settings-details">
+            <summary>Import / Wiederherstellen</summary>
+            <div class="settings-details-content">
+              <button class="sidebar-action-btn secondary" type="button" data-restore-current-chat-md>Aus Markdown wiederherstellen</button>
+              <button class="sidebar-action-btn secondary" type="button" data-restore-current-chat-json>Aus JSON wiederherstellen</button>
+              <p class="settings-help">Wiederherstellen ersetzt den aktuell geöffneten Chat nach Bestätigung.</p>
+            </div>
+          </details>
           <details class="settings-details">
             <summary>Datenverwaltung / Erweiterte Einstellungen</summary>
             <div class="danger-zone">
@@ -4598,13 +5364,81 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
       setOutputTokenLimit(outputSlider.value);
       outputValue.textContent = String(getOutputTokenLimit());
     });
-const memoryFastInput = overlay.querySelector('#memory-fast-input');
-    const memoryNotesInput = overlay.querySelector('#memory-notes-input');
     const memoryStatus = overlay.querySelector('#memory-status');
-    overlay.querySelector('[data-save-memory]').addEventListener('click', () => {
-      setMemoryText(TATJANA_FAST_MEMORY_STORAGE_KEY, memoryFastInput.value);
-      setMemoryText(TATJANA_MEMORY_STORAGE_KEY, memoryNotesInput.value);
-      memoryStatus.textContent = 'Memory wurde lokal gespeichert.';
+    const memoryList = overlay.querySelector('[data-memory-fragment-list]');
+    const memorySearchInput = overlay.querySelector('#memory-fragment-search');
+    const memoryFragmentId = overlay.querySelector('#memory-fragment-id');
+    const memoryFragmentKeywords = overlay.querySelector('#memory-fragment-keywords');
+    const memoryFragmentText = overlay.querySelector('#memory-fragment-text');
+
+    const resetMemoryFragmentForm = () => {
+      memoryFragmentId.value = '';
+      memoryFragmentKeywords.value = '';
+      memoryFragmentText.value = '';
+    };
+
+    const refreshMemoryFragmentView = () => {
+      memoryList.innerHTML = renderMemoryFragmentCards(memorySearchInput.value);
+      const overview = overlay.querySelector('.memory-overview');
+      if (overview) overview.innerHTML = renderMemorySettingsOverview();
+    };
+
+    memorySearchInput.addEventListener('input', refreshMemoryFragmentView);
+
+    overlay.querySelector('[data-save-memory-fragment]').addEventListener('click', () => {
+      const keywords = splitMemoryKeywords(memoryFragmentKeywords.value);
+      const text = memoryFragmentText.value.trim();
+      if (!keywords.length || !text) {
+        memoryStatus.textContent = 'Bitte Stichwörter und Erinnerungstext eintragen.';
+        return;
+      }
+
+      const fragments = getMemoryFragments();
+      const existingId = memoryFragmentId.value;
+      const nextFragment = {
+        id: existingId || `memory-${Date.now()}`,
+        keywords,
+        text
+      };
+      const nextFragments = existingId
+        ? fragments.map(fragment => fragment.id === existingId ? nextFragment : fragment)
+        : [...fragments, nextFragment];
+
+      setMemoryFragments(nextFragments);
+      resetMemoryFragmentForm();
+      refreshMemoryFragmentView();
+      memoryStatus.textContent = 'Fragment wurde lokal gespeichert.';
+    });
+
+    overlay.querySelector('[data-reset-memory-fragment]').addEventListener('click', () => {
+      resetMemoryFragmentForm();
+      memoryStatus.textContent = '';
+    });
+
+    memoryList.addEventListener('click', event => {
+      const editButton = event.target.closest('[data-edit-fragment]');
+      const deleteButton = event.target.closest('[data-delete-fragment]');
+      if (!editButton && !deleteButton) return;
+      event.preventDefault();
+
+      const fragments = getMemoryFragments();
+      if (editButton) {
+        const fragment = fragments.find(item => item.id === editButton.dataset.editFragment);
+        if (!fragment) return;
+        memoryFragmentId.value = fragment.id;
+        memoryFragmentKeywords.value = fragment.keywords.join(' / ');
+        memoryFragmentText.value = fragment.text;
+        memoryFragmentKeywords.focus();
+        memoryStatus.textContent = 'Fragment ist zum Bearbeiten geladen.';
+        return;
+      }
+
+      const fragment = fragments.find(item => item.id === deleteButton.dataset.deleteFragment);
+      if (!fragment || !confirm('Dieses Fragment wirklich löschen?')) return;
+      setMemoryFragments(fragments.filter(item => item.id !== fragment.id));
+      resetMemoryFragmentForm();
+      refreshMemoryFragmentView();
+      memoryStatus.textContent = 'Fragment wurde gelöscht.';
     });
 
     overlay.querySelector('[data-open-prompt]').addEventListener('click', () => {
@@ -4615,6 +5449,23 @@ const memoryFastInput = overlay.querySelector('#memory-fast-input');
     overlay.querySelector('[data-open-theme]').addEventListener('click', () => {
       close();
       showThemePicker();
+    });
+
+    overlay.querySelector('[data-open-cloud-sync]').addEventListener('click', () => {
+      close();
+      showStorageSyncModal();
+    });
+
+    overlay.querySelector('[data-export-current-chat]').addEventListener('click', () => {
+      exportThreadToMarkdown(currentThreadId);
+    });
+
+    overlay.querySelector('[data-restore-current-chat-md]').addEventListener('click', () => {
+      restoreThreadFromMarkdown(currentThreadId);
+    });
+
+    overlay.querySelector('[data-restore-current-chat-json]').addEventListener('click', () => {
+      restoreThreadFromJson(currentThreadId);
     });
 
     overlay.querySelector('[data-delete-all]').addEventListener('click', () => {
@@ -4661,8 +5512,9 @@ const memoryFastInput = overlay.querySelector('#memory-fast-input');
 
     const update = () => {
       const distance = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight;
-      const canScrollDown = distance > 180;
-      const canScrollUp = messagesDiv.scrollTop > 360;
+      const hasScrollableMessages = messagesDiv.scrollHeight > messagesDiv.clientHeight + 260;
+      const canScrollDown = hasScrollableMessages && distance > 220;
+      const canScrollUp = hasScrollableMessages && distance <= 120 && messagesDiv.scrollTop > 520;
       if (canScrollDown) {
         setDirection('down');
         button.hidden = false;
@@ -4679,14 +5531,68 @@ const memoryFastInput = overlay.querySelector('#memory-fast-input');
     update();
   }
 
+  function getComposerAttachmentContainer() {
+    let container = document.getElementById('composer-attachments');
+    if (container) return container;
+    container = document.createElement('div');
+    container.id = 'composer-attachments';
+    container.className = 'composer-attachments';
+    const inputContainer = document.getElementById('input-container');
+    inputContainer?.insertAdjacentElement('beforebegin', container);
+    return container;
+  }
+
+  function renderPendingImageAttachments() {
+    const container = getComposerAttachmentContainer();
+    container.innerHTML = '';
+    container.hidden = pendingImageAttachments.length === 0;
+    pendingImageAttachments.forEach((image, index) => {
+      const item = document.createElement('div');
+      item.className = 'composer-attachment';
+      const preview = document.createElement('img');
+      preview.src = image.dataUrl;
+      preview.alt = image.name || 'Bildanhang';
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.setAttribute('aria-label', 'Bild entfernen');
+      remove.textContent = '×';
+      remove.addEventListener('click', () => {
+        pendingImageAttachments.splice(index, 1);
+        renderPendingImageAttachments();
+      });
+      item.append(preview, remove);
+      container.appendChild(item);
+    });
+  }
+
+  function readImageAttachment(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve({
+        type: 'image',
+        name: file.name,
+        mimeType: file.type || 'image/png',
+        dataUrl: String(reader.result || '')
+      });
+      reader.onerror = () => reject(reader.error || new Error('Bild konnte nicht gelesen werden.'));
+      reader.readAsDataURL(file);
+    });
+  }
+
   function initComposerExtras() {
     document.getElementById('settings-btn')?.addEventListener('click', openSettingsModal);
+    document.getElementById('logout-btn')?.addEventListener('click', logoutPortalSession);
     document.getElementById('attach-btn')?.addEventListener('click', () => document.getElementById('file-input')?.click());
-    document.getElementById('file-input')?.addEventListener('change', event => {
-      const files = Array.from(event.target.files || []).map(file => file.name);
-      if (files.length) {
-        input.value = `${input.value}${input.value ? '\n' : ''}[Anhang vorbereitet: ${files.join(', ')}]`;
-        input.dispatchEvent(new Event('input'));
+    document.getElementById('file-input')?.addEventListener('change', async event => {
+      const files = Array.from(event.target.files || []);
+      const imageFiles = files.filter(file => file.type && file.type.startsWith('image/'));
+      const skipped = files.length - imageFiles.length;
+      if (skipped > 0) alert('Aktuell können hier nur Bilder an Tatjana übergeben werden.');
+      if (imageFiles.length) {
+        const nextImages = await Promise.all(imageFiles.slice(0, 4).map(readImageAttachment));
+        pendingImageAttachments = pendingImageAttachments.concat(nextImages).slice(0, 4);
+        renderPendingImageAttachments();
+        input.focus();
       }
       event.target.value = '';
     });
@@ -4749,8 +5655,6 @@ const memoryFastInput = overlay.querySelector('#memory-fast-input');
 </script>
 </body>
 </html>
-
-
 
 
 
