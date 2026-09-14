@@ -5030,6 +5030,11 @@ input.disabled = true;
   const stopBtn = document.getElementById('stop-response-btn');
   if (stopBtn) stopBtn.hidden = false;
   activeRequestController = new AbortController();
+  let requestTimedOut = false;
+  const requestTimeoutId = window.setTimeout(() => {
+    requestTimedOut = true;
+    activeRequestController?.abort();
+  }, 90000);
   const thread = getCurrentThread();
   
   const userContent = text || 'Bitte schau dir das Bild an.';
@@ -5095,7 +5100,9 @@ input.disabled = true;
     typing.remove();
     console.error('Error:', error);
     if (error.name === 'AbortError') {
-      displayMessage('assistant', 'Okay, ich habe gestoppt. Du kannst deine Nachricht anpassen und neu schicken.');
+      displayMessage('assistant', requestTimedOut
+        ? 'Die Antwort hat zu lange gebraucht. Ich habe den Versuch beendet, damit du direkt weiter schreiben kannst.'
+        : 'Okay, ich habe gestoppt. Du kannst deine Nachricht anpassen und neu schicken.');
     } else if (error.message && error.message.includes('401')) {
       localStorage.removeItem(AUTH_TOKEN_KEY);
       displayMessage('assistant', 'Die geschuetzte Sitzung ist abgelaufen. Bitte melde dich neu mit dem Portal-Passwort an.');
@@ -5106,6 +5113,7 @@ input.disabled = true;
       displayMessage('assistant', 'Da ist gerade technisch etwas schiefgelaufen. Schau bitte in die Konsole, wenn du Details brauchst.');
     }
   } finally {
+    window.clearTimeout(requestTimeoutId);
     input.disabled = false;
     setSendButtonGenerating(false);
     activeRequestController = null;
