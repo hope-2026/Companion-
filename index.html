@@ -2222,6 +2222,51 @@ button[data-open-theme] {
   flex: 1;
 }
 
+.vector-memory-debug {
+  margin: 0 auto 8px;
+  width: min(100% - 28px, 720px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .92);
+  color: var(--text-main);
+  font-size: 12px;
+  line-height: 1.35;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
+}
+
+.vector-memory-debug[hidden] {
+  display: none !important;
+}
+
+.vector-memory-debug > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+}
+
+.vector-memory-debug > summary::-webkit-details-marker {
+  display: none;
+}
+
+.vector-memory-debug-body {
+  padding: 0 10px 10px;
+  color: var(--text-dim);
+}
+
+.vector-memory-debug-list {
+  margin: 6px 0 0;
+  padding-left: 16px;
+}
+
+.vector-memory-debug-list li {
+  margin: 4px 0;
+}
+
 #send-btn.is-stopping {
   background: #dc2626 !important;
   box-shadow: 0 6px 14px rgba(220, 38, 38, .24) !important;
@@ -2350,6 +2395,11 @@ button[data-open-theme] {
     
     <div id="messages"></div>
     
+    <details id="vector-memory-debug" class="vector-memory-debug" hidden>
+      <summary><span id="vector-memory-debug-title">Verwendete alte Erinnerung</span><span aria-hidden="true">⌄</span></summary>
+      <div id="vector-memory-debug-body" class="vector-memory-debug-body"></div>
+    </details>
+
     <div id="input-container"><button id="attach-btn" class="composer-icon-btn" type="button" aria-label="Datei oder Foto hinzufuegen" title="Datei oder Foto hinzufuegen">+</button><textarea id="input" placeholder="Nachricht eingeben..." rows="1" aria-label="Nachrichtenfeld"></textarea><button id="stop-response-btn" class="composer-icon-btn danger" type="button" aria-label="Antwort stoppen" title="Antwort stoppen" hidden>Stopp</button><button id="voice-btn" class="composer-icon-btn" type="button" aria-label="Nachricht diktieren" title="Nachricht diktieren"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><path d="M12 19v3"></path></svg></button><button id="send-btn" type="button" aria-label="Nachricht senden" title="Nachricht senden"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17V8"></path><path d="m7 12 5-5 5 5"></path></svg></button><input id="file-input" type="file" accept="image/*" multiple hidden></div>
   </div>
 </div>
@@ -3199,6 +3249,95 @@ function getTatjanaMemoryMessages(userText = '') {
     role: 'system',
     content: `Tatjana-Memory ist getrennt vom Companion-Prompt gespeichert. Nutze diese Informationen nur, wenn sie zur aktuellen Unterhaltung passen. Erfinde keine fehlenden Details.\n\n${sections.join('\n\n')}`
   }];
+}
+
+function getVectorMemoryLabel(memory) {
+  return [
+    memory.date || memory.period || '',
+    memory.title || memory.topic || memory.filename || 'Alter Gesprächsausschnitt'
+  ].filter(Boolean).join(' - ');
+}
+
+function updateVectorMemoryDebug(memories = []) {
+  const panel = document.getElementById('vector-memory-debug');
+  const title = document.getElementById('vector-memory-debug-title');
+  const body = document.getElementById('vector-memory-debug-body');
+  if (!panel || !title || !body) return;
+
+  if (!memories.length) {
+    panel.hidden = false;
+    title.textContent = 'Verwendete alte Erinnerung: keine Treffer';
+    body.innerHTML = '<p>Keine alte Erinnerung aus dem Vektorspeicher verwendet.</p>';
+    return;
+  }
+
+  title.textContent = memories.length === 1
+    ? 'Verwendete alte Erinnerung: 1 Treffer'
+    : `Verwendete alte Erinnerung: ${memories.length} Treffer`;
+  body.innerHTML = `
+    <ol class="vector-memory-debug-list">
+      ${memories.map(memory => `<li>${escapeHtml(getVectorMemoryLabel(memory))}</li>`).join('')}
+    </ol>
+  `;
+  panel.hidden = false;
+}
+
+async function getVectorMemoryContext(userText = '') {
+  const query = String(userText || '').trim();
+  if (!query || location.protocol === 'file:') return { message: null, memories: [] };
+
+  try {
+    const response = await fetch('/.netlify/functions/openai-vector-memory', {
+      method: 'POST',
+      headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ query })
+    });
+
+    if (!response.ok) {
+      console.warn('Vector memory search skipped:', response.status);
+      return { message: null, memories: [] };
+    }
+
+    const data = await response.json();
+    const memories = Array.isArray(data?.memories) ? data.memories : [];
+    if (!memories.length) return { message: null, memories: [] };
+
+    const sections = memories
+      .map((memory, index) => {
+        const sourceLines = [
+          `Treffer ${index + 1}`,
+          memory.date ? `Datum: ${memory.date}` : '',
+          memory.period ? `Zeitraum: ${memory.period}` : '',
+          memory.title ? `Titel: ${memory.title}` : '',
+          memory.topic ? `Thema: ${memory.topic}` : '',
+          memory.filename ? `Datei: ${memory.filename}` : '',
+          Number.isFinite(Number(memory.score)) ? `Trefferstärke: ${Number(memory.score).toFixed(3)}` : ''
+        ].filter(Boolean);
+        return `${sourceLines.join('\n')}\nAusschnitt:\n${String(memory.text || '').trim()}`;
+      })
+      .filter(Boolean);
+
+    if (!sections.length) return { message: null, memories: [] };
+
+    return {
+      message: {
+        role: 'system',
+        content: `Zusätzlicher Vektorspeicher-Kontext aus alten Tatjana-Gesprächen. Nutze diese Ausschnitte nur, wenn sie zur aktuellen Nachricht passen.
+Beachte dabei streng:
+- Datum, Zeitraum, Titel und Thema gehören zur Quelle und dürfen nicht miteinander vermischt werden.
+- Wenn mehrere Treffer aus verschiedenen Daten stammen, nicht automatisch zu einer durchgehenden Geschichte zusammenziehen.
+- Bei unsicherem oder schwachem Treffer vorsichtig formulieren und lieber sagen, dass es nur ein Ausschnitt ist.
+- Keine atmosphärischen Details ergänzen, wenn sie nicht im Ausschnitt stehen.
+- Erfinde keine fehlenden Details.
+
+${sections.join('\n\n')}`
+      },
+      memories
+    };
+  } catch (error) {
+    console.warn('Vector memory search skipped:', error);
+    return { message: null, memories: [] };
+  }
 }
 
 function openPortalDb() {
@@ -5058,10 +5197,13 @@ input.disabled = true;
   const contextWindowSize = getContextWindowSize();
   const liveMessages = contextWindowSize === 0 ? thread.messages : thread.messages.slice(-contextWindowSize);
   const internetResearchContext = await getInternetResearchContext(text);
+  const vectorMemoryContext = await getVectorMemoryContext(text);
+  updateVectorMemoryDebug(vectorMemoryContext?.memories || []);
   const apiMessages = [
     { role: 'system', content: systemPrompt },
     { role: 'system', content: getLocalTimeContext() },
     ...(internetResearchContext ? [internetResearchContext] : []),
+    ...(vectorMemoryContext?.message ? [vectorMemoryContext.message] : []),
     ...getTatjanaMemoryMessages(text),
     ...liveMessages.map(messageToApiMessage)
   ];
