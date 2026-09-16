@@ -2,6 +2,7 @@
 // Secure OpenAI text-to-speech proxy for Tatjana's read-aloud button.
 
 const crypto = require('crypto');
+const ALLOWED_TTS_VOICES = new Set(['nova', 'shimmer', 'coral', 'sage']);
 
 function verifySessionToken(token, secret) {
   if (!token || !secret || typeof token !== 'string') return false;
@@ -80,8 +81,12 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { input } = JSON.parse(event.body || '{}');
+    const { input, voice } = JSON.parse(event.body || '{}');
     const text = String(input || '').trim().slice(0, 6000);
+    const requestedVoice = String(voice || '').trim().toLowerCase();
+    const selectedVoice = ALLOWED_TTS_VOICES.has(requestedVoice)
+      ? requestedVoice
+      : (process.env.OPENAI_TTS_VOICE || 'nova');
     if (!text) {
       return {
         statusCode: 400,
@@ -98,7 +103,7 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         model: process.env.OPENAI_TTS_MODEL || 'gpt-4o-mini-tts',
-        voice: process.env.OPENAI_TTS_VOICE || 'nova',
+        voice: selectedVoice,
         input: text,
         instructions: 'Sprich Deutsch warm, weiblich, ruhig und natuerlich. Lies Emojis, Markdown-Zeichen und technische Formatierung nicht mit.',
         format: 'mp3'

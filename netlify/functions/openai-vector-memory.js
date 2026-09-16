@@ -61,6 +61,25 @@ function extractMemoryMetadata(text) {
   };
 }
 
+function normalizeForSearch(value) {
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function getCuratedMemoryBoost(memory, searchQuery) {
+  const query = normalizeForSearch(searchQuery);
+  const filename = normalizeForSearch(memory.filename);
+  let boost = 0;
+
+  if (query.includes('norddeich') && filename.includes('tatjana-norddeich-cluster')) {
+    boost += 0.35;
+  }
+
+  return boost;
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
@@ -130,7 +149,7 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         query: searchQuery,
-        max_num_results: 4
+        max_num_results: 10
       })
     });
 
@@ -146,7 +165,7 @@ exports.handler = async (event) => {
 
     const memories = (Array.isArray(data?.data) ? data.data : [])
       .map(result => {
-        const text = extractTextFromResult(result).slice(0, 1400);
+        const text = extractTextFromResult(result).slice(0, 2200);
         const metadata = extractMemoryMetadata(text);
         return {
           filename: result.filename || '',
@@ -155,12 +174,18 @@ exports.handler = async (event) => {
           text
         };
       })
-      .filter(memory => memory.text);
+      .filter(memory => memory.text)
+      .sort((a, b) => {
+        const scoreA = Number(a.score) || 0;
+        const scoreB = Number(b.score) || 0;
+        return (scoreB + getCuratedMemoryBoost(b, searchQuery)) - (scoreA + getCuratedMemoryBoost(a, searchQuery));
+      })
+      .slice(0, 5);
 
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ memories, configured: true })
+      body: JSON.stringify({ memories, configured: true, query: searchQuery })
     };
   } catch (error) {
     console.error('Vector memory error:', error);

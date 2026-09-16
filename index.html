@@ -165,7 +165,7 @@ body {
 #thread-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 7px;
 }
 
 .thread-item {
@@ -176,10 +176,16 @@ body {
   border-radius: 8px;
   color: var(--text-main);
   cursor: pointer;
-  padding: 12px;
-  transition: border-color 0.2s, background 0.2s;
+  padding: 9px 11px;
+  transition: border-color 0.2s, background 0.2s, transform 0.16s ease, box-shadow 0.16s ease;
+  transform-origin: center;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+.thread-item.thread-lifted {
+  transform: translateY(-3px) scale(1.012);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.16);
 }
 
 .thread-item:hover,
@@ -195,8 +201,8 @@ body {
 .thread-title {
   font-size: 14px;
   font-weight: 700;
-  line-height: 1.3;
-  margin-bottom: 5px;
+  line-height: 1.25;
+  margin-bottom: 3px;
 }
 
 .thread-meta,
@@ -261,6 +267,10 @@ body {
   border-radius: 12px;
   background: var(--bg-chat);
   box-shadow: 0 16px 40px rgba(15, 23, 42, .18);
+}
+
+.message-menu-popover {
+  width: min(230px, calc(100vw - 24px));
 }
 
 .thread-menu-title {
@@ -524,6 +534,13 @@ body {
   max-width: 85%;
   line-height: 1.5;
   word-wrap: break-word;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+  transform-origin: center;
+}
+
+.message.message-lifted {
+  transform: translateY(-3px) scale(1.012);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.16);
 }
 
 .message p {
@@ -662,6 +679,28 @@ body {
   padding: 24px;
   max-width: 320px;
   width: 90%;
+  position: relative;
+}
+
+.modal > .modal-close,
+.modal .modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal > .modal-close + h3,
+.modal .modal-close + h3 {
+  padding-right: 42px;
 }
 
 .modal h3 {
@@ -842,6 +881,16 @@ body {
   align-items: center;
   gap: 8px;
   margin-top: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-2px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+.message:hover .message-tools,
+.message:focus-within .message-tools {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .message-tool-btn {
@@ -879,6 +928,60 @@ body {
   color: var(--text-main);
   padding: 0 6px;
   font-size: 12px;
+  font-weight: 700;
+}
+
+.tatjana-floating-player {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 14px 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg-chat) 92%, var(--primary) 8%);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
+}
+
+.tatjana-floating-player[hidden] {
+  display: none !important;
+}
+
+.audio-player-btn,
+.audio-player-close {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg-user);
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.audio-player-btn.is-active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.audio-player-close {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.audio-player-rate {
+  height: 34px;
+  min-width: 66px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg-user);
+  color: var(--text-main);
+  padding: 0 8px;
+  font: inherit;
+  font-size: 13px;
   font-weight: 700;
 }
 
@@ -1025,6 +1128,16 @@ body {
   gap: 8px;
   align-items: center;
   margin-top: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-2px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+.message:hover .message-tools,
+.message:focus-within .message-tools {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 .message-tool-btn {
   width: 34px;
@@ -1361,8 +1474,22 @@ html[data-reading-font="opendyslexic"] select {
 #send-btn { width: 44px; height: 44px; min-width: 44px; min-height: 44px; border: 0; background: var(--primary); color: white; font-size: 24px; font-weight: 800; }
 #stop-response-btn { background: #b91c1c; color: #fff; border-color: #b91c1c; font-size: 18px; }
 #stop-response-btn[hidden] { display: none !important; }
-.message-tools { display: flex; align-items: center; gap: 8px; margin-top: 12px; opacity: 0.72; }
-.message:hover .message-tools, .message:focus-within .message-tools { opacity: 1; }
+.message-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-2px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+.message:hover .message-tools,
+.message:focus-within .message-tools {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
 .message-tool-btn, .message-voice-select {
   min-width: 34px; height: 34px; border: 1px solid transparent; border-radius: 999px;
   background: rgba(255,255,255,0.72); color: var(--text-main);
@@ -1684,6 +1811,19 @@ html[data-theme] {
   --border: #e5e7eb !important;
 }
 
+body[data-color-mode="dark"] {
+  --primary: #10b981 !important;
+  --primary-hover: #059669 !important;
+  --secondary: #a78bfa !important;
+  --bg-main: #111827 !important;
+  --bg-chat: #1f2937 !important;
+  --bg-user: #273449 !important;
+  --bg-assistant: #3b2d52 !important;
+  --text-main: #f9fafb !important;
+  --text-dim: #cbd5e1 !important;
+  --border: #374151 !important;
+}
+
 .sidebar-action-btn {
   min-height: 42px !important;
   margin-bottom: 10px !important;
@@ -1706,8 +1846,14 @@ html[data-theme] {
 }
 
 .thread-item {
-  padding: 10px 12px !important;
+  padding: 8px 11px !important;
   border-radius: 7px !important;
+  transition: border-color 0.2s, background 0.2s, transform 0.16s ease, box-shadow 0.16s ease !important;
+}
+
+.thread-item.thread-lifted {
+  transform: translateY(-3px) scale(1.012) !important;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.16) !important;
 }
 
 .danger-zone button,
@@ -1799,7 +1945,7 @@ button[data-open-theme] {
 
 @media (max-width: 520px) {
   #input-container {
-    grid-template-columns: 36px minmax(0, 1fr) 36px 40px !important;
+    grid-template-columns: 36px minmax(0, 1fr) 36px 64px 36px 36px 40px !important;
     gap: 7px !important;
   }
 
@@ -2059,6 +2205,56 @@ button[data-open-theme] {
   margin: 14px !important;
 }
 
+.tatjana-settings-modal .modal {
+  max-height: min(86vh, 760px) !important;
+}
+
+.tatjana-settings-modal .settings-section {
+  gap: 8px !important;
+  padding: 10px 0 !important;
+}
+
+.tatjana-settings-modal .settings-section h4 {
+  margin: 0 0 6px !important;
+}
+
+.settings-details {
+  border-radius: 9px !important;
+}
+
+.settings-details > summary {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  padding: 10px 12px !important;
+}
+
+.settings-details > summary::after {
+  content: "⌄" !important;
+  color: var(--text-muted) !important;
+  font-size: 15px !important;
+  transition: transform .16s ease !important;
+}
+
+.settings-details[open] > summary::after {
+  transform: rotate(180deg) !important;
+}
+
+.settings-details-content {
+  gap: 9px !important;
+  padding: 12px !important;
+}
+
+.settings-details-content label:first-child {
+  margin-top: 0 !important;
+}
+
+.settings-compact-actions {
+  display: grid !important;
+  gap: 8px !important;
+}
+
 .memory-overview {
   display: grid;
   gap: 8px;
@@ -2131,6 +2327,16 @@ button[data-open-theme] {
   white-space: nowrap;
 }
 
+.memory-fragment-chevron {
+  flex: 0 0 auto;
+  color: var(--text-dim);
+  transition: transform 0.18s ease;
+}
+
+.memory-fragment-card[open] .memory-fragment-chevron {
+  transform: rotate(180deg);
+}
+
 .composer-attachments {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -2188,6 +2394,7 @@ button[data-open-theme] {
   display: flex;
   gap: 8px;
   flex: 0 0 auto;
+  justify-content: flex-end;
 }
 
 .memory-fragment-body {
@@ -2267,6 +2474,136 @@ button[data-open-theme] {
   margin: 4px 0;
 }
 
+.source-debug-section {
+  margin: 8px 0 0;
+}
+
+.source-debug-section strong {
+  display: block;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.source-debug-empty {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+}
+
+.settings-toggle-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+  margin: 0 !important;
+}
+
+.settings-toggle-row input {
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 auto !important;
+}
+
+.tts-voice-menu {
+  min-width: 220px;
+}
+
+.tts-voice-row {
+  display: grid;
+  grid-template-columns: 1fr 38px;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.tts-voice-choice {
+  justify-content: flex-start;
+}
+
+.tts-voice-choice.is-selected {
+  background: rgba(168, 85, 247, .12);
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.tts-voice-preview {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-password-wrap {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.auth-password-wrap input {
+  width: 100%;
+  padding: 14px 48px 14px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #4b5563;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.auth-password-toggle:hover,
+.auth-password-toggle:focus-visible {
+  background: rgba(148, 163, 184, .18);
+  outline: none;
+}
+
+.auth-passkey-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.auth-passkey-btn {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-passkey-btn:hover,
+.auth-passkey-btn:focus-visible {
+  background: #f9fafb;
+  outline: none;
+}
+
+.auth-passkey-note {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 #send-btn.is-stopping {
   background: #dc2626 !important;
   box-shadow: 0 6px 14px rgba(220, 38, 38, .24) !important;
@@ -2296,10 +2633,10 @@ button[data-open-theme] {
 
 #scroll-bottom-btn {
   position: fixed !important;
-  left: 50% !important;
-  right: auto !important;
-  bottom: calc(142px + env(safe-area-inset-bottom)) !important;
-  transform: translateX(-50%) !important;
+  left: auto !important;
+  right: calc(18px + env(safe-area-inset-right)) !important;
+  bottom: calc(148px + env(safe-area-inset-bottom)) !important;
+  transform: none !important;
   z-index: 35 !important;
   width: 42px !important;
   height: 42px !important;
@@ -2326,7 +2663,167 @@ button[data-open-theme] {
 
 @media (max-width: 700px) {
   #scroll-bottom-btn {
-    bottom: calc(154px + env(safe-area-inset-bottom)) !important;
+    right: calc(16px + env(safe-area-inset-right)) !important;
+    bottom: calc(160px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Final local design polish: quieter ChatGPT-like spacing and menus */
+#sidebar {
+  transition: transform .22s ease !important;
+}
+
+#sidebar-header {
+  padding: 16px !important;
+  padding-top: calc(16px + env(safe-area-inset-top)) !important;
+}
+
+#thread-section {
+  padding: 14px !important;
+}
+
+#thread-list {
+  gap: 6px !important;
+}
+
+.thread-item {
+  position: relative !important;
+  border-radius: 10px !important;
+  padding: 10px 12px 10px 14px !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.thread-item:hover {
+  background: rgba(15, 23, 42, .04) !important;
+  border-color: transparent !important;
+}
+
+.thread-item.active {
+  background: rgba(16, 185, 129, .10) !important;
+  border-color: rgba(16, 185, 129, .35) !important;
+  box-shadow: inset 3px 0 0 var(--primary) !important;
+}
+
+.thread-title {
+  margin-bottom: 2px !important;
+  font-size: 14px !important;
+}
+
+.thread-meta {
+  font-size: 12px !important;
+}
+
+.empty-thread-list {
+  border: 1px dashed var(--border) !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, .45) !important;
+  padding: 18px 14px !important;
+}
+
+#messages {
+  gap: 18px !important;
+  padding: 22px 20px 24px !important;
+}
+
+.message {
+  max-width: min(78%, 680px) !important;
+  border-radius: 16px !important;
+  padding: 14px 16px !important;
+  box-shadow: none !important;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease !important;
+}
+
+.message.user,
+.message.assistant {
+  border: 1px solid rgba(15, 23, 42, .06) !important;
+}
+
+.message.message-lifted {
+  transform: translateY(-2px) scale(1.006) !important;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, .13) !important;
+}
+
+.message-time {
+  display: block !important;
+  margin-top: 10px !important;
+  color: var(--text-dim) !important;
+  font-size: 12px !important;
+}
+
+.message-tools {
+  display: none !important;
+}
+
+.message-tool-btn,
+.audio-player-btn,
+.audio-player-close,
+.composer-icon-btn,
+#send-btn,
+.tts-voice-preview {
+  border-radius: 999px !important;
+}
+
+.thread-menu-popover {
+  border-radius: 14px !important;
+  padding: 8px !important;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, .18) !important;
+  animation: softPopoverIn .14s ease both !important;
+}
+
+.thread-menu-title {
+  padding: 8px 10px 7px !important;
+}
+
+.thread-menu-action {
+  min-height: 38px !important;
+  border-radius: 10px !important;
+  padding: 9px 10px !important;
+}
+
+.vector-memory-debug {
+  margin-bottom: 10px !important;
+  border-radius: 12px !important;
+}
+
+.vector-memory-debug:not([open]) .vector-memory-debug-body {
+  display: none !important;
+}
+
+#input-container {
+  padding-top: 9px !important;
+  padding-bottom: calc(9px + env(safe-area-inset-bottom)) !important;
+}
+
+@keyframes softPopoverIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 700px) {
+  #sidebar {
+    width: min(86vw, 340px) !important;
+  }
+
+  #messages {
+    gap: 20px !important;
+    padding: 18px 14px 22px !important;
+  }
+
+  .message {
+    max-width: min(88%, 560px) !important;
+    padding: 13px 15px !important;
+  }
+
+  .message.user {
+    max-width: min(82%, 520px) !important;
   }
 }
 </style>
@@ -2337,8 +2834,18 @@ button[data-open-theme] {
   <div style="background:white;padding:32px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.1);max-width:400px;width:100%;">
     <h2 style="margin:0 0 18px;color:#1f2937;">Passwort</h2>
     <form onsubmit="checkPassword();return false;">
-      <input type="password" id="auth-password" placeholder="Passwort" style="width:100%;padding:14px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;margin-bottom:14px;">
+      <div class="auth-password-wrap">
+        <input type="password" id="auth-password" placeholder="Passwort" autocomplete="current-password">
+        <button class="auth-password-toggle" id="auth-password-toggle" type="button" aria-label="Passwort anzeigen" aria-pressed="false">
+          <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path></svg>
+        </button>
+      </div>
       <button type="submit" id="auth-submit" style="width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:16px;font-weight:700;">Anmelden</button>
+      <div class="auth-passkey-actions" aria-label="Biometrischer Login">
+        <button class="auth-passkey-btn" id="auth-passkey-login" type="button">Mit Face ID / Passkey anmelden</button>
+        <button class="auth-passkey-btn" id="auth-passkey-setup" type="button">Face ID / Passkey einrichten</button>
+        <p class="auth-passkey-note">Optional. Das Passwort bleibt immer als Fallback erhalten.</p>
+      </div>
     </form>
     <div id="auth-error" style="display:none;color:#dc2626;margin-top:12px;font-size:14px;"></div>
   </div>
@@ -2396,9 +2903,23 @@ button[data-open-theme] {
     <div id="messages"></div>
     
     <details id="vector-memory-debug" class="vector-memory-debug" hidden>
-      <summary><span id="vector-memory-debug-title">Verwendete alte Erinnerung</span><span aria-hidden="true">⌄</span></summary>
+      <summary><span id="vector-memory-debug-title">Verwendete Quellen</span><span aria-hidden="true">⌄</span></summary>
       <div id="vector-memory-debug-body" class="vector-memory-debug-body"></div>
     </details>
+
+    <div id="tatjana-floating-player" class="tatjana-floating-player" hidden>
+      <button class="audio-player-btn" type="button" data-audio-play aria-label="Vorlesen pausieren oder fortsetzen"></button>
+      <button class="audio-player-btn" type="button" data-audio-stop aria-label="Vorlesen stoppen"></button>
+      <button class="audio-player-btn" type="button" data-audio-back aria-label="15 Sekunden zurück"></button>
+      <button class="audio-player-btn" type="button" data-audio-forward aria-label="15 Sekunden vor"></button>
+      <select class="audio-player-rate" data-audio-rate aria-label="Wiedergabegeschwindigkeit">
+        <option value="0.75">0.75x</option>
+        <option value="1">1x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+      </select>
+      <button class="audio-player-close" type="button" data-audio-close aria-label="Player schließen">×</button>
+    </div>
 
     <div id="input-container"><button id="attach-btn" class="composer-icon-btn" type="button" aria-label="Datei oder Foto hinzufuegen" title="Datei oder Foto hinzufuegen">+</button><textarea id="input" placeholder="Nachricht eingeben..." rows="1" aria-label="Nachrichtenfeld"></textarea><button id="stop-response-btn" class="composer-icon-btn danger" type="button" aria-label="Antwort stoppen" title="Antwort stoppen" hidden>Stopp</button><button id="voice-btn" class="composer-icon-btn" type="button" aria-label="Nachricht diktieren" title="Nachricht diktieren"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><path d="M12 19v3"></path></svg></button><button id="send-btn" type="button" aria-label="Nachricht senden" title="Nachricht senden"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17V8"></path><path d="m7 12 5-5 5 5"></path></svg></button><input id="file-input" type="file" accept="image/*" multiple hidden></div>
   </div>
@@ -2407,6 +2928,7 @@ button[data-open-theme] {
 <!-- Theme picker modal -->
 <div id="theme-modal" class="modal-overlay">
   <div class="modal">
+    <button class="modal-close" type="button" aria-label="Schließen" data-close-theme-modal>×</button>
     <h3>Farbpalette auswählen</h3>
     <div id="theme-options"></div>
   </div>
@@ -2492,6 +3014,7 @@ function showCompanionPromptBearbeitenor() {
   modal.setAttribute('aria-labelledby', 'companion-prompt-title');
   modal.style.cssText = 'box-sizing:border-box;width:min(100%,680px);max-width:680px;margin:0 auto;padding:20px';
   modal.innerHTML = [
+    '<button class="modal-close" type="button" aria-label="Schließen">×</button>',
     '<h3 id="companion-prompt-title" style="margin:0 0 10px">Begleiter-Prompt</h3>',
     '<p style="margin:0 0 12px;font-size:14px;line-height:1.45">Füge den Prompt ein oder ändere ihn. Er wird privat in diesem Browser gespeichert und gilt ab deiner nächsten Nachricht.</p>',
     '<textarea id="companion-prompt-input" aria-label="Begleiter-Prompt" placeholder="Begleiter-Prompt hier einfügen..." style="box-sizing:border-box;width:100%;min-height:min(48vh,420px);max-height:60vh;resize:vertical;padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--bg-main);color:var(--text-main);font:inherit;line-height:1.45"></textarea>',
@@ -2520,6 +3043,7 @@ function showCompanionPromptBearbeitenor() {
     updateCompanionPromptButton();
     overlay.remove();
   });
+  modal.querySelector('.modal-close').addEventListener('click', () => overlay.remove());
   modal.querySelector('#cancel-companion-prompt').addEventListener('click', () => overlay.remove());
   overlay.addEventListener('click', event => {
     if (event.target === overlay) overlay.remove();
@@ -2717,10 +3241,17 @@ const THEMES = {
 };
 
 let currentTheme = localStorage.getItem('theme-palette') || 'purple';
-let currentMode = localStorage.getItem('theme-mode') || 'light';
+let currentMode = 'auto';
+const systemColorScheme = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+function getResolvedThemeMode(mode = currentMode) {
+  if (mode === 'auto') return systemColorScheme?.matches ? 'dark' : 'light';
+  return mode === 'dark' ? 'dark' : 'light';
+}
 
 function applyTheme(palette, mode) {
-  const theme = THEMES[palette][mode];
+  const resolvedMode = getResolvedThemeMode(mode);
+  const theme = THEMES[palette][resolvedMode];
   const root = document.documentElement;
   
   root.style.setProperty('--primary', theme.primary);
@@ -2733,9 +3264,12 @@ function applyTheme(palette, mode) {
   root.style.setProperty('--text-main', theme.textMain);
   root.style.setProperty('--text-dim', theme.textDim);
   root.style.setProperty('--border', theme.border);
+  document.body.dataset.colorMode = resolvedMode;
+  document.documentElement.dataset.colorMode = resolvedMode;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme.primary);
   
   const modeButton = document.getElementById('mode-btn');
-  if (modeButton) modeButton.textContent = mode === 'light' ? 'Hell' : 'Dunkel';
+  if (modeButton) modeButton.textContent = mode === 'auto' ? 'Automatisch' : resolvedMode === 'light' ? 'Hell' : 'Dunkel';
   
   currentTheme = palette;
   currentMode = mode;
@@ -2744,7 +3278,7 @@ function applyTheme(palette, mode) {
 }
 
 function toggleMode() {
-  const newMode = currentMode === 'light' ? 'dark' : 'light';
+  const newMode = currentMode === 'auto' ? 'dark' : currentMode === 'dark' ? 'light' : 'auto';
   applyTheme(currentTheme, newMode);
 }
 
@@ -2761,9 +3295,9 @@ function showThemePicker() {
     const preview = document.createElement('div');
     preview.className = 'theme-preview';
     preview.innerHTML = `
-      <span style="background:${THEMES[key][currentMode].primary}"></span>
-      <span style="background:${THEMES[key][currentMode].secondary}"></span>
-      <span style="background:${THEMES[key][currentMode].bgAssistant}"></span>
+      <span style="background:${THEMES[key][getResolvedThemeMode()].primary}"></span>
+      <span style="background:${THEMES[key][getResolvedThemeMode()].secondary}"></span>
+      <span style="background:${THEMES[key][getResolvedThemeMode()].bgAssistant}"></span>
     `;
     
     const name = document.createElement('span');
@@ -2791,8 +3325,15 @@ function showThemePicker() {
 
 // Apply saved theme on load
 applyTheme(currentTheme, currentMode);
+systemColorScheme?.addEventListener?.('change', () => {
+  if (currentMode === 'auto') applyTheme(currentTheme, 'auto');
+});
 
 // Theme modal close
+document.querySelector('[data-close-theme-modal]')?.addEventListener('click', () => {
+  document.getElementById('theme-modal')?.classList.remove('active');
+});
+
 document.getElementById('theme-modal').addEventListener('click', (e) => {
   if (e.target.id === 'theme-modal') {
     e.target.classList.remove('active');
@@ -2827,6 +3368,7 @@ const threadList = document.getElementById('thread-list');
 let pendingImageAttachments = [];
 
 const AUTH_TOKEN_KEY = 'companionPortalAuthToken';
+const AUTH_PASSKEY_KEY = 'companionPortalPasskeyCredential';
 const LOCAL_AUTH_BYPASS_TOKEN = 'local-dev-bypass';
 const CLOUDFLARE_WORKER_BASE_URL = '/.netlify/functions/cloudflare-sync-proxy';
 const THREADS_KEY = 'companionPortalThreads';
@@ -2854,6 +3396,7 @@ const OUTPUT_TOKENS_STORAGE_KEY = 'tatjana-output-tokens-v1';
 const TATJANA_MEMORY_STORAGE_KEY = 'tatjana-memory-notes-v1';
 const TATJANA_FAST_MEMORY_STORAGE_KEY = 'tatjana-memory-fast-v1';
 const TATJANA_MEMORY_FRAGMENTS_STORAGE_KEY = 'tatjana-memory-fragments-v1';
+const TATJANA_SOURCE_DEBUG_STORAGE_KEY = 'tatjana-source-debug-enabled-v1';
 let activeRequestController = null;
 function getTemperatureSetting() {
   const raw = localStorage.getItem(TEMPERATURE_STORAGE_KEY);
@@ -2872,6 +3415,15 @@ function getOutputTokenLimit() {
 
 function setOutputTokenLimit(value) {
   localStorage.setItem(OUTPUT_TOKENS_STORAGE_KEY, String(Math.min(8000, Math.max(500, Math.round(Number(value) || 3500)))));
+}
+
+function isSourceDebugEnabled() {
+  return localStorage.getItem(TATJANA_SOURCE_DEBUG_STORAGE_KEY) !== '0';
+}
+
+function setSourceDebugEnabled(enabled) {
+  localStorage.setItem(TATJANA_SOURCE_DEBUG_STORAGE_KEY, enabled ? '1' : '0');
+  if (!enabled) updateMemorySourceDebug({ hidden: true });
 }
 
 function getPortalAuthToken() {
@@ -2964,6 +3516,145 @@ async function checkPassword() {
   }
 }
 
+function setAuthPasswordVisible(visible) {
+  const passwordInput = document.getElementById('auth-password');
+  const toggle = document.getElementById('auth-password-toggle');
+  if (!passwordInput || !toggle) return;
+  passwordInput.type = visible ? 'text' : 'password';
+  toggle.setAttribute('aria-label', visible ? 'Passwort verbergen' : 'Passwort anzeigen');
+  toggle.setAttribute('aria-pressed', visible ? 'true' : 'false');
+}
+
+function getAuthErrorElement() {
+  return document.getElementById('auth-error');
+}
+
+function showAuthMessage(message, type = 'error') {
+  const errorDiv = getAuthErrorElement();
+  if (!errorDiv) return;
+  errorDiv.textContent = message;
+  errorDiv.style.color = type === 'success' ? '#15803d' : '#dc2626';
+  errorDiv.style.display = 'block';
+}
+
+function bufferToBase64Url(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  bytes.forEach(byte => {
+    binary += String.fromCharCode(byte);
+  });
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function base64UrlToBuffer(value) {
+  const base64 = String(value || '').replace(/-/g, '+').replace(/_/g, '/');
+  const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+  const binary = atob(padded);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
+
+function randomChallenge(length = 32) {
+  const bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+  return bytes;
+}
+
+function getStoredPasskeyCredential() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(AUTH_PASSKEY_KEY) || 'null');
+    return parsed?.id ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function webAuthnAvailable() {
+  return Boolean(window.PublicKeyCredential && navigator.credentials && window.isSecureContext);
+}
+
+async function setupPortalPasskey() {
+  if (!webAuthnAvailable()) {
+    showAuthMessage('Face ID / Passkey ist in diesem Browser nur über HTTPS oder localhost verfügbar.');
+    return;
+  }
+
+  try {
+    const userId = randomChallenge(16);
+    const credential = await navigator.credentials.create({
+      publicKey: {
+        challenge: randomChallenge(32),
+        rp: { name: 'Tatjana Portal' },
+        user: {
+          id: userId,
+          name: 'Moni',
+          displayName: 'Moni'
+        },
+        pubKeyCredParams: [
+          { type: 'public-key', alg: -7 },
+          { type: 'public-key', alg: -257 }
+        ],
+        authenticatorSelection: {
+          authenticatorAttachment: 'platform',
+          residentKey: 'preferred',
+          userVerification: 'required'
+        },
+        timeout: 60000,
+        attestation: 'none'
+      }
+    });
+
+    if (!credential) return;
+    localStorage.setItem(AUTH_PASSKEY_KEY, JSON.stringify({
+      id: credential.id,
+      rawId: bufferToBase64Url(credential.rawId),
+      type: credential.type,
+      createdAt: new Date().toISOString()
+    }));
+    showAuthMessage('Passkey wurde lokal vorbereitet. Das Passwort bleibt als Fallback aktiv.', 'success');
+  } catch (error) {
+    showAuthMessage(error?.name === 'NotAllowedError'
+      ? 'Passkey-Einrichtung wurde abgebrochen.'
+      : 'Passkey konnte nicht eingerichtet werden.');
+  }
+}
+
+async function tryPortalPasskeyLogin() {
+  if (!webAuthnAvailable()) {
+    showAuthMessage('Face ID / Passkey ist in diesem Browser nicht verfügbar.');
+    return;
+  }
+  const storedCredential = getStoredPasskeyCredential();
+  if (!storedCredential?.rawId) {
+    showAuthMessage('Noch kein Passkey eingerichtet. Bitte zuerst Face ID / Passkey einrichten.');
+    return;
+  }
+
+  try {
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge: randomChallenge(32),
+        allowCredentials: [{
+          id: base64UrlToBuffer(storedCredential.rawId),
+          type: 'public-key'
+        }],
+        userVerification: 'required',
+        timeout: 60000
+      }
+    });
+
+    if (!assertion) return;
+    showAuthMessage('Passkey erkannt. Die sichere Online-Session-Anbindung wird später getestet; bis dahin bleibt das Passwort der Fallback.', 'success');
+  } catch (error) {
+    showAuthMessage(error?.name === 'NotAllowedError'
+      ? 'Passkey-Anmeldung wurde abgebrochen.'
+      : 'Passkey-Anmeldung konnte nicht geprüft werden.');
+  }
+}
+
 async function ensureAuthenticatedBeforeBoot() {
   const hostname = window.location.hostname;
   const isLocalhost = ['localhost', '127.0.0.1', '::1'].includes(hostname);
@@ -3019,6 +3710,7 @@ function logoutPortalSession() {
   }
   if (passwordInput) {
     passwordInput.value = '';
+    setAuthPasswordVisible(false);
   }
   if (authGate) {
     authGate.style.display = 'flex';
@@ -3229,20 +3921,21 @@ function renderMemoryFragmentCards(searchTerm = '') {
     <details class="memory-fragment-card" data-fragment-id="${escapeHtml(fragment.id)}">
       <summary>
         <span class="memory-fragment-keywords">${escapeHtml(fragment.keywords.join(' / '))}</span>
-        <span class="memory-fragment-actions">
-          <button class="message-tool-btn" type="button" data-edit-fragment="${escapeHtml(fragment.id)}" title="Bearbeiten" aria-label="Fragment bearbeiten"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></button>
-          <button class="message-tool-btn danger" type="button" data-delete-fragment="${escapeHtml(fragment.id)}" title="Löschen" aria-label="Fragment löschen"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg></button>
-        </span>
+        <span class="memory-fragment-chevron" aria-hidden="true">⌄</span>
       </summary>
       <div class="memory-fragment-body">
         <p class="memory-fragment-text">${escapeHtml(fragment.text)}</p>
+        <div class="memory-fragment-actions">
+          <button class="message-tool-btn" type="button" data-edit-fragment="${escapeHtml(fragment.id)}" title="Bearbeiten" aria-label="Fragment bearbeiten"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg></button>
+          <button class="message-tool-btn danger" type="button" data-delete-fragment="${escapeHtml(fragment.id)}" title="Löschen" aria-label="Fragment löschen"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 14H6L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg></button>
+        </div>
       </div>
     </details>
   `).join('');
 }
 
-function getTatjanaMemoryMessages(userText = '') {
-  const matches = findMatchingMemoryFragments(userText);
+function getTatjanaMemoryMessages(userText = '', knownMatches = null) {
+  const matches = Array.isArray(knownMatches) ? knownMatches : findMatchingMemoryFragments(userText);
   if (!matches.length) return [];
   const sections = matches.map(fragment => `Stichwörter: ${fragment.keywords.join(', ')}\n${fragment.text}`);
   return [{
@@ -3258,28 +3951,109 @@ function getVectorMemoryLabel(memory) {
   ].filter(Boolean).join(' - ');
 }
 
-function updateVectorMemoryDebug(memories = []) {
+function normaliseConversationAwarenessText(text = '') {
+  return String(text || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9äöüß\s]/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function getTextSimilarityScore(a = '', b = '') {
+  const first = normaliseConversationAwarenessText(a);
+  const second = normaliseConversationAwarenessText(b);
+  if (!first || !second) return 0;
+  if (first === second) return 1;
+  const firstWords = new Set(first.split(' ').filter(word => word.length > 2));
+  const secondWords = new Set(second.split(' ').filter(word => word.length > 2));
+  if (!firstWords.size || !secondWords.size) return 0;
+  let shared = 0;
+  firstWords.forEach(word => {
+    if (secondWords.has(word)) shared += 1;
+  });
+  return shared / Math.max(firstWords.size, secondWords.size);
+}
+
+function buildConversationAwarenessMessage(thread, currentText = '') {
+  const userMessages = (thread?.messages || [])
+    .filter(message => message?.role === 'user' && message.content)
+    .map(message => String(message.content || '').trim())
+    .filter(Boolean);
+  const previousUserMessages = userMessages.slice(0, -1).slice(-8);
+  const current = String(currentText || '').trim();
+  if (!current || !previousUserMessages.length) return null;
+
+  const bestSimilarity = previousUserMessages.reduce((best, previous) => {
+    return Math.max(best, getTextSimilarityScore(current, previous));
+  }, 0);
+  const currentNormalised = normaliseConversationAwarenessText(current);
+  const looksLikeMemoryTest = /\b(weisst|weißt|erinnerst|kennst|wer ist|was ist|noch|test)\b/.test(currentNormalised);
+  const recentMemoryTests = previousUserMessages.filter(previous => {
+    const normalised = normaliseConversationAwarenessText(previous);
+    return /\b(weisst|weißt|erinnerst|kennst|wer ist|was ist|noch|test)\b/.test(normalised);
+  }).length;
+
+  if (bestSimilarity < 0.62 && !(looksLikeMemoryTest && recentMemoryTests >= 2)) return null;
+
+  return {
+    role: 'system',
+    content: `Aktueller Chat-Kontext: Moni stellt gerade wahrscheinlich eine sehr aehnliche Frage erneut oder testet, ob Tatjana sich erinnert. Nutze dafuer nur den aktuellen Chatverlauf, nicht den Vektorspeicher als Beweis.
+Reagiere warm, persoenlich und leicht spielerisch. Wenn es passt, darf Tatjana sanft-neckisch sagen, dass Moni das gerade schon gefragt oder getestet hat, z.B. "Moni, du testest mich gerade ein bisschen, oder?".
+Wichtig: niemals genervt, belehrend oder vorwurfsvoll klingen. Erst Verstehen und Naehe zeigen, dann kurz auf die wiederholte Frage eingehen.`
+  };
+}
+
+function sanitizeVectorMemoryTextForModel(text = '') {
+  return String(text || '')
+    .replace(/\*\*(?!\s)([^*\n][\s\S]*?[^*\n])\*\*/g, '$1')
+    .replace(/\*(?!\s)([^*\n][^*\n]*?[^*\n])\*/g, '$1')
+    .trim();
+}
+
+function updateMemorySourceDebug({ hidden = false, chatMessageCount = 0, conversationAwarenessActive = false, fragments = [], vectorMemories = [] } = {}) {
   const panel = document.getElementById('vector-memory-debug');
   const title = document.getElementById('vector-memory-debug-title');
   const body = document.getElementById('vector-memory-debug-body');
   if (!panel || !title || !body) return;
 
-  if (!memories.length) {
-    panel.hidden = false;
-    title.textContent = 'Verwendete alte Erinnerung: keine Treffer';
-    body.innerHTML = '<p>Keine alte Erinnerung aus dem Vektorspeicher verwendet.</p>';
+  if (hidden || !isSourceDebugEnabled()) {
+    panel.hidden = true;
+    body.innerHTML = '';
     return;
   }
 
-  title.textContent = memories.length === 1
-    ? 'Verwendete alte Erinnerung: 1 Treffer'
-    : `Verwendete alte Erinnerung: ${memories.length} Treffer`;
+  const vectorCount = vectorMemories.length;
+  const fragmentCount = fragments.length;
+  const sourceCount = (chatMessageCount > 0 ? 1 : 0) + (fragmentCount > 0 ? 1 : 0) + (vectorCount > 0 ? 1 : 0);
+  title.textContent = sourceCount
+    ? `Verwendete Quellen: ${sourceCount}`
+    : 'Verwendete Quellen: keine Zusatzquelle';
+
+  const chatItems = [
+    `${chatMessageCount} Nachricht${chatMessageCount === 1 ? '' : 'en'} aus dem aktuellen Chat im Kontext`,
+    conversationAwarenessActive ? 'Wiederholungs-/Testhinweis aus aktuellem Chat aktiv' : ''
+  ].filter(Boolean);
+  const fragmentItems = fragments.map(fragment => fragment.keywords.join(' / '));
+  const vectorItems = vectorMemories.map(memory => getVectorMemoryLabel(memory));
+
+  const renderSection = (heading, items, emptyText) => `
+    <div class="source-debug-section">
+      <strong>${escapeHtml(heading)}</strong>
+      ${items.length
+        ? `<ol class="vector-memory-debug-list">${items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ol>`
+        : `<p class="source-debug-empty">${escapeHtml(emptyText)}</p>`}
+    </div>
+  `;
+
   body.innerHTML = `
-    <ol class="vector-memory-debug-list">
-      ${memories.map(memory => `<li>${escapeHtml(getVectorMemoryLabel(memory))}</li>`).join('')}
-    </ol>
+    ${renderSection('Aktueller Chat', chatItems, 'Kein aktueller Chatkontext erfasst.')}
+    ${renderSection('Memory-Fragmente', fragmentItems, 'Keine passenden Fragmente verwendet.')}
+    ${renderSection('Vector Store', vectorItems, 'Keine alte Erinnerung aus dem Vektorspeicher verwendet.')}
   `;
   panel.hidden = false;
+  panel.open = false;
 }
 
 async function getVectorMemoryContext(userText = '') {
@@ -3313,7 +4087,7 @@ async function getVectorMemoryContext(userText = '') {
           memory.filename ? `Datei: ${memory.filename}` : '',
           Number.isFinite(Number(memory.score)) ? `Trefferstärke: ${Number(memory.score).toFixed(3)}` : ''
         ].filter(Boolean);
-        return `${sourceLines.join('\n')}\nAusschnitt:\n${String(memory.text || '').trim()}`;
+        return `${sourceLines.join('\n')}\nAusschnitt:\n${sanitizeVectorMemoryTextForModel(memory.text)}`;
       })
       .filter(Boolean);
 
@@ -3329,6 +4103,7 @@ Beachte dabei streng:
 - Bei unsicherem oder schwachem Treffer vorsichtig formulieren und lieber sagen, dass es nur ein Ausschnitt ist.
 - Keine atmosphärischen Details ergänzen, wenn sie nicht im Ausschnitt stehen.
 - Erfinde keine fehlenden Details.
+- Verwende die Ausschnitte nicht als Formatvorlage. Schreibe normale persoenliche Antworten als natuerlichen Fliesstext ohne unnoetige Markdown-Fettschrift.
 
 ${sections.join('\n\n')}`
       },
@@ -3947,6 +4722,7 @@ async function showStorageSyncModal() {
   const modal = document.createElement('div');
   modal.className = 'modal';
   modal.innerHTML = `
+    <button class="modal-close" type="button" aria-label="Schließen">×</button>
     <h3>Cloud-Sync</h3>
     <div style="text-align:left;line-height:1.55;margin:0 0 16px;padding:14px 16px;border-radius:14px;background:#f8fafc;border:1px solid #e2e8f0;color:#334155;">
       <div><strong style="color:#6d28d9;">Letzter Cloud-Sync</strong><br>${formatRelativeSyncTime(lastCloudSync)}</div>
@@ -3957,6 +4733,7 @@ async function showStorageSyncModal() {
       <div style="margin-top:10px;"><strong style="color:#6d28d9;">Handy ↔ PC später testen</strong><br>Erst auf einem Gerät speichern, danach auf dem anderen Gerät laden.</div>
     </div>
   `;
+  modal.querySelector('.modal-close')?.addEventListener('click', () => overlay.remove());
 
   const actions = [
     { text: 'In Cloud speichern', action: async () => runCloudSync({ showSuccessToast: true, showFailureToast: true, showSuccessWhenNoChanges: true, verifyLocalThreads: true }) },
@@ -4402,20 +5179,58 @@ function renderThreadList() {
     
     const titleText = thread.pinned ? `Angepinnt: ${thread.title || 'Neue Unterhaltung'}` : thread.title || 'Neue Unterhaltung';
     const dateText = formatThreadDate(thread.updated);
-    const previewText = getSearchPreview(thread, query);
     const button = document.createElement('button');
     button.type = 'button';
+    button.setAttribute('aria-current', thread.id === currentThreadId ? 'true' : 'false');
     button.className = [
       'thread-item',
       thread.id === currentThreadId ? 'active' : '',
       thread.pinned ? 'pinned' : ''
     ].filter(Boolean).join(' ');
-    button.onclick = (event) => showThreadModal(thread.id, event);
+    let threadLongPressTimer = null;
+    let threadLongPressOpened = false;
+    const clearThreadLongPress = () => {
+      if (threadLongPressTimer) window.clearTimeout(threadLongPressTimer);
+      threadLongPressTimer = null;
+    };
+
+    button.addEventListener('pointerdown', event => {
+      if (event.button && event.button !== 0) return;
+      threadLongPressOpened = false;
+      clearThreadLongPress();
+      threadLongPressTimer = window.setTimeout(() => {
+        threadLongPressOpened = true;
+        liftThreadItem(button, true);
+        showThreadModal(thread.id, button);
+      }, 520);
+    });
+    button.addEventListener('pointerup', clearThreadLongPress);
+    button.addEventListener('pointercancel', clearThreadLongPress);
+    button.addEventListener('pointerleave', clearThreadLongPress);
+    button.addEventListener('contextmenu', event => showThreadModal(thread.id, event));
+    button.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        switchThread(thread.id);
+      }
+      if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {
+        event.preventDefault();
+        showThreadModal(thread.id, button);
+      }
+    });
+    button.onclick = (event) => {
+      if (threadLongPressOpened) {
+        event.preventDefault();
+        threadLongPressOpened = false;
+        return;
+      }
+      closeThreadMenu();
+      switchThread(thread.id);
+    };
     
     button.innerHTML = `
       <div class="thread-title">${highlightSearchTerm(titleText, query)}</div>
       <div class="thread-meta">${highlightSearchTerm(dateText, query)}</div>
-      <div class="thread-preview">${highlightSearchTerm(previewText, query)}</div>
     `;
     
     threadList.appendChild(button);
@@ -4549,6 +5364,18 @@ function performFullSearch() {
 
 function closeThreadMenu() {
   document.getElementById('thread-menu-popover')?.remove();
+  document.querySelectorAll('.thread-item.thread-lifted').forEach(item => item.classList.remove('thread-lifted'));
+}
+
+function liftThreadItem(button, withHaptic = false) {
+  if (!button) return;
+  document.querySelectorAll('.thread-item.thread-lifted').forEach(item => {
+    if (item !== button) item.classList.remove('thread-lifted');
+  });
+  button.classList.add('thread-lifted');
+  if (withHaptic && navigator.vibrate) {
+    try { navigator.vibrate(12); } catch (error) {}
+  }
 }
 
 function makeThreadMenuButton(label, iconName, action, danger = false) {
@@ -4566,7 +5393,8 @@ function makeThreadMenuButton(label, iconName, action, danger = false) {
 }
 
 function showThreadModal(threadId, event) {
-  if (event) {
+  const sourceElement = event?.getBoundingClientRect ? event : null;
+  if (event && !sourceElement) {
     event.preventDefault();
     event.stopPropagation();
   }
@@ -4597,7 +5425,7 @@ function showThreadModal(threadId, event) {
 
   document.body.appendChild(popover);
 
-  const source = event?.currentTarget || event?.target;
+  const source = sourceElement || event?.currentTarget || event?.target;
   const rect = source?.getBoundingClientRect?.();
   const popoverRect = popover.getBoundingClientRect();
   const top = rect ? Math.min(rect.bottom + 6, window.innerHeight - popoverRect.height - 10) : 80;
@@ -4605,8 +5433,13 @@ function showThreadModal(threadId, event) {
   popover.style.top = `${Math.max(10, top)}px`;
   popover.style.left = `${Math.max(10, left)}px`;
 
+  const closeOnOutsidePointer = pointerEvent => {
+    if (popover.contains(pointerEvent.target)) return;
+    closeThreadMenu();
+    document.removeEventListener('pointerdown', closeOnOutsidePointer);
+  };
   setTimeout(() => {
-    document.addEventListener('click', closeThreadMenu, { once: true });
+    document.addEventListener('pointerdown', closeOnOutsidePointer);
   }, 0);
   
   return false;
@@ -4762,12 +5595,17 @@ function escapeHtml(value) {
 }
 
 
+const TATJANA_TTS_VOICES = ['nova', 'shimmer', 'coral', 'sage'];
+const TATJANA_TTS_VOICE_STORAGE_KEY = 'tatjana-openai-tts-voice';
+
 function getStoredVoiceName() {
-  return localStorage.getItem('tatjana-tts-voice-name') || '';
+  const saved = localStorage.getItem(TATJANA_TTS_VOICE_STORAGE_KEY) || localStorage.getItem('tatjana-tts-voice-name') || 'nova';
+  return TATJANA_TTS_VOICES.includes(saved) ? saved : 'nova';
 }
 
 function setStoredVoiceName(name) {
-  localStorage.setItem('tatjana-tts-voice-name', name || '');
+  const voice = TATJANA_TTS_VOICES.includes(name) ? name : 'nova';
+  localStorage.setItem(TATJANA_TTS_VOICE_STORAGE_KEY, voice);
 }
 
 function getSpeechVoices() {
@@ -4777,6 +5615,7 @@ function getSpeechVoices() {
 let currentTatjanaAudio = null;
 let currentTatjanaAudioKey = '';
 let currentTatjanaAudioButton = null;
+let currentTatjanaAudioText = '';
 
 function getStoredPlaybackRate() {
   const savedRate = Number(localStorage.getItem('tatjana-tts-playback-rate') || '1');
@@ -4787,6 +5626,7 @@ function setStoredPlaybackRate(rate) {
   const nextRate = Number(rate) || 1;
   localStorage.setItem('tatjana-tts-playback-rate', String(nextRate));
   if (currentTatjanaAudio) currentTatjanaAudio.playbackRate = nextRate;
+  updateTatjanaFloatingPlayer();
 }
 
 function updateTatjanaAudioButton(button, isPlaying) {
@@ -4797,9 +5637,27 @@ function updateTatjanaAudioButton(button, isPlaying) {
   button.innerHTML = tatjanaSvgIcon(isPlaying ? 'pause' : 'play');
 }
 
+function updateTatjanaFloatingPlayer() {
+  const player = document.getElementById('tatjana-floating-player');
+  if (!player) return;
+  const hasAudio = Boolean(currentTatjanaAudio);
+  player.hidden = !hasAudio;
+
+  const playButton = player.querySelector('[data-audio-play]');
+  const rateSelect = player.querySelector('[data-audio-rate]');
+  const isPlaying = hasAudio && !currentTatjanaAudio.paused;
+  if (playButton) {
+    playButton.classList.toggle('is-active', isPlaying);
+    playButton.innerHTML = tatjanaSvgIcon(isPlaying ? 'pause' : 'play');
+    playButton.title = isPlaying ? 'Pause' : 'Abspielen';
+  }
+  if (rateSelect) rateSelect.value = String(getStoredPlaybackRate());
+}
+
 function resetTatjanaAudioButton() {
   updateTatjanaAudioButton(currentTatjanaAudioButton, false);
   currentTatjanaAudioButton = null;
+  updateTatjanaFloatingPlayer();
 }
 
 function stopCurrentTatjanaAudio() {
@@ -4808,13 +5666,61 @@ function stopCurrentTatjanaAudio() {
     currentTatjanaAudio = null;
   }
   currentTatjanaAudioKey = '';
+  currentTatjanaAudioText = '';
   resetTatjanaAudioButton();
+  updateTatjanaFloatingPlayer();
 }
 
 function seekTatjanaAudio(seconds) {
   if (!currentTatjanaAudio) return;
   const duration = Number.isFinite(currentTatjanaAudio.duration) ? currentTatjanaAudio.duration : currentTatjanaAudio.currentTime + Math.abs(seconds);
   currentTatjanaAudio.currentTime = Math.max(0, Math.min(duration, currentTatjanaAudio.currentTime + seconds));
+}
+
+async function toggleTatjanaAudioPlayback() {
+  if (!currentTatjanaAudio) return;
+  if (currentTatjanaAudio.paused) {
+    await currentTatjanaAudio.play();
+  } else {
+    currentTatjanaAudio.pause();
+  }
+  updateTatjanaFloatingPlayer();
+}
+
+function initTatjanaFloatingPlayer() {
+  const player = document.getElementById('tatjana-floating-player');
+  if (!player) return;
+  const playButton = player.querySelector('[data-audio-play]');
+  const stopButton = player.querySelector('[data-audio-stop]');
+  const backButton = player.querySelector('[data-audio-back]');
+  const forwardButton = player.querySelector('[data-audio-forward]');
+  const rateSelect = player.querySelector('[data-audio-rate]');
+  const closeButton = player.querySelector('[data-audio-close]');
+
+  if (playButton) {
+    playButton.innerHTML = tatjanaSvgIcon('play');
+    playButton.addEventListener('click', () => toggleTatjanaAudioPlayback());
+  }
+  if (stopButton) {
+    stopButton.innerHTML = tatjanaSvgIcon('stop');
+    stopButton.addEventListener('click', () => stopCurrentTatjanaAudio());
+  }
+  if (backButton) {
+    backButton.innerHTML = tatjanaSvgIcon('back15');
+    backButton.addEventListener('click', () => seekTatjanaAudio(-15));
+  }
+  if (forwardButton) {
+    forwardButton.innerHTML = tatjanaSvgIcon('forward15');
+    forwardButton.addEventListener('click', () => seekTatjanaAudio(15));
+  }
+  if (rateSelect) {
+    rateSelect.value = String(getStoredPlaybackRate());
+    rateSelect.addEventListener('change', () => setStoredPlaybackRate(rateSelect.value));
+  }
+  if (closeButton) {
+    closeButton.addEventListener('click', () => stopCurrentTatjanaAudio());
+  }
+  updateTatjanaFloatingPlayer();
 }
 
 function setupTatjanaMediaSession(title, text) {
@@ -4824,10 +5730,15 @@ function setupTatjanaMediaSession(title, text) {
     artist: 'Tatjana Portal',
     album: cleanTextForSpeech(text).slice(0, 120)
   });
-  navigator.mediaSession.setActionHandler('play', () => currentTatjanaAudio?.play());
-  navigator.mediaSession.setActionHandler('pause', () => currentTatjanaAudio?.pause());
-  navigator.mediaSession.setActionHandler('seekbackward', () => seekTatjanaAudio(-15));
-  navigator.mediaSession.setActionHandler('seekforward', () => seekTatjanaAudio(15));
+  [
+    ['play', () => currentTatjanaAudio?.play()],
+    ['pause', () => currentTatjanaAudio?.pause()],
+    ['stop', () => stopCurrentTatjanaAudio()],
+    ['seekbackward', () => seekTatjanaAudio(-15)],
+    ['seekforward', () => seekTatjanaAudio(15)]
+  ].forEach(([action, handler]) => {
+    try { navigator.mediaSession.setActionHandler(action, handler); } catch (error) {}
+  });
 }
 
 function cleanTextForSpeech(text) {
@@ -4867,6 +5778,7 @@ async function speakText(text, options = {}) {
     } else {
       currentTatjanaAudio.pause();
     }
+    updateTatjanaFloatingPlayer();
     return;
   }
 
@@ -4875,12 +5787,13 @@ async function speakText(text, options = {}) {
     stopCurrentTatjanaAudio();
     currentTatjanaAudioKey = audioKey;
     currentTatjanaAudioButton = button;
+    currentTatjanaAudioText = spokenText;
     updateTatjanaAudioButton(button, false);
 
     const response = await fetch('/.netlify/functions/openai-tts', {
       method: 'POST',
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ input: spokenText })
+      body: JSON.stringify({ input: spokenText, voice: getStoredVoiceName() })
     });
 
     if (!response.ok) throw new Error(`TTS ${response.status}`);
@@ -4889,14 +5802,23 @@ async function speakText(text, options = {}) {
 
     currentTatjanaAudio = new Audio(`data:${data.mimeType || 'audio/mpeg'};base64,${data.audioBase64}`);
     currentTatjanaAudio.playbackRate = getStoredPlaybackRate();
-    currentTatjanaAudio.addEventListener('play', () => updateTatjanaAudioButton(button, true));
-    currentTatjanaAudio.addEventListener('pause', () => updateTatjanaAudioButton(button, false));
+    currentTatjanaAudio.addEventListener('play', () => {
+      updateTatjanaAudioButton(button, true);
+      updateTatjanaFloatingPlayer();
+    });
+    currentTatjanaAudio.addEventListener('pause', () => {
+      updateTatjanaAudioButton(button, false);
+      updateTatjanaFloatingPlayer();
+    });
     currentTatjanaAudio.addEventListener('ended', () => {
       currentTatjanaAudio = null;
       currentTatjanaAudioKey = '';
+      currentTatjanaAudioText = '';
       resetTatjanaAudioButton();
+      updateTatjanaFloatingPlayer();
     });
     setupTatjanaMediaSession('Tatjana liest vor', spokenText);
+    updateTatjanaFloatingPlayer();
     await currentTatjanaAudio.play();
   } catch (error) {
     console.warn('OpenAI-TTS nicht verfügbar, Browser-Stimme wird genutzt:', error);
@@ -4963,12 +5885,41 @@ function deleteMessageAt(index) {
   renderThreadList();
 }
 
+async function shareMessageContent(content) {
+  const text = String(content || '').trim();
+  if (!text) return;
+  if (navigator.share) {
+    try {
+      await navigator.share({ text });
+      return;
+    } catch (error) {
+      if (error?.name === 'AbortError') return;
+    }
+  }
+  await navigator.clipboard?.writeText(text);
+  showSyncToast('Nachricht wurde kopiert.');
+}
+
+function saveMessageAsText(content, messageIndex) {
+  const text = String(content || '').trim();
+  if (!text) return;
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `tatjana-nachricht-${Number.isInteger(messageIndex) ? messageIndex + 1 : Date.now()}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  URL.revokeObjectURL(link.href);
+  link.remove();
+}
+
 function tatjanaSvgIcon(name) {
   const icons = {
     copy: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><rect x="4" y="4" width="11" height="11" rx="2"></rect></svg>',
     volume: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>',
     play: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7Z"></path></svg>',
     pause: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14"></path><path d="M16 5v14"></path></svg>',
+    stop: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"></rect></svg>',
     back15: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 17a5 5 0 1 0-4.6-7"></path><path d="M6 7v3h3"></path><path d="M10 13h1v4"></path><path d="M14 13h2v2h-2v2h2"></path></svg>',
     forward15: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 17a5 5 0 1 1 4.6-7"></path><path d="M18 7v3h-3"></path><path d="M8 13h1v4"></path><path d="M12 13h2v2h-2v2h2"></path></svg>',
     trash: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M6 6l1 16h10l1-16"></path><path d="M10 11v6M14 11v6"></path></svg>',
@@ -4978,6 +5929,8 @@ function tatjanaSvgIcon(name) {
     pin: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v5"></path><path d="M5 17h14"></path><path d="m7 9 5-5 5 5"></path><path d="M8 9h8l1 8H7Z"></path></svg>',
     download: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>',
     upload: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"></path><path d="m7 8 5-5 5 5"></path><path d="M5 21h14"></path></svg>',
+    share: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"></path><path d="M16 6l-4-4-4 4"></path><path d="M12 2v14"></path></svg>',
+    more: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle></svg>',
     arrowDown: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>',
     arrowUp: '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5"></path><path d="m5 12 7-7 7 7"></path></svg>'
   };
@@ -5016,91 +5969,193 @@ function getMessageTimestampForIndex(messageIndex) {
   return message?.timestamp || message?.created || null;
 }
 
-function enhanceMessageElement(div, role, content, messageIndex) {
-  if (!Number.isInteger(messageIndex)) return;
-  const tools = document.createElement('div');
-  tools.className = 'message-tools';
+function closeMessageMenu() {
+  document.getElementById('message-menu-popover')?.remove();
+}
 
-  const copyButton = document.createElement('button');
-  copyButton.type = 'button';
-  copyButton.className = 'message-tool-btn';
-  copyButton.title = 'Kopieren';
-  copyButton.setAttribute('aria-label', 'Nachricht kopieren');
-  copyButton.innerHTML = tatjanaSvgIcon('copy');
-  copyButton.addEventListener('click', () => navigator.clipboard?.writeText(content));
-  tools.appendChild(copyButton);
+function makeMessageMenuButton(label, iconName, action, danger = false) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = `thread-menu-action${danger ? ' danger' : ''}`;
+  button.innerHTML = `${tatjanaSvgIcon(iconName)}<span>${escapeHtml(label)}</span>`;
+  button.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+    const triggerRect = event.currentTarget.getBoundingClientRect();
+    closeMessageMenu();
+    action(event.currentTarget, triggerRect);
+  });
+  return button;
+}
 
-  if (role === 'assistant') {
-    const audioPlayer = document.createElement('div');
-    audioPlayer.className = 'tatjana-audio-player';
+function closeTatjanaVoiceMenu() {
+  document.getElementById('tts-voice-menu-popover')?.remove();
+}
 
-    const speakButton = document.createElement('button');
-    speakButton.type = 'button';
-    speakButton.className = 'message-tool-btn';
-    speakButton.title = 'Abspielen';
-    speakButton.setAttribute('aria-label', 'Antwort vorlesen');
-    speakButton.innerHTML = tatjanaSvgIcon('play');
-    speakButton.addEventListener('click', () => speakText(content, {
-      audioKey: `message-${messageIndex}`,
-      button: speakButton,
-      voiceName: getStoredVoiceName()
-    }));
-    audioPlayer.appendChild(speakButton);
+function showTatjanaVoiceMenu(content, messageIndex, triggerRect = null) {
+  closeTatjanaVoiceMenu();
+  closeThreadMenu();
 
-    const backButton = document.createElement('button');
-    backButton.type = 'button';
-    backButton.className = 'message-tool-btn';
-    backButton.title = '15 Sekunden zurück';
-    backButton.setAttribute('aria-label', '15 Sekunden zurück');
-    backButton.innerHTML = tatjanaSvgIcon('back15');
-    backButton.addEventListener('click', () => seekTatjanaAudio(-15));
-    audioPlayer.appendChild(backButton);
+  const popover = document.createElement('div');
+  popover.id = 'tts-voice-menu-popover';
+  popover.className = 'thread-menu-popover tts-voice-menu';
 
-    const forwardButton = document.createElement('button');
-    forwardButton.type = 'button';
-    forwardButton.className = 'message-tool-btn';
-    forwardButton.title = '15 Sekunden vor';
-    forwardButton.setAttribute('aria-label', '15 Sekunden vor');
-    forwardButton.innerHTML = tatjanaSvgIcon('forward15');
-    forwardButton.addEventListener('click', () => seekTatjanaAudio(15));
-    audioPlayer.appendChild(forwardButton);
+  const title = document.createElement('div');
+  title.className = 'thread-menu-title';
+  title.textContent = 'Vorlesestimme';
+  popover.appendChild(title);
 
-    const rateSelect = document.createElement('select');
-    rateSelect.className = 'audio-rate-select';
-    rateSelect.title = 'Wiedergabegeschwindigkeit';
-    rateSelect.setAttribute('aria-label', 'Wiedergabegeschwindigkeit');
-    [0.75, 1, 1.25, 1.5].forEach(rate => {
-      const option = document.createElement('option');
-      option.value = String(rate);
-      option.textContent = rate === 1 ? '1x' : `${rate}x`;
-      rateSelect.appendChild(option);
+  TATJANA_TTS_VOICES.forEach(voice => {
+    const row = document.createElement('div');
+    row.className = 'tts-voice-row';
+
+    const choose = document.createElement('button');
+    choose.type = 'button';
+    choose.className = `thread-menu-action tts-voice-choice${getStoredVoiceName() === voice ? ' is-selected' : ''}`;
+    choose.innerHTML = `${tatjanaSvgIcon('play')}<span>${escapeHtml(voice)}</span>`;
+    choose.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      setStoredVoiceName(voice);
+      closeTatjanaVoiceMenu();
+      speakText(content, {
+        audioKey: `message-${messageIndex}-${voice}`,
+        voiceName: voice
+      });
     });
-    rateSelect.value = String(getStoredPlaybackRate());
-    rateSelect.addEventListener('change', () => setStoredPlaybackRate(rateSelect.value));
-    audioPlayer.appendChild(rateSelect);
 
-    tools.appendChild(audioPlayer);
+    const preview = document.createElement('button');
+    preview.type = 'button';
+    preview.className = 'tts-voice-preview';
+    preview.title = `${voice} probehören`;
+    preview.setAttribute('aria-label', `${voice} probehören`);
+    preview.innerHTML = tatjanaSvgIcon('volume');
+    preview.addEventListener('click', event => {
+      event.preventDefault();
+      event.stopPropagation();
+      setStoredVoiceName(voice);
+      speakText('So klingt Tatjana mit dieser Stimme.', {
+        audioKey: `voice-preview-${voice}`,
+        voiceName: voice
+      });
+    });
 
-    const regenerateButton = document.createElement('button');
-    regenerateButton.type = 'button';
-    regenerateButton.className = 'message-tool-btn';
-    regenerateButton.title = 'Erneut generieren';
-    regenerateButton.setAttribute('aria-label', 'Antwort erneut generieren');
-    regenerateButton.innerHTML = tatjanaSvgIcon('refresh');
-    regenerateButton.addEventListener('click', () => regenerateAssistantAt(messageIndex));
-    tools.appendChild(regenerateButton);
+    row.append(choose, preview);
+    popover.appendChild(row);
+  });
+
+  document.body.appendChild(popover);
+  const popoverRect = popover.getBoundingClientRect();
+  const top = triggerRect ? Math.min(triggerRect.bottom + 6, window.innerHeight - popoverRect.height - 10) : 80;
+  const left = triggerRect ? Math.min(Math.max(triggerRect.left, 10), window.innerWidth - popoverRect.width - 10) : 10;
+  popover.style.top = `${Math.max(10, top)}px`;
+  popover.style.left = `${Math.max(10, left)}px`;
+
+  const closeOnOutsidePointer = event => {
+    if (!popover.contains(event.target)) {
+      closeTatjanaVoiceMenu();
+      document.removeEventListener('pointerdown', closeOnOutsidePointer, true);
+    }
+  };
+  window.setTimeout(() => document.addEventListener('pointerdown', closeOnOutsidePointer, true), 0);
+}
+
+function showMessageMenu(messageIndex, sourceElement) {
+  if (!Number.isInteger(messageIndex)) return;
+  const thread = getCurrentThread();
+  const message = thread?.messages?.[messageIndex];
+  if (!message) return;
+
+  closeMessageMenu();
+  closeTatjanaVoiceMenu();
+  closeThreadMenu();
+
+  const content = message.content || '';
+  const popover = document.createElement('div');
+  popover.id = 'message-menu-popover';
+  popover.className = 'thread-menu-popover message-menu-popover';
+
+  const title = document.createElement('div');
+  title.className = 'thread-menu-title';
+  title.textContent = message.role === 'user' ? 'Deine Nachricht' : 'Tatjanas Antwort';
+  popover.appendChild(title);
+
+  popover.appendChild(makeMessageMenuButton('Kopieren', 'copy', () => navigator.clipboard?.writeText(content)));
+  popover.appendChild(makeMessageMenuButton('Teilen', 'share', () => shareMessageContent(content)));
+  popover.appendChild(makeMessageMenuButton('Speichern', 'download', () => saveMessageAsText(content, messageIndex)));
+
+  if (message.role === 'assistant') {
+    popover.appendChild(makeMessageMenuButton('Vorlesen', 'volume', (_button, triggerRect) => showTatjanaVoiceMenu(content, messageIndex, triggerRect)));
+    popover.appendChild(makeMessageMenuButton('Wiederholen', 'refresh', () => regenerateAssistantAt(messageIndex)));
   }
 
-  const deleteButton = document.createElement('button');
-  deleteButton.type = 'button';
-  deleteButton.className = 'message-tool-btn danger';
-  deleteButton.title = 'Löschen';
-  deleteButton.setAttribute('aria-label', 'Nachricht löschen');
-  deleteButton.innerHTML = tatjanaSvgIcon('trash');
-  deleteButton.addEventListener('click', () => deleteMessageAt(messageIndex));
-  tools.appendChild(deleteButton);
+  const separator = document.createElement('div');
+  separator.className = 'thread-menu-separator';
+  popover.appendChild(separator);
+  popover.appendChild(makeMessageMenuButton('Löschen', 'trash', () => deleteMessageAt(messageIndex), true));
 
-  div.appendChild(tools);
+  document.body.appendChild(popover);
+
+  const rect = sourceElement?.getBoundingClientRect?.();
+  const popoverRect = popover.getBoundingClientRect();
+  const top = rect ? Math.min(rect.bottom + 6, window.innerHeight - popoverRect.height - 10) : 80;
+  const left = rect ? Math.min(Math.max(rect.left, 10), window.innerWidth - popoverRect.width - 10) : 10;
+  popover.style.top = `${Math.max(10, top)}px`;
+  popover.style.left = `${Math.max(10, left)}px`;
+
+  const closeOnOutsidePointer = event => {
+    if (popover.contains(event.target)) return;
+    closeMessageMenu();
+    document.removeEventListener('pointerdown', closeOnOutsidePointer);
+  };
+  setTimeout(() => {
+    document.addEventListener('pointerdown', closeOnOutsidePointer);
+  }, 0);
+}
+
+function pulseMessageCard(div, withHaptic = false) {
+  if (!div) return;
+  div.classList.remove('message-lifted');
+  void div.offsetWidth;
+  div.classList.add('message-lifted');
+  if (withHaptic && navigator.vibrate) {
+    try { navigator.vibrate(12); } catch (error) {}
+  }
+  window.setTimeout(() => div.classList.remove('message-lifted'), 180);
+}
+
+function enhanceMessageElement(div, role, content, messageIndex) {
+  if (!Number.isInteger(messageIndex)) return;
+  let longPressTimer = null;
+  let longPressOpened = false;
+  const clearLongPress = () => {
+    if (longPressTimer) window.clearTimeout(longPressTimer);
+    longPressTimer = null;
+  };
+
+  div.addEventListener('pointerdown', event => {
+    if (event.target.closest('button, select, input, textarea, a')) return;
+    longPressOpened = false;
+    clearLongPress();
+    longPressTimer = window.setTimeout(() => {
+      longPressOpened = true;
+      pulseMessageCard(div, true);
+      showMessageMenu(messageIndex, div);
+    }, 520);
+  });
+  div.addEventListener('pointerup', clearLongPress);
+  div.addEventListener('pointercancel', clearLongPress);
+  div.addEventListener('pointerleave', clearLongPress);
+  div.addEventListener('click', event => {
+    if (event.target.closest('button, select, input, textarea, a')) return;
+    if (longPressOpened) {
+      longPressOpened = false;
+      return;
+    }
+    if (window.getSelection?.().toString()) return;
+    pulseMessageCard(div, true);
+    showMessageMenu(messageIndex, div);
+  });
 }
 function displayMessage(role, content, messageIndex = null, timestampOverride = null, attachments = []) {
   const div = document.createElement('div');
@@ -5110,14 +6165,12 @@ function displayMessage(role, content, messageIndex = null, timestampOverride = 
   }
   div.innerHTML = renderMessageMarkup(content);
   appendImagePreviews(div, attachments);
-  if (role === 'assistant') {
-    const time = document.createElement('time');
-    time.className = 'message-time';
-    const timestamp = timestampOverride || getMessageTimestampForIndex(messageIndex) || Date.now();
-    time.dateTime = new Date(timestamp).toISOString();
-    time.textContent = formatMessageDateTime(timestamp);
-    div.appendChild(time);
-  }
+  const time = document.createElement('time');
+  time.className = 'message-time';
+  const timestamp = timestampOverride || getMessageTimestampForIndex(messageIndex) || Date.now();
+  time.dateTime = new Date(timestamp).toISOString();
+  time.textContent = formatMessageDateTime(timestamp);
+  div.appendChild(time);
   enhanceMessageElement(div, role, content, messageIndex);
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -5198,13 +6251,21 @@ input.disabled = true;
   const liveMessages = contextWindowSize === 0 ? thread.messages : thread.messages.slice(-contextWindowSize);
   const internetResearchContext = await getInternetResearchContext(text);
   const vectorMemoryContext = await getVectorMemoryContext(text);
-  updateVectorMemoryDebug(vectorMemoryContext?.memories || []);
+  const conversationAwarenessContext = buildConversationAwarenessMessage(thread, userContent);
+  const memoryFragmentMatches = findMatchingMemoryFragments(text);
+  updateMemorySourceDebug({
+    chatMessageCount: liveMessages.filter(message => message?.role !== 'system').length,
+    conversationAwarenessActive: Boolean(conversationAwarenessContext),
+    fragments: memoryFragmentMatches,
+    vectorMemories: vectorMemoryContext?.memories || []
+  });
   const apiMessages = [
     { role: 'system', content: systemPrompt },
     { role: 'system', content: getLocalTimeContext() },
+    ...(conversationAwarenessContext ? [conversationAwarenessContext] : []),
     ...(internetResearchContext ? [internetResearchContext] : []),
     ...(vectorMemoryContext?.message ? [vectorMemoryContext.message] : []),
-    ...getTatjanaMemoryMessages(text),
+    ...getTatjanaMemoryMessages(text, memoryFragmentMatches),
     ...liveMessages.map(messageToApiMessage)
   ];
     
@@ -5319,10 +6380,10 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
       storageSync: 'Speicher & Sicherheit',
       searchThreads: 'Unterhaltungen durchsuchen...',
       searchConversations: 'In Unterhaltungen suchen',
-      conversationBackup: 'Chat-Sicherung',
-      exportMarkdown: 'Chat als Markdown exportieren',
-      restoreMarkdown: 'Chat aus Markdown wiederherstellen',
-      backupHelp: 'Nutze das vor Updates oder um diesen Chat in ein neues Portal mitzunehmen.',
+      conversationBackup: 'Export',
+      exportMarkdown: 'Markdown exportieren',
+      restoreMarkdown: 'Markdown importieren',
+      backupHelp: 'Import ersetzt den aktuell geöffneten Chat nach Bestätigung.',
       openMenu: 'Menü öffnen',
       closeMenu: 'Menü schließen',
       changePalette: 'Farbpalette ändern',
@@ -5413,29 +6474,40 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
         <h3 id="tatjana-settings-title">Einstellungen</h3>
 
         <section class="settings-section">
-          <h4>Antwortverhalten</h4>
-          <label for="temperature-slider"><strong>Temperatur</strong></label>
-          <div class="settings-row">
-            <input id="temperature-slider" type="range" min="0" max="1.5" step="0.1" value="${getTemperatureSetting()}">
-            <strong id="temperature-value">${getTemperatureSetting().toFixed(1)}</strong>
-          </div>
-          <p class="settings-help">Standard ist 1.1. Höher wirkt lebendiger, niedriger ruhiger.</p>
-          <label for="output-tokens-slider"><strong>Antwortlänge / Output-Tokens</strong></label>
-          <div class="settings-row">
-            <input id="output-tokens-slider" type="range" min="500" max="8000" step="100" value="${getOutputTokenLimit()}">
-            <strong id="output-tokens-value">${getOutputTokenLimit()}</strong>
-          </div>
-          <p class="settings-help">Startwert ist 3500. Das gibt Tatjana mehr Ausgaberaum, ohne den Prompt oder das Modell zu ändern.</p>
+          <details class="settings-details">
+            <summary>Antwortverhalten</summary>
+            <div class="settings-details-content">
+              <label for="temperature-slider"><strong>Temperatur</strong></label>
+              <div class="settings-row">
+                <input id="temperature-slider" type="range" min="0" max="1.5" step="0.1" value="${getTemperatureSetting()}">
+                <strong id="temperature-value">${getTemperatureSetting().toFixed(1)}</strong>
+              </div>
+              <p class="settings-help">Standard ist 1.1. Höher wirkt lebendiger, niedriger ruhiger.</p>
+              <label for="output-tokens-slider"><strong>Antwortlänge / Output-Tokens</strong></label>
+              <div class="settings-row">
+                <input id="output-tokens-slider" type="range" min="500" max="8000" step="100" value="${getOutputTokenLimit()}">
+                <strong id="output-tokens-value">${getOutputTokenLimit()}</strong>
+              </div>
+              <p class="settings-help">Startwert ist 3500. Das gibt Tatjana mehr Ausgaberaum, ohne den Prompt oder das Modell zu ändern.</p>
+            </div>
+          </details>
         </section>
 <section class="settings-section">
-          <h4>Prompt und Darstellung</h4>
-          <button class="sidebar-action-btn secondary" type="button" data-open-prompt>Prompt bearbeiten</button>
-          <button class="sidebar-action-btn secondary" type="button" data-open-theme>Farben / Hell-Dunkel</button>
+          <details class="settings-details">
+            <summary>Prompt und Darstellung</summary>
+            <div class="settings-details-content settings-compact-actions">
+              <button class="sidebar-action-btn secondary" type="button" data-open-prompt>Prompt bearbeiten</button>
+              <button class="sidebar-action-btn secondary" type="button" data-open-theme>Farben / Hell-Dunkel</button>
+              <label class="settings-toggle-row" for="source-debug-toggle">
+                <span><strong>Memory-/Quellenanzeige</strong><br><small class="settings-help">Nur fuer Tests und Diagnose.</small></span>
+                <input id="source-debug-toggle" type="checkbox" ${isSourceDebugEnabled() ? 'checked' : ''}>
+              </label>
+            </div>
+          </details>
         </section>
 
         <section class="settings-section">
           <h4>Tatjana-Memory</h4>
-          <div class="memory-overview">${renderMemorySettingsOverview()}</div>
           <details class="settings-details">
             <summary>Fragmente bearbeiten</summary>
             <div class="memory-edit-fields">
@@ -5468,18 +6540,18 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
             </div>
           </details>
           <details class="settings-details">
-            <summary>Export / Backup</summary>
+            <summary>Export</summary>
             <div class="settings-details-content">
-              <button class="sidebar-action-btn secondary" type="button" data-export-current-chat>Aktuellen Chat exportieren</button>
-              <p class="settings-help">Speichert den gerade geöffneten Chat als Markdown-Datei.</p>
+              <button class="sidebar-action-btn secondary" type="button" data-export-current-chat>Markdown exportieren</button>
+              <p class="settings-help">Speichert den aktuell geöffneten Chat.</p>
             </div>
           </details>
           <details class="settings-details">
-            <summary>Import / Wiederherstellen</summary>
+            <summary>Import</summary>
             <div class="settings-details-content">
-              <button class="sidebar-action-btn secondary" type="button" data-restore-current-chat-md>Aus Markdown wiederherstellen</button>
-              <button class="sidebar-action-btn secondary" type="button" data-restore-current-chat-json>Aus JSON wiederherstellen</button>
-              <p class="settings-help">Wiederherstellen ersetzt den aktuell geöffneten Chat nach Bestätigung.</p>
+              <button class="sidebar-action-btn secondary" type="button" data-restore-current-chat-md>Markdown importieren</button>
+              <button class="sidebar-action-btn secondary" type="button" data-restore-current-chat-json>JSON importieren</button>
+              <p class="settings-help">Import ersetzt den aktuell geöffneten Chat nach Bestätigung.</p>
             </div>
           </details>
           <details class="settings-details">
@@ -5514,6 +6586,12 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
       setOutputTokenLimit(outputSlider.value);
       outputValue.textContent = String(getOutputTokenLimit());
     });
+
+    const sourceDebugToggle = overlay.querySelector('#source-debug-toggle');
+    sourceDebugToggle?.addEventListener('change', () => {
+      setSourceDebugEnabled(sourceDebugToggle.checked);
+    });
+
     const memoryStatus = overlay.querySelector('#memory-status');
     const memoryList = overlay.querySelector('[data-memory-fragment-list]');
     const memorySearchInput = overlay.querySelector('#memory-fragment-search');
@@ -5529,8 +6607,6 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
 
     const refreshMemoryFragmentView = () => {
       memoryList.innerHTML = renderMemoryFragmentCards(memorySearchInput.value);
-      const overview = overlay.querySelector('.memory-overview');
-      if (overview) overview.innerHTML = renderMemorySettingsOverview();
     };
 
     memorySearchInput.addEventListener('input', refreshMemoryFragmentView);
@@ -5658,13 +6734,14 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
     button.addEventListener('click', () => {
       const top = direction === 'up' ? 0 : messagesDiv.scrollHeight;
       messagesDiv.scrollTo({ top, behavior: 'smooth' });
+      window.setTimeout(update, 280);
     });
 
     const update = () => {
       const distance = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight;
-      const hasScrollableMessages = messagesDiv.scrollHeight > messagesDiv.clientHeight + 260;
-      const canScrollDown = hasScrollableMessages && distance > 220;
-      const canScrollUp = hasScrollableMessages && distance <= 120 && messagesDiv.scrollTop > 520;
+      const hasScrollableMessages = messagesDiv.scrollHeight > messagesDiv.clientHeight + 360;
+      const canScrollDown = hasScrollableMessages && distance > 320;
+      const canScrollUp = hasScrollableMessages && distance <= 80 && messagesDiv.scrollTop > 700;
       if (canScrollDown) {
         setDirection('down');
         button.hidden = false;
@@ -5731,6 +6808,16 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
   }
 
   function initComposerExtras() {
+    document.getElementById('auth-password-toggle')?.addEventListener('click', () => {
+      const passwordInput = document.getElementById('auth-password');
+      setAuthPasswordVisible(passwordInput?.type === 'password');
+      passwordInput?.focus();
+    });
+    document.getElementById('auth-passkey-setup')?.addEventListener('click', setupPortalPasskey);
+    document.getElementById('auth-passkey-login')?.addEventListener('click', tryPortalPasskeyLogin);
+    if (!window.PublicKeyCredential || !navigator.credentials) {
+      document.querySelector('.auth-passkey-actions')?.setAttribute('hidden', '');
+    }
     document.getElementById('settings-btn')?.addEventListener('click', openSettingsModal);
     document.getElementById('logout-btn')?.addEventListener('click', logoutPortalSession);
     document.getElementById('attach-btn')?.addEventListener('click', () => document.getElementById('file-input')?.click());
@@ -5797,6 +6884,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
     }
 
     ensureScrollButton();
+    initTatjanaFloatingPlayer();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initComposerExtras);
