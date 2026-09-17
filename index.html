@@ -2733,6 +2733,10 @@ button[data-open-theme] {
   padding: 14px 16px !important;
   box-shadow: none !important;
   transition: transform .16s ease, box-shadow .16s ease, background .16s ease !important;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  touch-action: manipulation !important;
 }
 
 .message.user,
@@ -2743,6 +2747,11 @@ button[data-open-theme] {
 .message.message-lifted {
   transform: translateY(-2px) scale(1.006) !important;
   box-shadow: 0 12px 28px rgba(15, 23, 42, .13) !important;
+}
+
+.message.message-menu-active {
+  transform: translateY(-2px) scale(1.006) !important;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, .16) !important;
 }
 
 .message-time {
@@ -2792,8 +2801,71 @@ button[data-open-theme] {
 }
 
 #input-container {
-  padding-top: 9px !important;
-  padding-bottom: calc(9px + env(safe-area-inset-bottom)) !important;
+  grid-template-columns: 40px minmax(0, 1fr) 40px 44px !important;
+  padding-top: 10px !important;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+}
+
+#input {
+  min-height: 56px !important;
+  width: 100% !important;
+}
+
+#voice-btn {
+  grid-column: 3 !important;
+}
+
+#stop-response-btn {
+  grid-column: 3 !important;
+}
+
+#stop-response-btn:not([hidden]) ~ #voice-btn {
+  display: none !important;
+}
+
+#send-btn {
+  grid-column: 4 !important;
+}
+
+.message-edit-modal {
+  z-index: 2600 !important;
+}
+
+.message-edit-modal .modal {
+  max-width: min(92vw, 640px) !important;
+  width: min(92vw, 640px) !important;
+}
+
+.message-edit-textarea {
+  width: 100% !important;
+  min-height: 190px !important;
+  resize: vertical !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 14px !important;
+  background: var(--bg-main) !important;
+  color: var(--text-main) !important;
+  font: inherit !important;
+  font-size: 16px !important;
+  line-height: 1.45 !important;
+  padding: 13px 14px !important;
+}
+
+.message-edit-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  margin-top: 12px !important;
+}
+
+.message-edit-submit {
+  width: 44px !important;
+  height: 44px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: var(--primary) !important;
+  color: #ffffff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 @keyframes softPopoverIn {
@@ -2825,6 +2897,110 @@ button[data-open-theme] {
   .message.user {
     max-width: min(82%, 520px) !important;
   }
+
+  #input-container {
+    grid-template-columns: 38px minmax(0, 1fr) 38px 42px !important;
+    gap: 8px !important;
+  }
+
+  #input {
+    min-height: 56px !important;
+  }
+}
+
+body[data-color-mode="light"],
+body:not([data-color-mode="dark"]) {
+  --bg-main: #ffffff !important;
+  --bg-chat: #ffffff !important;
+  --bg-user: #ffffff !important;
+  --bg-assistant: #ead7ff !important;
+  --text-main: #111827 !important;
+  --text-dim: #6b7280 !important;
+  --border: #e5e7eb !important;
+}
+
+body[data-color-mode="dark"] {
+  --bg-main: #000000 !important;
+  --bg-chat: #050505 !important;
+  --bg-user: #101010 !important;
+  --bg-assistant: #21142f !important;
+  --text-main: #f9fafb !important;
+  --text-dim: #cbd5e1 !important;
+  --border: #2a2a2a !important;
+}
+
+body[data-color-mode="light"] #app,
+body:not([data-color-mode="dark"]) #app,
+body[data-color-mode="light"] #header,
+body:not([data-color-mode="dark"]) #header,
+body[data-color-mode="light"] #messages,
+body:not([data-color-mode="dark"]) #messages,
+body[data-color-mode="light"] #input-container,
+body:not([data-color-mode="dark"]) #input-container {
+  background: #ffffff !important;
+  color: #111827 !important;
+}
+
+body[data-color-mode="dark"],
+body[data-color-mode="dark"] #app,
+body[data-color-mode="dark"] #header,
+body[data-color-mode="dark"] #messages,
+body[data-color-mode="dark"] #input-container,
+body[data-color-mode="dark"] #sidebar {
+  background: #000000 !important;
+  color: #f9fafb !important;
+}
+
+body[data-color-mode="dark"] .message.user,
+body[data-color-mode="dark"] .thread-menu-popover,
+body[data-color-mode="dark"] .modal,
+body[data-color-mode="dark"] .vector-memory-debug,
+body[data-color-mode="dark"] .empty-thread-list {
+  background: #101010 !important;
+  color: #f9fafb !important;
+  border-color: #2a2a2a !important;
+}
+
+body[data-color-mode="dark"] .message.assistant {
+  background: #21142f !important;
+  color: #f9fafb !important;
+  border-color: #3a2a4f !important;
+}
+
+body[data-color-mode="light"] .vector-memory-debug,
+body:not([data-color-mode="dark"]) .vector-memory-debug {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
+}
+
+body[data-color-mode="dark"] #input,
+body[data-color-mode="dark"] #thread-search,
+body[data-color-mode="dark"] textarea,
+body[data-color-mode="dark"] input {
+  background: #101010 !important;
+  color: #f9fafb !important;
+  border-color: #333333 !important;
+}
+
+body[data-color-mode="dark"] .icon-btn,
+body[data-color-mode="dark"] .composer-icon-btn,
+body[data-color-mode="dark"] .message-tool-btn,
+body[data-color-mode="dark"] .audio-player-btn,
+body[data-color-mode="dark"] .audio-player-close,
+body[data-color-mode="dark"] .tts-voice-preview {
+  background: #111111 !important;
+  color: #f9fafb !important;
+  border-color: #333333 !important;
+}
+
+body[data-color-mode="light"] .icon-btn,
+body:not([data-color-mode="dark"]) .icon-btn,
+body[data-color-mode="light"] .composer-icon-btn,
+body:not([data-color-mode="dark"]) .composer-icon-btn {
+  background: #ffffff !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
 }
 </style>
 </head>
@@ -5969,8 +6145,73 @@ function getMessageTimestampForIndex(messageIndex) {
   return message?.timestamp || message?.created || null;
 }
 
+function closeMessageEditModal() {
+  document.getElementById('message-edit-modal')?.remove();
+}
+
+function submitEditedUserMessage(messageIndex, editedText) {
+  if (activeRequestController) return;
+  const cleanText = (editedText || '').trim();
+  if (!cleanText) return;
+  const thread = getCurrentThread();
+  const message = thread?.messages?.[messageIndex];
+  if (!thread || !message || message.role !== 'user') return;
+
+  thread.messages = thread.messages.slice(0, messageIndex);
+  thread.updated = Date.now();
+  saveThreads();
+  renderMessages();
+  renderThreadList();
+
+  input.value = cleanText;
+  input.dispatchEvent(new Event('input'));
+  closeMessageEditModal();
+  sendMessage();
+}
+
+function openMessageEditModal(messageIndex) {
+  const thread = getCurrentThread();
+  const message = thread?.messages?.[messageIndex];
+  if (!message || message.role !== 'user') return;
+
+  closeMessageEditModal();
+  closeMessageMenu();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'message-edit-modal';
+  overlay.className = 'modal-overlay active message-edit-modal';
+
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.innerHTML = `
+    <button class="modal-close" type="button" aria-label="Schliessen">×</button>
+    <h3>Nachricht bearbeiten</h3>
+    <textarea class="message-edit-textarea" aria-label="Nachricht bearbeiten">${escapeHtml(message.content || '')}</textarea>
+    <div class="message-edit-actions">
+      <button class="message-edit-submit" type="button" aria-label="Änderung senden">${tatjanaSvgIcon('arrowUp')}</button>
+    </div>
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  const textarea = modal.querySelector('.message-edit-textarea');
+  const closeButton = modal.querySelector('.modal-close');
+  const submitButton = modal.querySelector('.message-edit-submit');
+  closeButton.addEventListener('click', closeMessageEditModal);
+  submitButton.addEventListener('click', () => submitEditedUserMessage(messageIndex, textarea.value));
+  overlay.addEventListener('pointerdown', event => {
+    if (event.target === overlay) closeMessageEditModal();
+  });
+  textarea.focus();
+  textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+}
+
 function closeMessageMenu() {
   document.getElementById('message-menu-popover')?.remove();
+  document.querySelectorAll('.message-menu-active').forEach(element => {
+    element.classList.remove('message-menu-active', 'message-lifted');
+  });
 }
 
 function makeMessageMenuButton(label, iconName, action, danger = false) {
@@ -6075,16 +6316,13 @@ function showMessageMenu(messageIndex, sourceElement) {
   popover.id = 'message-menu-popover';
   popover.className = 'thread-menu-popover message-menu-popover';
 
-  const title = document.createElement('div');
-  title.className = 'thread-menu-title';
-  title.textContent = message.role === 'user' ? 'Deine Nachricht' : 'Tatjanas Antwort';
-  popover.appendChild(title);
-
   popover.appendChild(makeMessageMenuButton('Kopieren', 'copy', () => navigator.clipboard?.writeText(content)));
   popover.appendChild(makeMessageMenuButton('Teilen', 'share', () => shareMessageContent(content)));
   popover.appendChild(makeMessageMenuButton('Speichern', 'download', () => saveMessageAsText(content, messageIndex)));
 
-  if (message.role === 'assistant') {
+  if (message.role === 'user') {
+    popover.appendChild(makeMessageMenuButton('Bearbeiten', 'edit', () => openMessageEditModal(messageIndex)));
+  } else if (message.role === 'assistant') {
     popover.appendChild(makeMessageMenuButton('Vorlesen', 'volume', (_button, triggerRect) => showTatjanaVoiceMenu(content, messageIndex, triggerRect)));
     popover.appendChild(makeMessageMenuButton('Wiederholen', 'refresh', () => regenerateAssistantAt(messageIndex)));
   }
@@ -6095,10 +6333,17 @@ function showMessageMenu(messageIndex, sourceElement) {
   popover.appendChild(makeMessageMenuButton('Löschen', 'trash', () => deleteMessageAt(messageIndex), true));
 
   document.body.appendChild(popover);
+  if (sourceElement) {
+    sourceElement.classList.add('message-menu-active');
+  }
 
   const rect = sourceElement?.getBoundingClientRect?.();
   const popoverRect = popover.getBoundingClientRect();
-  const top = rect ? Math.min(rect.bottom + 6, window.innerHeight - popoverRect.height - 10) : 80;
+  const preferredTop = rect ? rect.top - popoverRect.height - 8 : 80;
+  const fallbackTop = rect ? rect.bottom + 8 : 80;
+  const top = rect
+    ? (preferredTop >= 10 ? preferredTop : Math.min(fallbackTop, window.innerHeight - popoverRect.height - 10))
+    : 80;
   const left = rect ? Math.min(Math.max(rect.left, 10), window.innerWidth - popoverRect.width - 10) : 10;
   popover.style.top = `${Math.max(10, top)}px`;
   popover.style.left = `${Math.max(10, left)}px`;
@@ -6155,6 +6400,10 @@ function enhanceMessageElement(div, role, content, messageIndex) {
     if (window.getSelection?.().toString()) return;
     pulseMessageCard(div, true);
     showMessageMenu(messageIndex, div);
+  });
+  div.addEventListener('contextmenu', event => {
+    if (event.target.closest('button, select, input, textarea, a')) return;
+    event.preventDefault();
   });
 }
 function displayMessage(role, content, messageIndex = null, timestampOverride = null, attachments = []) {
