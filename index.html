@@ -4569,7 +4569,7 @@ function updateMemorySourceDebug({ hidden = false, chatMessageCount = 0, convers
   panel.open = false;
 }
 
-async function getVectorMemoryContext(userText = '') {
+async function getVectorMemoryContext(userText = '', signal = null) {
   const query = String(userText || '').trim();
   if (!query || location.protocol === 'file:') return { message: null, memories: [] };
 
@@ -4577,7 +4577,8 @@ async function getVectorMemoryContext(userText = '') {
     const response = await fetch('/.netlify/functions/openai-vector-memory', {
       method: 'POST',
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ query })
+      body: JSON.stringify({ query }),
+      signal
     });
 
     if (!response.ok) {
@@ -5454,13 +5455,14 @@ function formatInternetResearchForTatjana(result) {
   ].join('\n\n');
 }
 
-async function getInternetResearchContext(userText) {
+async function getInternetResearchContext(userText, signal = null) {
   if (!shouldUseInternetResearch(userText)) return null;
   try {
     const response = await fetch('/.netlify/functions/openai-web-search', {
       method: 'POST',
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ query: userText })
+      body: JSON.stringify({ query: userText }),
+      signal
     });
     if (!response.ok) throw new Error(`Web search ${response.status}`);
     const data = await response.json();
@@ -6915,8 +6917,10 @@ input.disabled = true;
   try {
   const contextWindowSize = getContextWindowSize();
   const liveMessages = contextWindowSize === 0 ? thread.messages : thread.messages.slice(-contextWindowSize);
-  const internetResearchContext = await getInternetResearchContext(text);
-  const vectorMemoryContext = await getVectorMemoryContext(text);
+  const internetResearchContext = await getInternetResearchContext(text, activeRequestController?.signal);
+  if (!activeRequestController) return;
+  const vectorMemoryContext = await getVectorMemoryContext(text, activeRequestController?.signal);
+  if (!activeRequestController) return;
   const conversationAwarenessContext = buildConversationAwarenessMessage(thread, userContent);
   const memoryFragmentMatches = findMatchingMemoryFragments(text);
   const newLongTermMemoryMatches = selectNewLongTermMemoriesForContext(text);
