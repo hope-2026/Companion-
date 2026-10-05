@@ -6135,7 +6135,7 @@ input.addEventListener('keydown', (e) => {
 // Send button click
 sendBtn.addEventListener('click', () => {
   if (activeRequestController) {
-    activeRequestController.abort();
+    stopActiveResponse();
     return;
   }
   sendMessage();
