@@ -4457,6 +4457,28 @@ function getVectorMemoryLabel(memory) {
   ].filter(Boolean).join(' - ');
 }
 
+function createLinkedTimeoutSignal(parentSignal = null, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+  const abortFromParent = () => controller.abort();
+
+  if (parentSignal) {
+    if (parentSignal.aborted) {
+      controller.abort();
+    } else {
+      parentSignal.addEventListener('abort', abortFromParent, { once: true });
+    }
+  }
+
+  return {
+    signal: controller.signal,
+    clear() {
+      window.clearTimeout(timeoutId);
+      parentSignal?.removeEventListener?.('abort', abortFromParent);
+    }
+  };
+}
+
 function normaliseConversationAwarenessText(text = '') {
   return String(text || '')
     .toLowerCase()
@@ -4573,12 +4595,13 @@ async function getVectorMemoryContext(userText = '', signal = null) {
   const query = String(userText || '').trim();
   if (!query || location.protocol === 'file:') return { message: null, memories: [] };
 
+  const timeout = createLinkedTimeoutSignal(signal, 8000);
   try {
     const response = await fetch('/.netlify/functions/openai-vector-memory', {
       method: 'POST',
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ query }),
-      signal
+      signal: timeout.signal
     });
 
     if (!response.ok) {
@@ -4624,8 +4647,11 @@ ${sections.join('\n\n')}`
       memories
     };
   } catch (error) {
+    if (signal?.aborted) throw error;
     console.warn('Vector memory search skipped:', error);
     return { message: null, memories: [] };
+  } finally {
+    timeout.clear();
   }
 }
 
@@ -5457,23 +5483,27 @@ function formatInternetResearchForTatjana(result) {
 
 async function getInternetResearchContext(userText, signal = null) {
   if (!shouldUseInternetResearch(userText)) return null;
+  const timeout = createLinkedTimeoutSignal(signal, 10000);
   try {
     const response = await fetch('/.netlify/functions/openai-web-search', {
       method: 'POST',
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ query: userText }),
-      signal
+      signal: timeout.signal
     });
     if (!response.ok) throw new Error(`Web search ${response.status}`);
     const data = await response.json();
     const content = formatInternetResearchForTatjana(data);
     return content ? { role: 'system', content } : null;
   } catch (error) {
+    if (signal?.aborted) throw error;
     console.warn('Internet-Recherche nicht verfügbar:', error);
     return {
       role: 'system',
       content: 'Internet-Recherche wurde versucht, ist aber gerade nicht verfügbar. Behaupte keine aktuelle Recherche und weise bei aktuellen Fakten darauf hin, dass du sie nicht live prüfen konntest.'
     };
+  } finally {
+    timeout.clear();
   }
 }
 
