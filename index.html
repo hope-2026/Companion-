@@ -6852,9 +6852,25 @@ function setSendButtonGenerating(isGenerating) {
   sendBtn.title = isGenerating ? 'Antwort stoppen' : 'Nachricht senden';
 }
 
-async function sendMessage() {
+function resetResponseGenerationUi() {
+  input.disabled = false;
+  setSendButtonGenerating(false);
+  const stopBtn = document.getElementById('stop-response-btn');
+  if (stopBtn) stopBtn.hidden = true;
+}
+
+function stopActiveResponse() {
   if (activeRequestController) {
     activeRequestController.abort();
+    activeRequestController = null;
+  }
+  resetResponseGenerationUi();
+  input.focus();
+}
+
+async function sendMessage() {
+  if (activeRequestController) {
+    stopActiveResponse();
     return;
   }
   const text = input.value.trim();
@@ -6884,7 +6900,9 @@ input.disabled = true;
   updateThreadTitle(thread);
   saveThreads();
   refineThreadTitleWithMiniAssistant(thread);
-  await markThreadDirty(thread.id, { indexChanged: true });
+  markThreadDirty(thread.id, { indexChanged: true }).catch(error => {
+    console.warn('Could not mark outgoing thread dirty:', error);
+  });
   renderThreadList();
   
   input.value = '';
@@ -6948,7 +6966,9 @@ input.disabled = true;
     thread.updated = Date.now();
     
     saveThreads();
-    await markThreadDirty(thread.id);
+    markThreadDirty(thread.id).catch(error => {
+      console.warn('Could not mark answered thread dirty:', error);
+    });
     renderThreadList();
     updateNewLongTermMemoryFromExchange(thread, userContent, assistantMessage).catch(error => {
       console.warn('New long-term memory update skipped:', error);
@@ -6972,11 +6992,8 @@ input.disabled = true;
     }
   } finally {
     window.clearTimeout(requestTimeoutId);
-    input.disabled = false;
-    setSendButtonGenerating(false);
     activeRequestController = null;
-    const stopBtn = document.getElementById('stop-response-btn');
-    if (stopBtn) stopBtn.hidden = true;
+    resetResponseGenerationUi();
     input.focus();
   }
 }
@@ -7500,7 +7517,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
       }
       event.target.value = '';
     });
-    document.getElementById('stop-response-btn')?.addEventListener('click', () => activeRequestController?.abort());
+    document.getElementById('stop-response-btn')?.addEventListener('click', stopActiveResponse);
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const voiceButton = document.getElementById('voice-btn');
