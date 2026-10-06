@@ -3598,6 +3598,8 @@ const IDB_NAME = 'companionPortalThreadsDb';
 const BASIC_IDB_NAME = 'companionPortalBasicDb';
 const IDB_VERSION = 1;
 const IDB_STORE = 'portalState';
+const PORTAL_STORAGE_TIMEOUT_MS = 4000;
+let threadsStorageReady = false;
 
 let threads = {};
 let currentThreadId = null;
@@ -4552,16 +4554,38 @@ ${sections.join('\n\n')}`
 function openPortalDb() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(IDB_NAME, IDB_VERSION);
+    let settled = false;
+    const fail = error => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeout);
+      reject(error);
+    };
+    const timeout = window.setTimeout(() => fail(new Error('IndexedDB open timed out')), PORTAL_STORAGE_TIMEOUT_MS);
 
     request.onupgradeneeded = () => {
+      if (settled) {
+        request.transaction?.abort();
+        return;
+      }
       const db = request.result;
       if (!db.objectStoreNames.contains(IDB_STORE)) {
         db.createObjectStore(IDB_STORE);
       }
     };
 
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      if (settled) {
+        request.result.close();
+        return;
+      }
+      settled = true;
+      window.clearTimeout(timeout);
+      request.result.onversionchange = () => request.result.close();
+      resolve(request.result);
+    };
+    request.onerror = () => fail(request.error);
+    request.onblocked = () => fail(new Error('IndexedDB open blocked by another connection'));
   });
 }
 
@@ -4569,13 +4593,32 @@ function openExistingDb(name) {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(name);
     let existedBeforeÖffnen = true;
+    let settled = false;
+    const fail = error => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeout);
+      reject(error);
+    };
+    const timeout = window.setTimeout(() => fail(new Error('Legacy IndexedDB open timed out')), PORTAL_STORAGE_TIMEOUT_MS);
 
     request.onupgradeneeded = () => {
+      if (settled) {
+        request.transaction?.abort();
+        return;
+      }
       existedBeforeÖffnen = false;
     };
 
     request.onsuccess = () => {
       const db = request.result;
+      if (settled) {
+        db.close();
+        return;
+      }
+      settled = true;
+      window.clearTimeout(timeout);
+      db.onversionchange = () => db.close();
       if (!existedBeforeÖffnen) {
         db.close();
         indexedDB.deleteDatabase(name);
@@ -4585,71 +4628,66 @@ function openExistingDb(name) {
       resolve(db);
     };
 
-    request.onerror = () => reject(request.error);
+    request.onerror = () => fail(request.error);
+    request.onblocked = () => fail(new Error('Legacy IndexedDB open blocked'));
   });
 }
 
 async function getPortalState(key) {
-  const db = await openPortalDb();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(IDB_STORE, 'readonly');
-    const request = tx.objectStore(IDB_STORE).get(key);
+  return runPortalStorageTransaction('readonly', store => store.get(key));
+}
 
-    request.onsuccess = () => resolve(request.result ?? null);
-    request.onerror = () => reject(request.error);
-    tx.oncomplete = () => db.close();
-    tx.onerror = () => {
+async function runPortalStorageTransaction(mode, operation, existingDb = null) {
+  const db = existingDb || await openPortalDb();
+  return new Promise((resolve, reject) => {
+    let tx;
+    let request;
+    let settled = false;
+    const finish = error => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeout);
       db.close();
-      reject(tx.error);
+      if (error) reject(error);
+      else resolve(request.result ?? null);
     };
+    const timeout = window.setTimeout(() => {
+      finish(new Error('IndexedDB transaction timed out'));
+      try { tx?.abort(); } catch (error) { /* Already completed. */ }
+    }, PORTAL_STORAGE_TIMEOUT_MS);
+    try {
+      tx = db.transaction(IDB_STORE, mode);
+      request = operation(tx.objectStore(IDB_STORE));
+      request.onerror = () => finish(request.error || new Error('IndexedDB request failed'));
+      tx.oncomplete = () => finish();
+      tx.onerror = () => finish(tx.error || new Error('IndexedDB transaction failed'));
+      tx.onabort = () => finish(tx.error || new Error('IndexedDB transaction aborted'));
+    } catch (error) {
+      finish(error);
+    }
   });
 }
 
 async function getBasicPortalConversation() {
   const db = await openExistingDb(BASIC_IDB_NAME);
   if (!db) return [];
-
-  return new Promise((resolve, reject) => {
-    if (!db.objectStoreNames.contains(IDB_STORE)) {
-      db.close();
-      resolve([]);
-      return;
-    }
-
-    const tx = db.transaction(IDB_STORE, 'readonly');
-    const request = tx.objectStore(IDB_STORE).get(LEGACY_CONVERSATION_KEY);
-
-    request.onsuccess = () => {
-      const value = request.result;
-      resolve(Array.isArray(value) ? value : []);
-    };
-    request.onerror = () => reject(request.error);
-    tx.oncomplete = () => db.close();
-    tx.onerror = () => {
-      db.close();
-      reject(tx.error);
-    };
-  });
+  if (!db.objectStoreNames.contains(IDB_STORE)) {
+    db.close();
+    return [];
+  }
+  const value = await runPortalStorageTransaction('readonly', store => store.get(LEGACY_CONVERSATION_KEY), db);
+  return Array.isArray(value) ? value : [];
 }
 
 async function setPortalState(key, value) {
-  const db = await openPortalDb();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(IDB_STORE, 'readwrite');
-    tx.objectStore(IDB_STORE).put(value, key);
-
-    tx.oncomplete = () => {
-      db.close();
-      resolve();
-    };
-    tx.onerror = () => {
-      db.close();
-      reject(tx.error);
-    };
-  });
+  if (key === THREADS_KEY && !threadsStorageReady) {
+    throw new Error('Chat storage was not loaded safely; refusing to overwrite it');
+  }
+  return runPortalStorageTransaction('readwrite', store => store.put(value, key));
 }
 
 function saveCurrentThreadId() {
+  if (!threadsStorageReady) return;
   setPortalState(CURRENT_THREAD_KEY, currentThreadId).catch(error => {
     console.warn('Could not save current thread id to IndexedDB:', error);
   });
@@ -4669,15 +4707,25 @@ function makeThread(title = 'Neue Unterhaltung', messages = []) {
 }
 
 async function loadThreads() {
+  threadsStorageReady = false;
   try {
-    threads = await getPortalState(THREADS_KEY) || {};
+    const storedThreads = await getPortalState(THREADS_KEY);
+    if (storedThreads !== null && (typeof storedThreads !== 'object' || Array.isArray(storedThreads))) {
+      throw new Error('Invalid stored chat data');
+    }
+    threads = storedThreads || {};
+    threadsStorageReady = true;
   } catch (error) {
     console.warn('Could not load saved threads from IndexedDB:', error);
     try {
-      threads = JSON.parse(localStorage.getItem(THREADS_KEY) || '{}');
+      const fallback = JSON.parse(localStorage.getItem(THREADS_KEY) || 'null');
+      if (!fallback || typeof fallback !== 'object' || Array.isArray(fallback) || !Object.keys(fallback).length) {
+        throw error;
+      }
+      threads = fallback;
     } catch (fallbackError) {
       console.warn('Could not load fallback localStorage threads:', fallbackError);
-      threads = {};
+      throw error;
     }
   }
   
@@ -4699,6 +4747,8 @@ async function loadThreads() {
       }
     } catch (error) {
       console.warn('Could not load basic IndexedDB conversation:', error);
+      threadsStorageReady = false;
+      throw error;
     }
   }
 
@@ -5289,7 +5339,16 @@ function formatThreadDate(timestamp) {
   });
 }
 
+function scheduleScrollButtonUpdate() {
+  window.requestAnimationFrame(() => {
+    if (typeof window.updateTatjanaScrollButton === 'function') {
+      window.updateTatjanaScrollButton();
+    }
+  });
+}
+
 function renderMessages() {
+  if (!threadsStorageReady && (!currentThreadId || !threads[currentThreadId])) return;
   messagesDiv.innerHTML = '';
   getCurrentThread().messages.forEach((msg, index) => {
     if (msg.role !== 'system') {
@@ -6747,16 +6806,20 @@ async function sendMessage() {
     showCompanionPromptBearbeitenor();
     return;
   }
-input.disabled = true;
+  input.disabled = true;
   setSendButtonGenerating(true);
   const stopBtn = document.getElementById('stop-response-btn');
   if (stopBtn) stopBtn.hidden = false;
-  activeRequestController = new AbortController();
+  const requestController = new AbortController();
+  activeRequestController = requestController;
+  const signal = requestController.signal;
+  let typing = null;
   let requestTimedOut = false;
   const requestTimeoutId = window.setTimeout(() => {
     requestTimedOut = true;
-    activeRequestController?.abort();
+    requestController.abort();
   }, 90000);
+  try {
   const thread = getCurrentThread();
   
   const userContent = text || 'Bitte schau dir das Bild an.';
@@ -6766,7 +6829,9 @@ input.disabled = true;
   updateThreadTitle(thread);
   saveThreads();
   refineThreadTitleWithMiniAssistant(thread);
-  await markThreadDirty(thread.id, { indexChanged: true });
+  markThreadDirty(thread.id, { indexChanged: true }).catch(error => {
+    console.warn('Could not persist chat sync marker:', error);
+  });
   renderThreadList();
   
   input.value = '';
@@ -6774,15 +6839,14 @@ input.disabled = true;
   pendingImageAttachments = [];
   window.renderPendingImageAttachments?.();
   
-  const typing = showTyping();
+  typing = showTyping();
   
-  try {
   const contextWindowSize = getContextWindowSize();
   const liveMessages = contextWindowSize === 0 ? thread.messages : thread.messages.slice(-contextWindowSize);
-  const internetResearchContext = await getInternetResearchContext(text, activeRequestController?.signal);
-  if (!activeRequestController) return;
-  const vectorMemoryContext = await getVectorMemoryContext(text, activeRequestController?.signal);
-  if (!activeRequestController) return;
+  const internetResearchContext = await getInternetResearchContext(text, signal);
+  if (signal.aborted) return;
+  const vectorMemoryContext = await getVectorMemoryContext(text, signal);
+  if (signal.aborted) return;
   const conversationAwarenessContext = buildConversationAwarenessMessage(thread, userContent);
   const memoryFragmentMatches = findMatchingMemoryFragments(text);
   const newLongTermMemoryMatches = selectNewLongTermMemoriesForContext(text);
@@ -6813,7 +6877,7 @@ input.disabled = true;
         temperature: getTemperatureSetting(),
         max_tokens: getOutputTokenLimit()
       }),
-      signal: activeRequestController.signal
+      signal
     });
     
     if (!response.ok) {
@@ -6821,6 +6885,7 @@ input.disabled = true;
     }
     
     const data = await response.json();
+    if (signal.aborted) return;
     const assistantMessage = data.choices[0].message.content;
     
     typing.remove();
@@ -6831,15 +6896,18 @@ input.disabled = true;
     thread.updated = Date.now();
     
     saveThreads();
-    await markThreadDirty(thread.id);
+    markThreadDirty(thread.id).catch(error => {
+      console.warn('Could not persist response sync marker:', error);
+    });
     renderThreadList();
     updateNewLongTermMemoryFromExchange(thread, userContent, assistantMessage).catch(error => {
       console.warn('New long-term memory update skipped:', error);
     });
     
   } catch (error) {
-    typing.remove();
+    typing?.remove();
     console.error('Error:', error);
+    if (signal.aborted && activeRequestController !== requestController) return;
     if (error.name === 'AbortError') {
       displayMessage('assistant', requestTimedOut
         ? 'Die Antwort hat zu lange gebraucht. Ich habe den Versuch beendet, damit du direkt weiter schreiben kannst.'
@@ -6854,10 +6922,13 @@ input.disabled = true;
       displayMessage('assistant', 'Da ist gerade technisch etwas schiefgelaufen. Schau bitte in die Konsole, wenn du Details brauchst.');
     }
   } finally {
+    typing?.remove();
     window.clearTimeout(requestTimeoutId);
-    activeRequestController = null;
-    resetResponseGenerationUi();
-    input.focus();
+    if (activeRequestController === requestController) {
+      activeRequestController = null;
+      resetResponseGenerationUi();
+      input.focus();
+    }
   }
 }
 
@@ -6865,21 +6936,21 @@ async function bootPortal() {
   const authenticated = await ensureAuthenticatedBeforeBoot();
   if (!authenticated) return;
   await loadThreads();
-  await loadKvSyncState();
-  await loadNewLongTermMemoryState();
   renderMessages();
   renderThreadList();
   input.focus();
+  await loadKvSyncState().catch(error => console.warn('Could not load sync markers:', error));
+  await loadNewLongTermMemoryState().catch(error => console.warn('Could not load new memory:', error));
 }
 
 bootPortal().catch(error => {
   console.error('Portal boot failed:', error);
-  threads = {};
-  const fallbackThread = makeThread();
-  threads[fallbackThread.id] = fallbackThread;
-  currentThreadId = fallbackThread.id;
-  renderMessages();
-  renderThreadList();
+  if (Object.keys(threads).length) {
+    renderMessages();
+    renderThreadList();
+  } else {
+    displayMessage('assistant', 'Die gespeicherten Unterhaltungen konnten gerade nicht geladen werden. Das bedeutet nicht, dass sie geloescht sind. Bitte keine Website-Daten loeschen und die Seite erneut laden.');
+  }
 });
 
 
@@ -7294,14 +7365,6 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
     messagesDiv.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
     update();
-  }
-
-  function scheduleScrollButtonUpdate() {
-    window.requestAnimationFrame(() => {
-      if (typeof window.updateTatjanaScrollButton === 'function') {
-        window.updateTatjanaScrollButton();
-      }
-    });
   }
 
   function getComposerAttachmentContainer() {
