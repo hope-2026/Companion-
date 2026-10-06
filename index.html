@@ -2546,10 +2546,12 @@ button[data-open-theme] {
   position: absolute;
   width: 1px;
   height: 1px;
-  opacity: 0;
-  pointer-events: none;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
   clip: rect(0 0 0 0);
-  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .auth-password-wrap input {
@@ -2644,8 +2646,8 @@ button[data-open-theme] {
 #scroll-bottom-btn {
   position: fixed !important;
   left: auto !important;
-  right: calc(14px + env(safe-area-inset-right)) !important;
-  bottom: calc(132px + env(safe-area-inset-bottom)) !important;
+  right: calc(18px + env(safe-area-inset-right)) !important;
+  bottom: calc(148px + env(safe-area-inset-bottom)) !important;
   transform: none !important;
   z-index: 35 !important;
   width: 32px !important;
@@ -2654,12 +2656,13 @@ button[data-open-theme] {
   min-height: 32px !important;
   max-width: 32px !important;
   max-height: 32px !important;
-  border: 1px solid rgba(15, 23, 42, .10) !important;
+  padding: 0 !important;
+  border: 1px solid rgba(15, 23, 42, .08) !important;
   border-radius: 999px !important;
-  background: rgba(255, 255, 255, .86) !important;
-  color: #374151 !important;
-  box-shadow: 0 8px 18px rgba(15, 23, 42, .10) !important;
-  opacity: .88 !important;
+  background: rgba(255, 255, 255, .72) !important;
+  color: #1f2937 !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, .10) !important;
+  opacity: .82 !important;
   backdrop-filter: blur(8px) !important;
 }
 
@@ -2668,15 +2671,22 @@ button[data-open-theme] {
 }
 
 #scroll-bottom-btn .icon-svg {
-  width: 17px !important;
-  height: 17px !important;
-  stroke-width: 2.2 !important;
+  width: 18px !important;
+  height: 18px !important;
+  stroke-width: 2.1 !important;
+}
+
+body[data-color-mode="dark"] #scroll-bottom-btn {
+  background: rgba(17, 17, 17, .72) !important;
+  color: #f9fafb !important;
+  border-color: rgba(255, 255, 255, .12) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .18) !important;
 }
 
 @media (max-width: 700px) {
   #scroll-bottom-btn {
-    right: calc(12px + env(safe-area-inset-right)) !important;
-    bottom: calc(126px + env(safe-area-inset-bottom)) !important;
+    right: calc(16px + env(safe-area-inset-right)) !important;
+    bottom: calc(160px + env(safe-area-inset-bottom)) !important;
   }
 }
 
@@ -3014,89 +3024,6 @@ body:not([data-color-mode="dark"]) .composer-icon-btn {
   color: #111827 !important;
   border-color: #e5e7eb !important;
 }
-
-.chat-thread-menu-btn {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 999px !important;
-  background: var(--bg-main) !important;
-  color: var(--text-main) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  touch-action: manipulation !important;
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-body[data-color-mode="dark"] .chat-thread-menu-btn {
-  background: #111111 !important;
-  color: #f9fafb !important;
-  border-color: #333333 !important;
-}
-
-body[data-color-mode="dark"] #scroll-bottom-btn {
-  background: rgba(17, 17, 17, .86) !important;
-  color: #f9fafb !important;
-  border-color: rgba(255, 255, 255, .14) !important;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, .22) !important;
-}
-
-.chat-start-screen {
-  flex: 1 !important;
-  min-height: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 32px 18px !important;
-}
-
-.chat-start-content {
-  width: min(520px, 100%) !important;
-  text-align: center !important;
-}
-
-.chat-start-content h2 {
-  margin: 0 0 10px !important;
-  color: var(--text-main) !important;
-  font-size: clamp(24px, 5vw, 34px) !important;
-  font-weight: 700 !important;
-}
-
-.chat-start-content p {
-  margin: 0 auto 20px !important;
-  max-width: 420px !important;
-  color: var(--text-dim) !important;
-  font-size: 15px !important;
-  line-height: 1.5 !important;
-}
-
-.chat-start-actions {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 10px !important;
-  flex-wrap: wrap !important;
-}
-
-.chat-start-action {
-  min-height: 42px !important;
-  padding: 10px 16px !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 999px !important;
-  background: var(--bg-chat) !important;
-  color: var(--text-main) !important;
-  font: inherit !important;
-  font-weight: 650 !important;
-  cursor: pointer !important;
-}
-
-.chat-start-action.primary {
-  border-color: var(--primary) !important;
-  background: var(--primary) !important;
-  color: #ffffff !important;
-}
 </style>
 </head>
 <body>
@@ -3167,7 +3094,6 @@ body[data-color-mode="dark"] #scroll-bottom-btn {
         <div id="title">Tatjana</div>
       </div>
       <div id="header-controls">
-        <button class="chat-thread-menu-btn" id="current-thread-menu-btn" type="button" title="Chat-Aktionen" aria-label="Chat-Aktionen öffnen"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle></svg></button>
         <button class="icon-btn" id="logout-btn" type="button" title="Abmelden" aria-label="Abmelden"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></button>
         <button class="icon-btn" id="settings-btn" type="button" title="Einstellungen" aria-label="Einstellungen"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6V20a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1H4a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6V4a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.22.34.42.67.6 1H20a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-.51 1Z"></path></svg></button>
       </div>
@@ -3275,7 +3201,8 @@ function getTatjanaConversationStyleContext() {
 - Monis Vermutungen nicht automatisch bestätigen.
 - Erfinde keine psychologischen Motive oder Gefühle anderer Personen, wenn sie nicht aus Gespräch oder Erinnerung belegt sind.
 - Humor und Neckerei nur, wenn die Situation dazu passt; bei ernsten Sorgen keine unpassenden Witze oder übertriebene Lockerheit.
-- Wenn Moni im aktuellen Chat sehr ähnliche Testfragen wiederholt, natürlich darauf eingehen, statt so zu tun, als wäre es die erste Frage.`;
+- Wenn Moni im aktuellen Chat sehr ähnliche Testfragen wiederholt, natürlich darauf eingehen, statt so zu tun, als wäre es die erste Frage.
+- Normale Gespräche sollen wie ein echtes Gespräch wirken und nicht wie eine perfekt formatierte KI-Antwort.`;
 }
 
 function updateCompanionPromptButton() {
@@ -3723,17 +3650,6 @@ function buildPortalAuthHeaders(headers = {}) {
   return token ? { ...headers, Authorization: `Bearer ${token}` } : { ...headers };
 }
 
-function storePasskeySessionToken(token = getPortalAuthToken()) {
-  if (!token || !token.includes('.')) return;
-  const storedCredential = getStoredPasskeyCredential();
-  if (!storedCredential?.rawId) return;
-  localStorage.setItem(AUTH_PASSKEY_KEY, JSON.stringify({
-    ...storedCredential,
-    sessionToken: token,
-    sessionTokenStoredAt: new Date().toISOString()
-  }));
-}
-
 async function cloudflareSyncFetch(url, options = {}) {
   const response = await fetch(url, {
     ...options,
@@ -3872,6 +3788,17 @@ function getStoredPasskeyCredential() {
   }
 }
 
+function storePasskeySessionToken(token = getPortalAuthToken()) {
+  if (!token || !token.includes('.')) return;
+  const storedCredential = getStoredPasskeyCredential();
+  if (!storedCredential?.id) return;
+  localStorage.setItem(AUTH_PASSKEY_KEY, JSON.stringify({
+    ...storedCredential,
+    sessionToken: token,
+    sessionTokenStoredAt: new Date().toISOString()
+  }));
+}
+
 function webAuthnAvailable() {
   return Boolean(window.PublicKeyCredential && navigator.credentials && window.isSecureContext);
 }
@@ -3912,9 +3839,8 @@ async function setupPortalPasskey() {
       id: credential.id,
       rawId: bufferToBase64Url(credential.rawId),
       type: credential.type,
-      createdAt: new Date().toISOString(),
-      sessionToken: getPortalAuthToken().includes('.') ? getPortalAuthToken() : null,
-      sessionTokenStoredAt: getPortalAuthToken().includes('.') ? new Date().toISOString() : null
+      sessionToken: getPortalAuthToken() || '',
+      createdAt: new Date().toISOString()
     }));
     showAuthMessage('Passkey wurde lokal vorbereitet. Das Passwort bleibt als Fallback aktiv.', 'success');
   } catch (error) {
@@ -3950,7 +3876,7 @@ async function tryPortalPasskeyLogin() {
 
     if (!assertion) return;
     if (!storedCredential.sessionToken || !storedCredential.sessionToken.includes('.')) {
-      showAuthMessage('Passkey erkannt. Bitte melde dich einmal mit Passwort an, damit die sichere Session mit Face ID verbunden wird.');
+      showAuthMessage('Passkey erkannt. Bitte melde dich einmal mit Passwort an, damit die sichere Sitzung verknüpft werden kann.');
       return;
     }
     localStorage.setItem(AUTH_TOKEN_KEY, storedCredential.sessionToken);
@@ -4457,28 +4383,6 @@ function getVectorMemoryLabel(memory) {
   ].filter(Boolean).join(' - ');
 }
 
-function createLinkedTimeoutSignal(parentSignal = null, timeoutMs = 8000) {
-  const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
-  const abortFromParent = () => controller.abort();
-
-  if (parentSignal) {
-    if (parentSignal.aborted) {
-      controller.abort();
-    } else {
-      parentSignal.addEventListener('abort', abortFromParent, { once: true });
-    }
-  }
-
-  return {
-    signal: controller.signal,
-    clear() {
-      window.clearTimeout(timeoutId);
-      parentSignal?.removeEventListener?.('abort', abortFromParent);
-    }
-  };
-}
-
 function normaliseConversationAwarenessText(text = '') {
   return String(text || '')
     .toLowerCase()
@@ -4540,7 +4444,7 @@ function sanitizeVectorMemoryTextForModel(text = '') {
     .trim();
 }
 
-function updateMemorySourceDebug({ hidden = false, chatMessageCount = 0, conversationAwarenessActive = false, fragments = [], vectorMemories = [], newMemories = [] } = {}) {
+function updateMemorySourceDebug({ hidden = false, chatMessageCount = 0, conversationAwarenessActive = false, fragments = [], vectorMemories = [] } = {}) {
   const panel = document.getElementById('vector-memory-debug');
   const title = document.getElementById('vector-memory-debug-title');
   const body = document.getElementById('vector-memory-debug-body');
@@ -4554,8 +4458,7 @@ function updateMemorySourceDebug({ hidden = false, chatMessageCount = 0, convers
 
   const vectorCount = vectorMemories.length;
   const fragmentCount = fragments.length;
-  const newMemoryCount = newMemories.length;
-  const sourceCount = (chatMessageCount > 0 ? 1 : 0) + (fragmentCount > 0 ? 1 : 0) + (vectorCount > 0 ? 1 : 0) + (newMemoryCount > 0 ? 1 : 0);
+  const sourceCount = (chatMessageCount > 0 ? 1 : 0) + (fragmentCount > 0 ? 1 : 0) + (vectorCount > 0 ? 1 : 0);
   title.textContent = sourceCount
     ? `Verwendete Quellen: ${sourceCount}`
     : 'Verwendete Quellen: keine Zusatzquelle';
@@ -4565,11 +4468,6 @@ function updateMemorySourceDebug({ hidden = false, chatMessageCount = 0, convers
     conversationAwarenessActive ? 'Wiederholungs-/Testhinweis aus aktuellem Chat aktiv' : ''
   ].filter(Boolean);
   const fragmentItems = fragments.map(fragment => fragment.keywords.join(' / '));
-  const newMemoryItems = newMemories.map(memory => [
-    memory.title || 'Neue Erinnerung',
-    memory.sourceThreadTitle ? `aus "${memory.sourceThreadTitle}"` : '',
-    memory.savedAt ? new Date(memory.savedAt).toLocaleDateString('de-DE') : ''
-  ].filter(Boolean).join(' - '));
   const vectorItems = vectorMemories.map(memory => getVectorMemoryLabel(memory));
 
   const renderSection = (heading, items, emptyText) => `
@@ -4584,7 +4482,6 @@ function updateMemorySourceDebug({ hidden = false, chatMessageCount = 0, convers
   body.innerHTML = `
     ${renderSection('Aktueller Chat', chatItems, 'Kein aktueller Chatkontext erfasst.')}
     ${renderSection('Memory-Fragmente', fragmentItems, 'Keine passenden Fragmente verwendet.')}
-    ${renderSection('Neue dauerhafte Erinnerungen', newMemoryItems, 'Keine neue dauerhafte Erinnerung verwendet.')}
     ${renderSection('Vector Store', vectorItems, 'Keine alte Erinnerung aus dem Vektorspeicher verwendet.')}
   `;
   panel.hidden = false;
@@ -4595,13 +4492,12 @@ async function getVectorMemoryContext(userText = '', signal = null) {
   const query = String(userText || '').trim();
   if (!query || location.protocol === 'file:') return { message: null, memories: [] };
 
-  const timeout = createLinkedTimeoutSignal(signal, 8000);
   try {
     const response = await fetch('/.netlify/functions/openai-vector-memory', {
       method: 'POST',
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ query }),
-      signal: timeout.signal
+      signal
     });
 
     if (!response.ok) {
@@ -4650,8 +4546,6 @@ ${sections.join('\n\n')}`
     if (signal?.aborted) throw error;
     console.warn('Vector memory search skipped:', error);
     return { message: null, memories: [] };
-  } finally {
-    timeout.clear();
   }
 }
 
@@ -4787,7 +4681,12 @@ async function loadThreads() {
     }
   }
   
-  currentThreadId = null;
+  try {
+    currentThreadId = await getPortalState(CURRENT_THREAD_KEY);
+  } catch (error) {
+    console.warn('Could not load current thread id from IndexedDB:', error);
+    currentThreadId = localStorage.getItem(CURRENT_THREAD_KEY);
+  }
   
   const hasThreads = Object.keys(threads).length > 0;
   let legacyMessages = [];
@@ -4814,15 +4713,27 @@ async function loadThreads() {
   if (!hasThreads && legacyMessages.length) {
     const migrated = makeThread('Importierte Unterhaltung', legacyMessages);
     threads[migrated.id] = migrated;
+    currentThreadId = migrated.id;
     saveThreads();
+    saveCurrentThreadId();
     return;
   }
   
   if (!hasThreads) {
+    const firstThread = makeThread();
+    threads[firstThread.id] = firstThread;
+    currentThreadId = firstThread.id;
+    saveThreads();
+    saveCurrentThreadId();
     return;
   }
   
-  saveCurrentThreadId();
+  if (!currentThreadId || !threads[currentThreadId]) {
+    currentThreadId = Object.keys(threads).sort((a, b) => {
+      return threads[b].updated - threads[a].updated;
+    })[0];
+    saveCurrentThreadId();
+  }
 }
 
 function saveThreads() {
@@ -5378,41 +5289,9 @@ function formatThreadDate(timestamp) {
   });
 }
 
-function updateCurrentThreadBar() {
-  const menuButton = document.getElementById('current-thread-menu-btn');
-  if (!menuButton) return;
-  const thread = currentThreadId ? threads[currentThreadId] : null;
-  menuButton.disabled = !thread;
-  menuButton.hidden = !thread;
-}
-
-function renderChatStartScreen() {
-  updateCurrentThreadBar();
-  messagesDiv.innerHTML = `
-    <div class="chat-start-screen">
-      <div class="chat-start-content">
-        <h2>Womit starten wir?</h2>
-        <p>Beginne einen neuen Chat oder öffne eine gespeicherte Unterhaltung über die Seitenleiste.</p>
-        <div class="chat-start-actions">
-          <button class="chat-start-action primary" type="button" data-start-new-chat>Neuer Chat</button>
-          <button class="chat-start-action" type="button" data-start-open-sidebar>Unterhaltungen öffnen</button>
-        </div>
-      </div>
-    </div>
-  `;
-  messagesDiv.querySelector('[data-start-new-chat]')?.addEventListener('click', event => createNewThread(event));
-  messagesDiv.querySelector('[data-start-open-sidebar]')?.addEventListener('click', event => openSidebar(event));
-}
-
 function renderMessages() {
-  updateCurrentThreadBar();
   messagesDiv.innerHTML = '';
-  const thread = currentThreadId ? threads[currentThreadId] : null;
-  if (!thread) {
-    renderChatStartScreen();
-    return;
-  }
-  thread.messages.forEach((msg, index) => {
+  getCurrentThread().messages.forEach((msg, index) => {
     if (msg.role !== 'system') {
       displayMessage(msg.role, msg.content, index, null, msg.attachments);
     }
@@ -5483,13 +5362,12 @@ function formatInternetResearchForTatjana(result) {
 
 async function getInternetResearchContext(userText, signal = null) {
   if (!shouldUseInternetResearch(userText)) return null;
-  const timeout = createLinkedTimeoutSignal(signal, 10000);
   try {
     const response = await fetch('/.netlify/functions/openai-web-search', {
       method: 'POST',
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ query: userText }),
-      signal: timeout.signal
+      signal
     });
     if (!response.ok) throw new Error(`Web search ${response.status}`);
     const data = await response.json();
@@ -5502,8 +5380,6 @@ async function getInternetResearchContext(userText, signal = null) {
       role: 'system',
       content: 'Internet-Recherche wurde versucht, ist aber gerade nicht verfügbar. Behaupte keine aktuelle Recherche und weise bei aktuellen Fakten darauf hin, dass du sie nicht live prüfen konntest.'
     };
-  } finally {
-    timeout.clear();
   }
 }
 
@@ -6006,58 +5882,6 @@ function showThreadModal(threadId, event) {
   return false;
 }
 
-function showCurrentThreadActionsMenu(event) {
-  event?.preventDefault?.();
-  event?.stopPropagation?.();
-
-  const threadId = currentThreadId;
-  const thread = threadId ? threads[threadId] : null;
-  if (!thread) return false;
-
-  closeThreadMenu();
-  closeMessageMenu();
-  closeTatjanaVoiceMenu();
-
-  const popover = document.createElement('div');
-  popover.id = 'thread-menu-popover';
-  popover.className = 'thread-menu-popover current-thread-menu-popover';
-
-  const title = document.createElement('div');
-  title.className = 'thread-menu-title';
-  title.textContent = thread.title || 'Neue Unterhaltung';
-  popover.appendChild(title);
-  popover.appendChild(makeThreadMenuButton('Umbenennen', 'edit', () => renameThread(threadId)));
-  popover.appendChild(makeThreadMenuButton('Teilen / Exportieren', 'download', () => exportThreadToMarkdown(threadId)));
-  popover.appendChild(makeThreadMenuButton(thread.pinned ? 'Loslösen' : 'Anpinnen', 'pin', () => toggleAnpinnen(threadId)));
-  popover.appendChild(makeThreadMenuButton('Neuer Chat', 'open', () => createNewThread()));
-
-  const separator = document.createElement('div');
-  separator.className = 'thread-menu-separator';
-  popover.appendChild(separator);
-  popover.appendChild(makeThreadMenuButton('Löschen', 'trash', () => deleteThread(threadId), true));
-
-  document.body.appendChild(popover);
-
-  const source = event?.currentTarget || document.getElementById('current-thread-menu-btn');
-  const rect = source?.getBoundingClientRect?.();
-  const popoverRect = popover.getBoundingClientRect();
-  const top = rect ? Math.min(rect.bottom + 8, window.innerHeight - popoverRect.height - 10) : 80;
-  const left = rect ? Math.min(Math.max(rect.right - popoverRect.width, 10), window.innerWidth - popoverRect.width - 10) : 10;
-  popover.style.top = `${Math.max(10, top)}px`;
-  popover.style.left = `${Math.max(10, left)}px`;
-
-  const closeOnOutsidePointer = pointerEvent => {
-    if (popover.contains(pointerEvent.target)) return;
-    closeThreadMenu();
-    document.removeEventListener('pointerdown', closeOnOutsidePointer);
-  };
-  setTimeout(() => {
-    document.addEventListener('pointerdown', closeOnOutsidePointer);
-  }, 0);
-
-  return false;
-}
-
 function renameThread(threadId) {
   const thread = threads[threadId];
   if (!thread) return;
@@ -6069,7 +5893,6 @@ function renameThread(threadId) {
   thread.updated = Date.now();
   saveThreads();
   markThreadDirty(threadId, { indexChanged: true }).catch(error => console.warn('Could not mark renamed thread dirty:', error));
-  updateCurrentThreadBar();
   renderThreadList();
 }
 
@@ -6081,7 +5904,6 @@ function toggleAnpinnen(threadId) {
   thread.updated = Date.now();
   saveThreads();
   markThreadDirty(threadId, { indexChanged: true }).catch(error => console.warn('Could not mark pinned thread dirty:', error));
-  updateCurrentThreadBar();
   renderThreadList();
 }
 
@@ -6095,7 +5917,18 @@ function deleteThread(threadId) {
   markThreadDeleted(threadId).catch(error => console.warn('Could not mark thread deleted:', error));
   
   if (threadId === currentThreadId) {
-    currentThreadId = null;
+    const remainingThreads = Object.values(threads).sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return b.updated - a.updated;
+    });
+    if (remainingThreads.length) {
+      currentThreadId = remainingThreads[0].id;
+    } else {
+      const newThread = makeThread();
+      threads[newThread.id] = newThread;
+      currentThreadId = newThread.id;
+    }
     saveCurrentThreadId();
     renderMessages();
   }
@@ -6874,6 +6707,7 @@ function showTyping() {
   typing.innerHTML = '<span></span><span></span><span></span>';
   messagesDiv.appendChild(typing);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  scheduleScrollButtonUpdate();
   return typing;
 }
 
@@ -6932,9 +6766,7 @@ input.disabled = true;
   updateThreadTitle(thread);
   saveThreads();
   refineThreadTitleWithMiniAssistant(thread);
-  markThreadDirty(thread.id, { indexChanged: true }).catch(error => {
-    console.warn('Could not mark outgoing thread dirty:', error);
-  });
+  await markThreadDirty(thread.id, { indexChanged: true });
   renderThreadList();
   
   input.value = '';
@@ -6958,8 +6790,7 @@ input.disabled = true;
     chatMessageCount: liveMessages.filter(message => message?.role !== 'system').length,
     conversationAwarenessActive: Boolean(conversationAwarenessContext),
     fragments: memoryFragmentMatches,
-    vectorMemories: vectorMemoryContext?.memories || [],
-    newMemories: newLongTermMemoryMatches
+    vectorMemories: vectorMemoryContext?.memories || []
   });
   const apiMessages = [
     { role: 'system', content: systemPrompt },
@@ -7000,9 +6831,7 @@ input.disabled = true;
     thread.updated = Date.now();
     
     saveThreads();
-    markThreadDirty(thread.id).catch(error => {
-      console.warn('Could not mark answered thread dirty:', error);
-    });
+    await markThreadDirty(thread.id);
     renderThreadList();
     updateNewLongTermMemoryFromExchange(thread, userContent, assistantMessage).catch(error => {
       console.warn('New long-term memory update skipped:', error);
@@ -7446,9 +7275,10 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
 
     const update = () => {
       const distance = Math.max(0, messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight);
-      const hasScrollableMessages = messagesDiv.scrollHeight > messagesDiv.clientHeight + 520;
-      const canScrollDown = hasScrollableMessages && distance > 420;
-      const canScrollUp = hasScrollableMessages && distance <= 48 && messagesDiv.scrollTop > 1200;
+      const hasScrollableMessages = messagesDiv.scrollHeight > messagesDiv.clientHeight + 180;
+      const isAtBottom = distance <= 24;
+      const canScrollDown = hasScrollableMessages && !isAtBottom && distance > 140;
+      const canScrollUp = hasScrollableMessages && !isAtBottom && distance <= 140 && messagesDiv.scrollTop > 900;
       if (canScrollDown) {
         setDirection('down');
         button.hidden = false;
@@ -7460,18 +7290,18 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
       }
     };
 
+    window.updateTatjanaScrollButton = update;
     messagesDiv.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
     update();
   }
 
   function scheduleScrollButtonUpdate() {
-    window.setTimeout(() => {
-      ensureScrollButton();
-      const button = document.getElementById('scroll-bottom-btn');
-      if (!button) return;
-      messagesDiv.dispatchEvent(new Event('scroll'));
-    }, 80);
+    window.requestAnimationFrame(() => {
+      if (typeof window.updateTatjanaScrollButton === 'function') {
+        window.updateTatjanaScrollButton();
+      }
+    });
   }
 
   function getComposerAttachmentContainer() {
@@ -7534,7 +7364,6 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
     if (!window.PublicKeyCredential || !navigator.credentials) {
       document.querySelector('.auth-passkey-actions')?.setAttribute('hidden', '');
     }
-    document.getElementById('current-thread-menu-btn')?.addEventListener('click', showCurrentThreadActionsMenu);
     document.getElementById('settings-btn')?.addEventListener('click', openSettingsModal);
     document.getElementById('logout-btn')?.addEventListener('click', logoutPortalSession);
     document.getElementById('attach-btn')?.addEventListener('click', () => document.getElementById('file-input')?.click());
