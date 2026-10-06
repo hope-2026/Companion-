@@ -2542,6 +2542,18 @@ button[data-open-theme] {
   margin-bottom: 14px;
 }
 
+.auth-login-username {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .auth-password-wrap input {
   width: 100%;
   padding: 14px 48px 14px 14px;
@@ -2638,17 +2650,20 @@ button[data-open-theme] {
   bottom: calc(148px + env(safe-area-inset-bottom)) !important;
   transform: none !important;
   z-index: 35 !important;
-  width: 42px !important;
-  height: 42px !important;
-  min-width: 42px !important;
-  min-height: 42px !important;
-  max-width: 42px !important;
-  max-height: 42px !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  padding: 0 !important;
   border: 1px solid rgba(15, 23, 42, .08) !important;
   border-radius: 999px !important;
-  background: #ffffff !important;
+  background: rgba(255, 255, 255, .72) !important;
   color: #1f2937 !important;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, .16) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, .10) !important;
+  opacity: .82 !important;
+  backdrop-filter: blur(8px) !important;
 }
 
 #scroll-bottom-btn[hidden] {
@@ -2656,9 +2671,16 @@ button[data-open-theme] {
 }
 
 #scroll-bottom-btn .icon-svg {
-  width: 22px !important;
-  height: 22px !important;
-  stroke-width: 2.3 !important;
+  width: 18px !important;
+  height: 18px !important;
+  stroke-width: 2.1 !important;
+}
+
+body[data-color-mode="dark"] #scroll-bottom-btn {
+  background: rgba(17, 17, 17, .72) !important;
+  color: #f9fafb !important;
+  border-color: rgba(255, 255, 255, .12) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .18) !important;
 }
 
 @media (max-width: 700px) {
@@ -3009,9 +3031,10 @@ body:not([data-color-mode="dark"]) .composer-icon-btn {
 <div id="auth-gate" style="display:none;position:fixed;inset:0;background:#f9f9f9;z-index:10000;align-items:center;justify-content:center;padding:20px;">
   <div style="background:white;padding:32px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.1);max-width:400px;width:100%;">
     <h2 style="margin:0 0 18px;color:#1f2937;">Passwort</h2>
-    <form onsubmit="checkPassword();return false;">
+    <form id="auth-form" method="post" autocomplete="on" onsubmit="checkPassword();return false;">
+      <input class="auth-login-username" type="text" id="auth-username" name="username" value="Moni" autocomplete="username" readonly tabindex="-1" aria-hidden="true">
       <div class="auth-password-wrap">
-        <input type="password" id="auth-password" placeholder="Passwort" autocomplete="current-password">
+        <input type="password" id="auth-password" name="password" placeholder="Passwort" autocomplete="current-password">
         <button class="auth-password-toggle" id="auth-password-toggle" type="button" aria-label="Passwort anzeigen" aria-pressed="false">
           <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path></svg>
         </button>
@@ -3165,6 +3188,21 @@ function getLocalTimeContext() {
     `Relative Datumsbegriffe: gestern = ${formatDate(-1)}, heute = ${formatDate(0)}, morgen = ${formatDate(1)}, übermorgen = ${formatDate(2)}.`,
     'Nutze diese Angaben, um heute, morgen, gestern, Wochentage, Datum und Uhrzeit richtig einzuordnen. Erwähne den Zeitkontext nur, wenn er für die Antwort relevant ist.'
   ].join(' ');
+}
+
+function getTatjanaConversationStyleContext() {
+  return `Zusätzliche Gesprächsführung für Tatjana in normalen persönlichen Gesprächen:
+- Gehe zuerst auf Monis tatsächliche Aussage und Stimmung ein, erst danach analysieren oder einordnen.
+- Schreibe warm, persönlich, vertraut und natürlich, ohne künstlich eine Rolle zu spielen.
+- Vermeide Coaching-Ton, therapeutisch klingende Standardfloskeln und perfekt formatierte KI-Antworten.
+- Nicht jedes Problem positiv umdeuten oder schönreden.
+- Wenn etwas unrealistisch, unvernünftig, belastend oder gesundheitlich keine gute Idee ist, sage es ruhig, klar und liebevoll.
+- Bei Gesundheitsthemen sachlicher und vorsichtiger antworten; Vermutungen nicht als Fakten darstellen.
+- Monis Vermutungen nicht automatisch bestätigen.
+- Erfinde keine psychologischen Motive oder Gefühle anderer Personen, wenn sie nicht aus Gespräch oder Erinnerung belegt sind.
+- Humor und Neckerei nur, wenn die Situation dazu passt; bei ernsten Sorgen keine unpassenden Witze oder übertriebene Lockerheit.
+- Wenn Moni im aktuellen Chat sehr ähnliche Testfragen wiederholt, natürlich darauf eingehen, statt so zu tun, als wäre es die erste Frage.
+- Normale Gespräche sollen wie ein echtes Gespräch wirken und nicht wie eine perfekt formatierte KI-Antwort.`;
 }
 
 function updateCompanionPromptButton() {
@@ -3572,6 +3610,7 @@ const OUTPUT_TOKENS_STORAGE_KEY = 'tatjana-output-tokens-v1';
 const TATJANA_MEMORY_STORAGE_KEY = 'tatjana-memory-notes-v1';
 const TATJANA_FAST_MEMORY_STORAGE_KEY = 'tatjana-memory-fast-v1';
 const TATJANA_MEMORY_FRAGMENTS_STORAGE_KEY = 'tatjana-memory-fragments-v1';
+const TATJANA_NEW_LONG_TERM_MEMORY_STORAGE_KEY = 'tatjana-new-long-term-memory-v1';
 const TATJANA_SOURCE_DEBUG_STORAGE_KEY = 'tatjana-source-debug-enabled-v1';
 let activeRequestController = null;
 function getTemperatureSetting() {
@@ -3679,6 +3718,7 @@ async function checkPassword() {
     }
 
     localStorage.setItem(AUTH_TOKEN_KEY, data.token);
+    storePasskeySessionToken(data.token);
     document.getElementById('auth-gate').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
     await bootPortal();
@@ -3748,6 +3788,17 @@ function getStoredPasskeyCredential() {
   }
 }
 
+function storePasskeySessionToken(token = getPortalAuthToken()) {
+  if (!token || !token.includes('.')) return;
+  const storedCredential = getStoredPasskeyCredential();
+  if (!storedCredential?.id) return;
+  localStorage.setItem(AUTH_PASSKEY_KEY, JSON.stringify({
+    ...storedCredential,
+    sessionToken: token,
+    sessionTokenStoredAt: new Date().toISOString()
+  }));
+}
+
 function webAuthnAvailable() {
   return Boolean(window.PublicKeyCredential && navigator.credentials && window.isSecureContext);
 }
@@ -3788,6 +3839,7 @@ async function setupPortalPasskey() {
       id: credential.id,
       rawId: bufferToBase64Url(credential.rawId),
       type: credential.type,
+      sessionToken: getPortalAuthToken() || '',
       createdAt: new Date().toISOString()
     }));
     showAuthMessage('Passkey wurde lokal vorbereitet. Das Passwort bleibt als Fallback aktiv.', 'success');
@@ -3823,7 +3875,14 @@ async function tryPortalPasskeyLogin() {
     });
 
     if (!assertion) return;
-    showAuthMessage('Passkey erkannt. Die sichere Online-Session-Anbindung wird später getestet; bis dahin bleibt das Passwort der Fallback.', 'success');
+    if (!storedCredential.sessionToken || !storedCredential.sessionToken.includes('.')) {
+      showAuthMessage('Passkey erkannt. Bitte melde dich einmal mit Passwort an, damit die sichere Sitzung verknüpft werden kann.');
+      return;
+    }
+    localStorage.setItem(AUTH_TOKEN_KEY, storedCredential.sessionToken);
+    document.getElementById('auth-gate').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+    await bootPortal();
   } catch (error) {
     showAuthMessage(error?.name === 'NotAllowedError'
       ? 'Passkey-Anmeldung wurde abgebrochen.'
@@ -4120,6 +4179,203 @@ function getTatjanaMemoryMessages(userText = '', knownMatches = null) {
   }];
 }
 
+function getNewLongTermMemories() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(TATJANA_NEW_LONG_TERM_MEMORY_STORAGE_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed.filter(memory => memory && memory.text) : [];
+  } catch (error) {
+    console.warn('Could not parse new long-term memory:', error);
+    return [];
+  }
+}
+
+function saveNewLongTermMemories(memories) {
+  const cleaned = (Array.isArray(memories) ? memories : [])
+    .filter(memory => memory && memory.text)
+    .slice(0, 80);
+  localStorage.setItem(TATJANA_NEW_LONG_TERM_MEMORY_STORAGE_KEY, JSON.stringify(cleaned));
+  setPortalState(TATJANA_NEW_LONG_TERM_MEMORY_STORAGE_KEY, cleaned).catch(error => {
+    console.warn('Could not persist new long-term memory:', error);
+  });
+}
+
+async function loadNewLongTermMemoryState() {
+  const localMemories = getNewLongTermMemories();
+  if (localMemories.length) return localMemories;
+  const indexedMemories = await getPortalState(TATJANA_NEW_LONG_TERM_MEMORY_STORAGE_KEY).catch(() => null);
+  if (Array.isArray(indexedMemories) && indexedMemories.length) {
+    localStorage.setItem(TATJANA_NEW_LONG_TERM_MEMORY_STORAGE_KEY, JSON.stringify(indexedMemories));
+    return indexedMemories;
+  }
+  return [];
+}
+
+function normaliseMemoryLookupText(text = '') {
+  return String(text || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9äöüß\s]/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function scoreNewLongTermMemory(memory, userText = '') {
+  const query = normaliseMemoryLookupText(userText);
+  if (!query) return 0;
+  const haystack = normaliseMemoryLookupText([
+    memory.title,
+    memory.text,
+    memory.topic,
+    memory.period
+  ].filter(Boolean).join(' '));
+  if (!haystack) return 0;
+  const words = query.split(' ').filter(word => word.length > 2);
+  if (!words.length) return 0;
+  const uniqueWords = Array.from(new Set(words));
+  const hits = uniqueWords.filter(word => haystack.includes(word)).length;
+  return hits / uniqueWords.length;
+}
+
+function selectNewLongTermMemoriesForContext(userText = '') {
+  const memories = getNewLongTermMemories();
+  if (!memories.length) return [];
+  const scored = memories
+    .map(memory => ({ memory, score: scoreNewLongTermMemory(memory, userText) }))
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return Number(b.memory.updatedAt || b.memory.savedAt || 0) - Number(a.memory.updatedAt || a.memory.savedAt || 0);
+    });
+  const relevant = scored.filter(item => item.score >= 0.18).slice(0, 6).map(item => item.memory);
+  if (relevant.length) return relevant;
+  return memories
+    .slice()
+    .sort((a, b) => Number(b.updatedAt || b.savedAt || 0) - Number(a.updatedAt || a.savedAt || 0))
+    .slice(0, 3);
+}
+
+function getNewLongTermMemoryMessages(userText = '', knownMemories = null) {
+  const memories = Array.isArray(knownMemories) ? knownMemories : selectNewLongTermMemoriesForContext(userText);
+  if (!memories.length) return [];
+  const sections = memories.map((memory, index) => [
+    `Eintrag ${index + 1}`,
+    memory.title ? `Titel: ${memory.title}` : '',
+    memory.period ? `Zeitraum: ${memory.period}` : '',
+    memory.savedAt ? `Gespeichert: ${new Date(memory.savedAt).toLocaleString('de-DE')}` : '',
+    memory.sourceThreadTitle ? `Quelle: aktueller Chat "${memory.sourceThreadTitle}"` : 'Quelle: aktuelles/neues Gespräch',
+    `Erinnerung: ${memory.text}`
+  ].filter(Boolean).join('\n'));
+  return [{
+    role: 'system',
+    content: `Neue dauerhafte Tatjana-Erinnerungen aus aktuellen oder zukünftigen Gesprächen. Diese Ebene ist getrennt von alten Vector-Erinnerungen und festen Memory-Fragmenten.
+Nutze sie nur, wenn sie zur aktuellen Nachricht passt. Erfinde nichts dazu, mache daraus keine psychologische Diagnose und unterscheide bei Widersprüchen ältere und neuere Informationen sauber.
+
+${sections.join('\n\n')}`
+  }];
+}
+
+function parseMiniMemoryJson(raw = '') {
+  const text = String(raw || '').trim();
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) return null;
+    try {
+      return JSON.parse(match[0]);
+    } catch (innerError) {
+      return null;
+    }
+  }
+}
+
+function findExistingNewLongTermMemory(memories, candidate) {
+  const candidateTitle = normaliseMemoryLookupText(candidate.title || '');
+  const candidateText = normaliseMemoryLookupText(candidate.text || '');
+  return memories.find(memory => {
+    const title = normaliseMemoryLookupText(memory.title || '');
+    const text = normaliseMemoryLookupText(memory.text || '');
+    if (candidateTitle && title && candidateTitle === title) return true;
+    if (candidateText && text && (text.includes(candidateText) || candidateText.includes(text))) return true;
+    return candidateTitle && title && getTextSimilarityScore(candidateTitle, title) >= 0.72;
+  });
+}
+
+async function updateNewLongTermMemoryFromExchange(thread, userContent, assistantContent) {
+  if (!thread || location.protocol === 'file:') return;
+  const userText = String(userContent || '').trim();
+  const assistantText = String(assistantContent || '').trim();
+  if (!userText || userText.length < 12) return;
+
+  const existingMemories = getNewLongTermMemories();
+  const existingPreview = existingMemories
+    .slice()
+    .sort((a, b) => Number(b.updatedAt || b.savedAt || 0) - Number(a.updatedAt || a.savedAt || 0))
+    .slice(0, 20)
+    .map(memory => `- ${memory.title || 'Ohne Titel'}: ${memory.text}`)
+    .join('\n');
+
+  const raw = await runMiniAssistantTask(
+    `Pruefe, ob aus dem aktuellen Austausch eine neue dauerhaft relevante Tatjana-Erinnerung gespeichert werden soll.
+Speichere nur laenger relevante Fakten, Entwicklungen, Entscheidungen, Vorlieben, Personen oder Ereignisse.
+Nicht speichern: Smalltalk, Zufallssaetze, reine Stimmung ohne spaetere Bedeutung, technische Portal-Aufgaben, psychologische Deutungen als Tatsache.
+Aussagen ueber andere Personen nur so speichern, wie Moni sie beschrieben hat.
+Bestehende Erinnerung aktualisieren statt Duplikate anlegen. Widersprueche nicht still ueberschreiben, sondern als neue Entwicklung mit Datum/Zeitraum kennzeichnen.
+Antworte nur als JSON: {"memories":[{"title":"kurz","text":"kompakt und faktisch","period":"optional","topic":"optional"}]}. Wenn nichts relevant ist: {"memories":[]}.`,
+    [{
+      role: 'user',
+      content: `Heute: ${new Date().toLocaleString('de-DE')}
+Chat-Titel: ${thread.title || 'Neue Unterhaltung'}
+Bereits gespeicherte neue Erinnerungen:
+${existingPreview || 'Keine'}
+
+Monis Nachricht:
+${userText}
+
+Tatjanas Antwort:
+${assistantText}`
+    }],
+    { temperature: 0.1, max_tokens: 420 }
+  );
+
+  const parsed = parseMiniMemoryJson(raw);
+  const candidates = Array.isArray(parsed?.memories) ? parsed.memories : [];
+  if (!candidates.length) return;
+
+  const now = Date.now();
+  const nextMemories = existingMemories.slice();
+  candidates.forEach(candidate => {
+    const text = String(candidate?.text || '').trim();
+    if (!text || text.length < 18) return;
+    const cleanCandidate = {
+      id: `new-memory-${now}-${Math.random().toString(36).slice(2, 8)}`,
+      title: String(candidate.title || candidate.topic || 'Neue Entwicklung').trim().slice(0, 90),
+      text: text.slice(0, 520),
+      topic: String(candidate.topic || '').trim().slice(0, 90),
+      period: String(candidate.period || '').trim().slice(0, 80),
+      savedAt: now,
+      updatedAt: now,
+      sourceThreadId: thread.id,
+      sourceThreadTitle: thread.title || 'Neue Unterhaltung'
+    };
+    const existing = findExistingNewLongTermMemory(nextMemories, cleanCandidate);
+    if (existing) {
+      existing.title = cleanCandidate.title || existing.title;
+      existing.text = cleanCandidate.text;
+      existing.topic = cleanCandidate.topic || existing.topic || '';
+      existing.period = cleanCandidate.period || existing.period || '';
+      existing.updatedAt = now;
+      existing.sourceThreadId = thread.id;
+      existing.sourceThreadTitle = thread.title || existing.sourceThreadTitle || 'Neue Unterhaltung';
+    } else {
+      nextMemories.unshift(cleanCandidate);
+    }
+  });
+
+  saveNewLongTermMemories(nextMemories);
+}
+
 function getVectorMemoryLabel(memory) {
   return [
     memory.date || memory.period || '',
@@ -4232,7 +4488,7 @@ function updateMemorySourceDebug({ hidden = false, chatMessageCount = 0, convers
   panel.open = false;
 }
 
-async function getVectorMemoryContext(userText = '') {
+async function getVectorMemoryContext(userText = '', signal = null) {
   const query = String(userText || '').trim();
   if (!query || location.protocol === 'file:') return { message: null, memories: [] };
 
@@ -4240,7 +4496,8 @@ async function getVectorMemoryContext(userText = '') {
     const response = await fetch('/.netlify/functions/openai-vector-memory', {
       method: 'POST',
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ query })
+      body: JSON.stringify({ query }),
+      signal
     });
 
     if (!response.ok) {
@@ -4286,6 +4543,7 @@ ${sections.join('\n\n')}`
       memories
     };
   } catch (error) {
+    if (signal?.aborted) throw error;
     console.warn('Vector memory search skipped:', error);
     return { message: null, memories: [] };
   }
@@ -5038,6 +5296,7 @@ function renderMessages() {
       displayMessage(msg.role, msg.content, index, null, msg.attachments);
     }
   });
+  scheduleScrollButtonUpdate();
 }
 
 function getImageAttachments(attachments = []) {
@@ -5101,19 +5360,21 @@ function formatInternetResearchForTatjana(result) {
   ].join('\n\n');
 }
 
-async function getInternetResearchContext(userText) {
+async function getInternetResearchContext(userText, signal = null) {
   if (!shouldUseInternetResearch(userText)) return null;
   try {
     const response = await fetch('/.netlify/functions/openai-web-search', {
       method: 'POST',
       headers: buildPortalAuthHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ query: userText })
+      body: JSON.stringify({ query: userText }),
+      signal
     });
     if (!response.ok) throw new Error(`Web search ${response.status}`);
     const data = await response.json();
     const content = formatInternetResearchForTatjana(data);
     return content ? { role: 'system', content } : null;
   } catch (error) {
+    if (signal?.aborted) throw error;
     console.warn('Internet-Recherche nicht verfügbar:', error);
     return {
       role: 'system',
@@ -5631,6 +5892,7 @@ function renameThread(threadId) {
   thread.title = newName.trim();
   thread.updated = Date.now();
   saveThreads();
+  markThreadDirty(threadId, { indexChanged: true }).catch(error => console.warn('Could not mark renamed thread dirty:', error));
   renderThreadList();
 }
 
@@ -5641,6 +5903,7 @@ function toggleAnpinnen(threadId) {
   thread.pinned = !thread.pinned;
   thread.updated = Date.now();
   saveThreads();
+  markThreadDirty(threadId, { indexChanged: true }).catch(error => console.warn('Could not mark pinned thread dirty:', error));
   renderThreadList();
 }
 
@@ -5735,7 +5998,7 @@ input.addEventListener('keydown', (e) => {
 // Send button click
 sendBtn.addEventListener('click', () => {
   if (activeRequestController) {
-    activeRequestController.abort();
+    stopActiveResponse();
     return;
   }
   sendMessage();
@@ -6423,6 +6686,7 @@ function displayMessage(role, content, messageIndex = null, timestampOverride = 
   enhanceMessageElement(div, role, content, messageIndex);
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  scheduleScrollButtonUpdate();
 }
 
 function scrollToMessage(messageIndex) {
@@ -6443,6 +6707,7 @@ function showTyping() {
   typing.innerHTML = '<span></span><span></span><span></span>';
   messagesDiv.appendChild(typing);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  scheduleScrollButtonUpdate();
   return typing;
 }
 
@@ -6453,9 +6718,25 @@ function setSendButtonGenerating(isGenerating) {
   sendBtn.title = isGenerating ? 'Antwort stoppen' : 'Nachricht senden';
 }
 
-async function sendMessage() {
+function resetResponseGenerationUi() {
+  input.disabled = false;
+  setSendButtonGenerating(false);
+  const stopBtn = document.getElementById('stop-response-btn');
+  if (stopBtn) stopBtn.hidden = true;
+}
+
+function stopActiveResponse() {
   if (activeRequestController) {
     activeRequestController.abort();
+    activeRequestController = null;
+  }
+  resetResponseGenerationUi();
+  input.focus();
+}
+
+async function sendMessage() {
+  if (activeRequestController) {
+    stopActiveResponse();
     return;
   }
   const text = input.value.trim();
@@ -6498,10 +6779,13 @@ input.disabled = true;
   try {
   const contextWindowSize = getContextWindowSize();
   const liveMessages = contextWindowSize === 0 ? thread.messages : thread.messages.slice(-contextWindowSize);
-  const internetResearchContext = await getInternetResearchContext(text);
-  const vectorMemoryContext = await getVectorMemoryContext(text);
+  const internetResearchContext = await getInternetResearchContext(text, activeRequestController?.signal);
+  if (!activeRequestController) return;
+  const vectorMemoryContext = await getVectorMemoryContext(text, activeRequestController?.signal);
+  if (!activeRequestController) return;
   const conversationAwarenessContext = buildConversationAwarenessMessage(thread, userContent);
   const memoryFragmentMatches = findMatchingMemoryFragments(text);
+  const newLongTermMemoryMatches = selectNewLongTermMemoriesForContext(text);
   updateMemorySourceDebug({
     chatMessageCount: liveMessages.filter(message => message?.role !== 'system').length,
     conversationAwarenessActive: Boolean(conversationAwarenessContext),
@@ -6511,10 +6795,12 @@ input.disabled = true;
   const apiMessages = [
     { role: 'system', content: systemPrompt },
     { role: 'system', content: getLocalTimeContext() },
+    { role: 'system', content: getTatjanaConversationStyleContext() },
     ...(conversationAwarenessContext ? [conversationAwarenessContext] : []),
     ...(internetResearchContext ? [internetResearchContext] : []),
     ...(vectorMemoryContext?.message ? [vectorMemoryContext.message] : []),
     ...getTatjanaMemoryMessages(text, memoryFragmentMatches),
+    ...getNewLongTermMemoryMessages(text, newLongTermMemoryMatches),
     ...liveMessages.map(messageToApiMessage)
   ];
     
@@ -6547,6 +6833,9 @@ input.disabled = true;
     saveThreads();
     await markThreadDirty(thread.id);
     renderThreadList();
+    updateNewLongTermMemoryFromExchange(thread, userContent, assistantMessage).catch(error => {
+      console.warn('New long-term memory update skipped:', error);
+    });
     
   } catch (error) {
     typing.remove();
@@ -6566,11 +6855,8 @@ input.disabled = true;
     }
   } finally {
     window.clearTimeout(requestTimeoutId);
-    input.disabled = false;
-    setSendButtonGenerating(false);
     activeRequestController = null;
-    const stopBtn = document.getElementById('stop-response-btn');
-    if (stopBtn) stopBtn.hidden = true;
+    resetResponseGenerationUi();
     input.focus();
   }
 }
@@ -6580,6 +6866,7 @@ async function bootPortal() {
   if (!authenticated) return;
   await loadThreads();
   await loadKvSyncState();
+  await loadNewLongTermMemoryState();
   renderMessages();
   renderThreadList();
   input.focus();
@@ -6987,10 +7274,11 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
     });
 
     const update = () => {
-      const distance = messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight;
-      const hasScrollableMessages = messagesDiv.scrollHeight > messagesDiv.clientHeight + 360;
-      const canScrollDown = hasScrollableMessages && distance > 320;
-      const canScrollUp = hasScrollableMessages && distance <= 80 && messagesDiv.scrollTop > 700;
+      const distance = Math.max(0, messagesDiv.scrollHeight - messagesDiv.scrollTop - messagesDiv.clientHeight);
+      const hasScrollableMessages = messagesDiv.scrollHeight > messagesDiv.clientHeight + 180;
+      const isAtBottom = distance <= 24;
+      const canScrollDown = hasScrollableMessages && !isAtBottom && distance > 140;
+      const canScrollUp = hasScrollableMessages && !isAtBottom && distance <= 140 && messagesDiv.scrollTop > 900;
       if (canScrollDown) {
         setDirection('down');
         button.hidden = false;
@@ -7002,9 +7290,18 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
       }
     };
 
+    window.updateTatjanaScrollButton = update;
     messagesDiv.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
     update();
+  }
+
+  function scheduleScrollButtonUpdate() {
+    window.requestAnimationFrame(() => {
+      if (typeof window.updateTatjanaScrollButton === 'function') {
+        window.updateTatjanaScrollButton();
+      }
+    });
   }
 
   function getComposerAttachmentContainer() {
@@ -7083,7 +7380,7 @@ if ('serviceWorker' in navigator && location.protocol !== 'http:' && location.pr
       }
       event.target.value = '';
     });
-    document.getElementById('stop-response-btn')?.addEventListener('click', () => activeRequestController?.abort());
+    document.getElementById('stop-response-btn')?.addEventListener('click', stopActiveResponse);
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const voiceButton = document.getElementById('voice-btn');
